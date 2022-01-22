@@ -114,8 +114,8 @@ public class ItemSerializer {
                     if (enchantment == null) {
                         continue;
                     }
-                    double level = (double) rawMap.get(o);
-                    item.addEnchantment(enchantment, (int) level);
+                    Double level = (Double) rawMap.get(o);
+                    item.addEnchantment(enchantment, level.intValue());
                 }
             }
         }

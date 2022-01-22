@@ -148,18 +148,28 @@ public class Menu implements EventWatcher {
     }
 
     private List<Integer> getEvenlyDistributedSlots(int amountInRow) {
-        return switch (amountInRow) {
-            case 0 -> Collections.emptyList();
-            case 1 -> Collections.singletonList(4);
-            case 2 -> Arrays.asList(3, 5);
-            case 3 -> Arrays.asList(3, 4, 5);
-            case 4 -> Arrays.asList(2, 3, 5, 6);
-            case 5 -> Arrays.asList(2, 3, 4, 5, 6);
-            case 6 -> Arrays.asList(1, 2, 3, 5, 6, 7);
-            case 7 -> Arrays.asList(1, 2, 3, 4, 5, 6, 7);
-            case 8 -> Arrays.asList(0, 1, 2, 3, 5, 6, 7, 8);
-            default -> Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8);
-        };
+        switch (amountInRow) {
+            case 0:
+                return Collections.emptyList();
+            case 1:
+                return Collections.singletonList(4);
+            case 2:
+                return Arrays.asList(3, 5);
+            case 3:
+                return Arrays.asList(3, 4, 5);
+            case 4:
+                return Arrays.asList(2, 3, 5, 6);
+            case 5:
+                return Arrays.asList(2, 3, 4, 5, 6);
+            case 6:
+                return Arrays.asList(1, 2, 3, 5, 6, 7);
+            case 7:
+                return Arrays.asList(1, 2, 3, 4, 5, 6, 7);
+            case 8:
+                return Arrays.asList(0, 1, 2, 3, 5, 6, 7, 8);
+            default:
+                return Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8);
+        }
     }
 
     // gets all ints from zero (inclusive) to n (inclusive)

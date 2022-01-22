@@ -30,7 +30,7 @@ public class Colours {
      */
     private static String translate(String string) {
         Matcher matcher = HEX_PATTERN.matcher(string);
-        StringBuilder buffer = new StringBuilder();
+        StringBuffer buffer = new StringBuffer();
         while (matcher.find()) {
             String group = matcher.group(1);
             matcher.appendReplacement(buffer, COLOUR_CHAR + "x"
