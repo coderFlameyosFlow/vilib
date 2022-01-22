@@ -42,4 +42,10 @@ public class Logging {
         error("##\tMinecraft: " + Version.getVersion().name().replaceAll("_", "."));
         error("##");
     }
+
+    public static void verbose(String message) {
+        if (FyPlugin.vebosing()) {
+            logger.info("(Verbose) " + message);
+        }
+    }
 }

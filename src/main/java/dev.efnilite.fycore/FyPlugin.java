@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class FyPlugin extends JavaPlugin {
 
+    protected static boolean verbosing;
     protected static FyPlugin fyPlugin;
     protected Version version;
 
@@ -45,6 +46,10 @@ public abstract class FyPlugin extends JavaPlugin {
 
     public void registerListener(Listener listener) {
         getServer().getPluginManager().registerEvents(listener, this);
+    }
+
+    public static boolean vebosing() {
+        return verbosing;
     }
 
     public static FyPlugin getFyPlugin() {
