@@ -1,4 +1,4 @@
-package dev.efnilite.fycore.util;
+package dev.efnilite.fycore.event;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;

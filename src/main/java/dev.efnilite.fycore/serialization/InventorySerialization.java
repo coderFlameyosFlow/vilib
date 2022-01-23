@@ -15,7 +15,7 @@ public class InventorySerialization {
         return inventory;
     }
 
-    public static Map<Integer, String> serializee64(PlayerInventory inventory) {
+    public static Map<Integer, String> serialize64(PlayerInventory inventory) {
         Map<Integer, String> result = new HashMap<>();
         for (int slot : inventory.getItems().keySet()) {
             result.put(slot, ItemSerializer.serialize64(inventory.getSlot(slot)));

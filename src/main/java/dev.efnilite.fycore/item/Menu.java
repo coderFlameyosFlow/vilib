@@ -1,6 +1,6 @@
 package dev.efnilite.fycore.item;
 
-import dev.efnilite.fycore.util.EventWatcher;
+import dev.efnilite.fycore.event.EventWatcher;
 import dev.efnilite.fycore.util.FyList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

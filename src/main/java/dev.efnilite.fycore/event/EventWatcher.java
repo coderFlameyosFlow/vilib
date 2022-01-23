@@ -1,4 +1,4 @@
-package dev.efnilite.fycore.util;
+package dev.efnilite.fycore.event;
 
 import dev.efnilite.fycore.FyPlugin;
 import org.bukkit.event.HandlerList;
