@@ -19,7 +19,7 @@ public class ConfigOption<Type> {
             value = (Type) config.get(path);
         } catch (ClassCastException ex) {
             Logging.stack("Incompatible types in config option '" + path + "': " + ex.getMessage(),
-                    "Please check if you have entered the correct type of data for path '" + path + "'");
+                    "Please check if you have entered the correct type of data for path '" + path + "'", ex);
             return;
         }
 

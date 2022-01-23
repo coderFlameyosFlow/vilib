@@ -7,18 +7,18 @@ import java.util.Map;
 
 public class InventorySerialization {
 
-    public static PlayerInventory deserializeGson(Map<Integer, Map<String, Object>> map) {
+    public static PlayerInventory deserialize64(Map<Integer, String> map) {
         PlayerInventory inventory = new PlayerInventory();
-        for (Integer slot : map.keySet()) {
-            inventory.setItem(slot, ItemSerializer.deserializeGson(map.get(slot)));
+        for (int slot : map.keySet()) {
+            inventory.setItem(slot, ItemSerializer.deserialize64(map.get(slot)));
         }
         return inventory;
     }
 
-    public static Map<Integer, Map<String, Object>> serializeGson(PlayerInventory inventory) {
-        Map<Integer, Map<String, Object>> result = new HashMap<>();
-        for (Integer slot : inventory.getItems().keySet()) {
-            result.put(slot, ItemSerializer.serializeGson(inventory.getSlot(slot)));
+    public static Map<Integer, String> serializee64(PlayerInventory inventory) {
+        Map<Integer, String> result = new HashMap<>();
+        for (int slot : inventory.getItems().keySet()) {
+            result.put(slot, ItemSerializer.serialize64(inventory.getSlot(slot)));
         }
         return result;
     }

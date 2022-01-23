@@ -2,6 +2,7 @@ package dev.efnilite.fycore.util;
 
 import dev.efnilite.fycore.FyPlugin;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.logging.Logger;
 
@@ -28,10 +29,23 @@ public class Logging {
         logger.severe(error);
     }
 
-    public static void stack(String error, String fix) {
+    public static void stack(String error, String fix, Throwable... optionals) {
         error("##");
         error("## " + FyPlugin.getFyPlugin().getName() + " has encountered a critical error!");
         error("## " + error);
+        error("## " + error);
+
+        if (optionals != null) {
+            Throwable throwable = optionals[0];
+            error("##");
+            error("## Stack trace:");
+            error("## " + throwable);
+            StackTraceElement[] stack = throwable.getStackTrace();
+            for (StackTraceElement stackTraceElement : stack) {
+                error("## \t" + stackTraceElement.toString());
+            }
+        }
+
         error("##");
         error("## This is an internal error which may be able to fix.");
         error("## How to fix: " + fix);
