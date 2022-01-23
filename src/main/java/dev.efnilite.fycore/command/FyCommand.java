@@ -66,8 +66,7 @@ public abstract class FyCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        long now = System.currentTimeMillis();
-        if (now - cooldown.getLastExecuted() > cooldownMs) {
+        if (System.currentTimeMillis() - cooldown.getLastExecuted() > cooldownMs) {
 
             playerCooldowns.remove(cooldown); // update cooldown
             playerCooldowns.add(new CommandCooldown(arg));

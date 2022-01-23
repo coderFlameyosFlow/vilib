@@ -6,14 +6,14 @@ package dev.efnilite.fycore.command;
 public class CommandCooldown {
 
     /**
-     * When the command with arg was last executed
-     */
-    private final long lastExecuted;
-
-    /**
      * The argument
      */
     private final String arg;
+
+    /**
+     * When the command with arg was last executed
+     */
+    private final long lastExecuted;
 
     public CommandCooldown(String arg) {
         this.lastExecuted = System.currentTimeMillis();
