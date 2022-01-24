@@ -1,0 +1,96 @@
+package dev.efnilite.fycore.item;
+
+import dev.efnilite.fycore.util.FyMap;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.function.Consumer;
+
+/**
+ * Class for an item which uses the difference between left/right click to assign values
+ */
+public class SliderItem extends MenuItem {
+
+    /**
+     * The initial value which will be displayed
+     */
+    private int current;
+    private final FyMap<Integer, Item> items = new FyMap<>();
+    private final FyMap<Integer, Consumer<ItemStack>> switchFunctions = new FyMap<>();
+
+    /**
+     * Sets the initial viewing index.
+     * If you set up 2 items, with index 0 and 1, you can specify which will be viewed first.
+     *
+     * @param   initial
+     *          The initial viewing index
+     *
+     * @return the instance of this class
+     */
+    public SliderItem initial(int initial) {
+        this.current = initial;
+        return this;
+    }
+
+    /**
+     * Adds an item to the possible options
+     *
+     * @param   value
+     *          The int value which the item will be assigned to. This must start from 0 and specifies the index of the panel.
+     *
+     * @param   item
+     *          The item which will be displayed
+     *
+     * @return the instance of this class
+     */
+    public SliderItem add(int value, Item item, Consumer<ItemStack> onSwitchTo) {
+        items.put(value, item);
+        switchFunctions.put(value, onSwitchTo);
+        return this;
+    }
+
+    @Override
+    public void handleClick(ItemStack item, InventoryClickEvent watcher, ClickType clickType) {
+        switch (clickType) {
+            case LEFT:
+                current++;
+                break;
+            case SHIFT_LEFT:
+                current = items.size() - 1;
+                break;
+            case RIGHT:
+                current--;
+                break;
+            case SHIFT_RIGHT:
+                current = 0;
+                break;
+            default:
+                return;
+        }
+        Consumer<ItemStack> consumer = switchFunctions.get(current);
+        if (consumer == null) {
+            return;
+        }
+        consumer.accept(item);
+    }
+
+    @Override
+    public ItemStack build() {
+        if (items.keySet().size() <= 0) {
+            throw new IllegalArgumentException("Items size is <0 or 0!");
+        }
+
+        Item init = items.get(current);
+        if (init == null) {
+            init = items.get(items.randomKey());
+        }
+
+        return init.build();
+    }
+
+    @Override
+    public boolean isMovable() {
+        return false;
+    }
+}

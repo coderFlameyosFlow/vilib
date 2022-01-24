@@ -23,11 +23,11 @@ public class Menu implements EventWatcher {
     private final int rows;
     private final String title;
     private final List<UUID> watchers;
-    private final Map<Integer, Item> items;
+    private final Map<Integer, MenuItem> items;
     private final List<Integer> evenlyDistributedRows;
 
-    public Menu(int slot, String name) {
-        this.rows = slot;
+    public Menu(int rows, String name) {
+        this.rows = rows;
         this.title = name;
         this.watchers = new ArrayList<>();
         this.items = new HashMap<>();
@@ -45,7 +45,7 @@ public class Menu implements EventWatcher {
      *
      * @return the instance of this class
      */
-    public Menu item(int slot, Item item) {
+    public Menu item(int slot, MenuItem item) {
         items.put(slot, item);
         return this;
     }
@@ -88,7 +88,7 @@ public class Menu implements EventWatcher {
         for (int row : evenlyDistributedRows) {
             int max = row * 9 - 1; // 1 * 9 - 1 = slot 8
             int min = (row - 1) * 9; // (1 - 1) * 9 = 0
-            Map<Integer, Item> itemsInRow = new HashMap<>();
+            Map<Integer, MenuItem> itemsInRow = new HashMap<>();
 
             for (int slot : items.keySet()) { // get all items in the specified row
                 if (slot >= min && slot <= max) {
@@ -103,7 +103,7 @@ public class Menu implements EventWatcher {
                 for (int i = 0; i < slots.size(); i++) {
                     int newSlot = slots.get(i) + 9 * row; // gets the new slot
                     int oldSlot = sortedSlots.get(i); // the previous slot
-                    Item item = itemsInRow.get(oldSlot); // the item in the previous slot
+                    MenuItem item = itemsInRow.get(oldSlot); // the item in the previous slot
 
                     items.remove(oldSlot); // remove item from previous slot
                     items.put(newSlot, item); // put item in new slot
@@ -113,6 +113,7 @@ public class Menu implements EventWatcher {
         for (int slot : items.keySet()) {
             inventory.setItem(slot, items.get(slot).build());
         }
+
         watchers.add(player.getUniqueId());
 
         player.openInventory(inventory);
@@ -130,14 +131,13 @@ public class Menu implements EventWatcher {
             return;
         }
 
-        event.setCancelled(true);
-        Item clickedItem = items.get(slot);
-
+        MenuItem clickedItem = items.get(slot);
         if (clickedItem == null) {
             return;
         }
+        event.setCancelled(!clickedItem.isMovable());
 
-        items.get(slot).handleClick(event.getCurrentItem(), event);
+        clickedItem.handleClick(event.getCurrentItem(), event, event.getClick());
     }
 
     @EventHandler

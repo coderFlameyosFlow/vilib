@@ -5,7 +5,6 @@ import dev.efnilite.fycore.util.colour.Colours;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -15,14 +14,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiConsumer;
 
 /**
  * A class for creating items.
  *
  * @author Efnilite
  */
-public class Item {
+public class Item extends MenuItem {
 
     private int amount;
     private int durability;
@@ -30,7 +28,6 @@ public class Item {
     private boolean unbreakable;
     private String name;
     private Material material;
-    private BiConsumer<ItemStack, InventoryClickEvent> clickFunction;
     private final List<String> lore;
 
     /**
@@ -71,11 +68,7 @@ public class Item {
         this.unbreakable = false;
     }
 
-    /**
-     * Finishes everything and gives the ItemStack result.
-     *
-     * @return the result
-     */
+    @Override
     public ItemStack build() {
         ItemStack item = new ItemStack(material, amount);
         ItemMeta meta = Bukkit.getItemFactory().getItemMeta(item.getType());
@@ -98,21 +91,9 @@ public class Item {
         return item;
     }
 
-    /**
-     * Set the function on click
-     *
-     * @param   consumer
-     *          Useful values which are gathered in the click e vent
-     *
-     * @return the instance of this class
-     */
-    public Item click(BiConsumer<ItemStack, InventoryClickEvent> consumer) {
-        this.clickFunction = consumer;
-        return this;
-    }
-
-    public void handleClick(ItemStack item, InventoryClickEvent watcher) {
-        clickFunction.accept(item, watcher);
+    @Override
+    public boolean isMovable() {
+        return false;
     }
 
     /**
