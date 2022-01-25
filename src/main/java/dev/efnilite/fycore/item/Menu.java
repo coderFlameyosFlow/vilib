@@ -1,8 +1,8 @@
 package dev.efnilite.fycore.item;
 
+import dev.efnilite.fycore.event.EventWatcher;
 import dev.efnilite.fycore.item.animation.MenuAnimation;
 import dev.efnilite.fycore.util.FyList;
-import dev.efnilite.fycore.event.EventWatcher;
 import dev.efnilite.fycore.util.Numbers;
 import dev.efnilite.fycore.util.colour.Colours;
 import org.bukkit.Bukkit;

@@ -4,6 +4,8 @@ import dev.efnilite.fycore.command.FyCommand;
 import dev.efnilite.fycore.reflection.Reflection;
 import dev.efnilite.fycore.util.Logging;
 import dev.efnilite.fycore.util.Version;
+import org.bukkit.Bukkit;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,6 +27,9 @@ public abstract class FyPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         disable();
+
+        HandlerList.unregisterAll(this);
+        Bukkit.getScheduler().cancelTasks(this);
     }
 
     public abstract void enable();

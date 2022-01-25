@@ -25,8 +25,10 @@ public abstract class MenuItem {
      *
      * @return the instance of this class
      */
-    public MenuItem click(BiConsumer<ItemStack, InventoryClickEvent> consumer,  ClickType clickType) {
-        clickFunctions.put(clickType, consumer);
+    public MenuItem click(BiConsumer<ItemStack, InventoryClickEvent> consumer,  ClickType... clickType) {
+        for (ClickType type : clickType) {
+            clickFunctions.put(type, consumer);
+        }
         return this;
     }
 
