@@ -1,8 +1,8 @@
 package dev.efnilite.fycore.item.animation;
 
+import dev.efnilite.fycore.util.Task;
 import dev.efnilite.fycore.item.Menu;
 import dev.efnilite.fycore.item.MenuItem;
-import dev.efnilite.fycore.util.Task;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitTask;
 

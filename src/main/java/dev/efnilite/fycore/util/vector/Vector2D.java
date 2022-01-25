@@ -1,4 +1,4 @@
-package dev.efnilite.fycore.util;
+package dev.efnilite.fycore.util.vector;
 
 import org.bukkit.util.Vector;
 
