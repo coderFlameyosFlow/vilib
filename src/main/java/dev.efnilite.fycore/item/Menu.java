@@ -1,8 +1,12 @@
 package dev.efnilite.fycore.item;
 
 import dev.efnilite.fycore.event.EventWatcher;
+import dev.efnilite.fycore.item.animation.MenuAnimation;
 import dev.efnilite.fycore.util.FyList;
+import dev.efnilite.fycore.util.Numbers;
+import dev.efnilite.fycore.util.colour.Colours;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -20,18 +24,20 @@ import java.util.*;
  */
 public class Menu implements EventWatcher {
 
+    private Player player;
+    private Material filler = null;
+    private MenuAnimation animation = null;
     private final int rows;
     private final String title;
-    private final List<UUID> watchers;
-    private final Map<Integer, MenuItem> items;
-    private final List<Integer> evenlyDistributedRows;
+    private final Map<Integer, MenuItem> items = new HashMap<>();
+    private final List<Integer> evenlyDistributedRows = new ArrayList<>();
 
     public Menu(int rows, String name) {
+        if (rows < 0 || rows > 6) {
+            throw new IllegalArgumentException("Rows is below 0 or above 6");
+        }
         this.rows = rows;
-        this.title = name;
-        this.watchers = new ArrayList<>();
-        this.items = new HashMap<>();
-        this.evenlyDistributedRows = new ArrayList<>();
+        this.title = Colours.colour(name);
     }
 
     /**
@@ -70,7 +76,34 @@ public class Menu implements EventWatcher {
      * @return the instance of this class
      */
     public Menu distributeRowsEvenly() {
-        evenlyDistributedRows.addAll(getFromZero(rows));
+        evenlyDistributedRows.addAll(Numbers.getFromZero(rows));
+        return this;
+    }
+
+    /**
+     * Fills the background with a specific item
+     *
+     * @param   filler
+     *          The background filler
+     *
+     * @return the instance of this class
+     */
+    public Menu fillBackground(@NotNull Material filler) {
+        this.filler = filler;
+        return this;
+    }
+
+    /**
+     * Creates an animation on opening
+     *
+     * @param   animation
+     *          The animation
+     *
+     * @return the instance of this class
+     */
+    public Menu animation(@NotNull MenuAnimation animation) {
+        this.animation = animation;
+        this.animation.init(rows);
         return this;
     }
 
@@ -83,8 +116,10 @@ public class Menu implements EventWatcher {
      * @return the instance of this class
      */
     public Menu open(Player player) {
+        this.player = player;
         Inventory inventory = Bukkit.createInventory(null, rows * 9, title);
 
+        // Evenly distributed rows
         for (int row : evenlyDistributedRows) {
             int max = row * 9 - 1; // 1 * 9 - 1 = slot 8
             int min = (row - 1) * 9; // (1 - 1) * 9 = 0
@@ -110,24 +145,40 @@ public class Menu implements EventWatcher {
                 }
             }
         }
-        for (int slot : items.keySet()) {
-            inventory.setItem(slot, items.get(slot).build());
+
+        // Filler
+        if (filler != null) { // fill the background with the same material
+            Item fillerItem = new Item(filler, "&c");
+            for (int slot = 0; slot < rows * 9; slot++) {
+                if (items.get(slot) != null) { // ignore already-set items
+                    continue;
+                }
+
+                items.put(slot, fillerItem);
+            }
         }
 
-        watchers.add(player.getUniqueId());
-
         player.openInventory(inventory);
+
+        // Set items
+        if (animation == null) {
+            for (int slot : items.keySet()) { // no animation means just setting it normally
+                inventory.setItem(slot, items.get(slot).build());
+            }
+        } else {
+            animation.run(this);
+        }
+
         register();
         return this;
     }
 
     @EventHandler
     public void click(@NotNull InventoryClickEvent event) {
-        Player player = (Player) event.getWhoClicked();
         InventoryView view = event.getView();
         int slot = event.getSlot();
 
-        if (!view.getTitle().equals(title) && !watchers.contains(player.getUniqueId()) && event.getCurrentItem() != null) {
+        if (!view.getTitle().equals(title) || event.getClickedInventory() != view.getTopInventory()) {
             return;
         }
 
@@ -142,9 +193,28 @@ public class Menu implements EventWatcher {
 
     @EventHandler
     public void close(InventoryCloseEvent event) {
-        Player player = (Player) event.getPlayer();
+        if (animation != null) {
+            animation.stop();
+        }
+        unregister();
+    }
 
-        watchers.remove(player.getUniqueId());
+    /**
+     * Gets the slots and their respective items
+     *
+     * @return a Map with the slots and items.
+     */
+    public Map<Integer, MenuItem> getItems() {
+        return items;
+    }
+
+    /**
+     * Gets the player
+     *
+     * @return the player
+     */
+    public Player getPlayer() {
+        return player;
     }
 
     private List<Integer> getEvenlyDistributedSlots(int amountInRow) {
@@ -170,14 +240,5 @@ public class Menu implements EventWatcher {
             default:
                 return Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8);
         }
-    }
-
-    // gets all ints from zero (inclusive) to n (inclusive)
-    private List<Integer> getFromZero(int n) {
-        List<Integer> result = new ArrayList<>();
-        for (int i = 0; i <= n; i++) {
-            result.add(n);
-        }
-        return result;
     }
 }

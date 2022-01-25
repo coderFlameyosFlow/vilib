@@ -9,6 +9,8 @@ import java.util.function.Consumer;
 
 /**
  * Class for an item which uses the difference between left/right click to assign values
+ *
+ * @author Efnilite
  */
 public class SliderItem extends MenuItem {
 
@@ -51,16 +53,22 @@ public class SliderItem extends MenuItem {
     }
 
     @Override
-    public void handleClick(ItemStack item, InventoryClickEvent watcher, ClickType clickType) {
+    public void handleClick(ItemStack item, InventoryClickEvent event, ClickType clickType) {
         switch (clickType) {
             case LEFT:
                 current++;
+                if (current >= items.size()) {
+                    current = 0;
+                }
                 break;
             case SHIFT_LEFT:
                 current = items.size() - 1;
                 break;
             case RIGHT:
                 current--;
+                if (current == -1) {
+                    current = items.size() - 1;
+                }
                 break;
             case SHIFT_RIGHT:
                 current = 0;
@@ -68,11 +76,13 @@ public class SliderItem extends MenuItem {
             default:
                 return;
         }
+
         Consumer<ItemStack> consumer = switchFunctions.get(current);
         if (consumer == null) {
             return;
         }
         consumer.accept(item);
+        event.getInventory().setItem(event.getSlot(), items.get(current).build());
     }
 
     @Override

@@ -5,14 +5,17 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BiConsumer;
 
 /**
  * Super class for every type of item which will be displayed in the menu
+ *
+ * @author Efnilite
  */
 public abstract class MenuItem {
 
-    protected HashMap<ClickType, BiConsumer<ItemStack, InventoryClickEvent>> clickFunctions;
+    protected Map<ClickType, BiConsumer<ItemStack, InventoryClickEvent>> clickFunctions = new HashMap<>();
 
     /**
      * Set the function on click

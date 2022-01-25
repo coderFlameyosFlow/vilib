@@ -50,7 +50,8 @@ public enum Version {
     public static Version getVersion() {
         String string = getFullVersion().toUpperCase();
         string = string.endsWith("_") ? string.substring(0, string.length() - 1) : string;
-        return valueOf(string);
+        VERSION = valueOf(string);
+        return VERSION;
     }
 
     private static String getFullVersion() {

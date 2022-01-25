@@ -2,6 +2,11 @@ package dev.efnilite.fycore.item;
 
 import org.bukkit.Material;
 
+/**
+ * An item which may be moved by the player
+ *
+ * @author Efnilite
+ */
 public class MovableItem extends Item {
 
     public MovableItem(Material material, String name) {
