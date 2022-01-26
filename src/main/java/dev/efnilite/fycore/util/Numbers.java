@@ -24,4 +24,22 @@ public class Numbers {
         return result;
     }
 
+    /**
+     * Gets the min int from an Array of ints
+     *
+     * @param   ints
+     *          All ints
+     *
+     * @return the smallest of the values of parameter ints
+     */
+    public static int min(int... ints) {
+        int min = Integer.MAX_VALUE;
+
+        for (int value : ints) {
+            min = Math.min(min, value);
+        }
+
+        return min;
+    }
+
 }

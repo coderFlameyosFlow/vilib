@@ -1,6 +1,6 @@
 package dev.efnilite.fycore.item.animation;
 
-import dev.efnilite.fycore.util.vector.Vector2D;
+import dev.efnilite.fycore.vector.Vector2D;
 
 import java.util.ArrayList;
 import java.util.List;
