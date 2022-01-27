@@ -32,7 +32,7 @@ public class TimedItem extends MenuItem {
                     InventoryView view = player.getOpenInventory();
                     if (view.getTitle().equals(menu.getTitle())) {
                         menu.item(previousSlot, revertTo);
-                        menu.update();
+                        menu.updateItem(previousSlot);
                     }
                 })
                 .run();

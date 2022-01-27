@@ -131,7 +131,7 @@ public abstract class MenuAnimation {
         List<Integer> result = new ArrayList<>();
 
         int direction = delta < 0 ? -1 : 1;
-        for (int i = 0; i < Math.abs(delta) + 1; i++) {
+        for (int i = 0; i <= Math.abs(delta) + 1; i++) {
             result.add(begin + (i * direction));
         }
         return result;
@@ -153,8 +153,8 @@ public abstract class MenuAnimation {
         List<Integer> result = new ArrayList<>();
 
         int direction = delta < 0 ? -9 : 9;
-        for (int i = 0; i < Math.abs(delta) + 1; i++) {
-            result.add(begin - (i * direction));
+        for (int i = 0; i <= Math.abs(delta); i++) {
+            result.add(begin + (i * direction));
         }
         return result;
     }
