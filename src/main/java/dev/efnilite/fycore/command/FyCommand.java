@@ -53,6 +53,14 @@ public abstract class FyCommand implements CommandExecutor, TabCompleter {
 
         CommandCooldown cooldown = null; // the current cooldown
         List<CommandCooldown> playerCooldowns = cooldowns.get(uuid);
+
+        if (playerCooldowns == null) {
+            playerCooldowns = new ArrayList<>();
+            playerCooldowns.add(new CommandCooldown(arg));
+            cooldowns.put(uuid, playerCooldowns);
+            return true;
+        }
+
         for (CommandCooldown plCooldown : playerCooldowns) { // get the appropriate commandcooldown class
             if (plCooldown.getArg().equals(arg)) {
                 cooldown = plCooldown;
