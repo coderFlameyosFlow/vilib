@@ -45,8 +45,8 @@ public abstract class FyPlugin extends JavaPlugin {
      * @param   command
      *          The command class
      */
-    public void registerCommand(String name, Class<? extends FyCommand> command) {
-        FyCommand.register(name, Reflection.newInstance(command));
+    public void registerCommand(String name, FyCommand command) {
+        FyCommand.register(name, command);
     }
 
     public void registerListener(Listener listener) {
