@@ -22,7 +22,12 @@ public class ChatAnswer implements EventWatcher {
     /**
      * The text, when entered, which will disable the instance of this class
      */
-    private String cancelText = "XXXXXX";
+    private final String cancelText;
+
+    /**
+     * The amount of chars that have to be added, removed or changed to get the change message;
+     */
+    private int matchDistance;
 
     /**
      * What to do after the message has been sent. This BiConsumer provides the answer and the player instance.
@@ -43,6 +48,11 @@ public class ChatAnswer implements EventWatcher {
         this.cancelText = cancelText;
 
         register();
+    }
+
+    public ChatAnswer matchDistance(int matchDistance) {
+        this.matchDistance = matchDistance;
+        return this;
     }
 
     /**
@@ -80,7 +90,7 @@ public class ChatAnswer implements EventWatcher {
 
         String message = event.getMessage();
         event.setCancelled(true);
-        if (Strings.getLevenshteinDistance(cancelText, message) < 2) {
+        if (Strings.getLevenshteinDistance(cancelText, message) > matchDistance) {
             postMessage.accept(player, message);
         }
         unregister();

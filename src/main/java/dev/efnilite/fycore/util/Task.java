@@ -19,6 +19,7 @@ public class Task {
     private boolean async;
     private final Plugin plugin;
     private Runnable defaultRunnable;
+    private BukkitTask task;
     private BukkitRunnable bukkitRunnable;
 
     public Task() {
@@ -91,12 +92,35 @@ public class Task {
     }
 
     /**
+     * Cancels this task
+     *
+     * @return the instance of this class
+     */
+    public Task cancel() {
+        task.cancel();
+        return this;
+    }
+
+    /**
+     * Cancels the active/waiting task and runs the task immediately
+     *
+     * @return the instance of this class
+     */
+    public BukkitTask cancelAndRunImmediately() {
+        task.cancel();
+
+        delay = 0; // reset to run immediately
+        repeat = 0;
+
+        return run();
+    }
+
+    /**
      * Runs this task
      *
      * @return the BukkitTask instance returned from running this task
      */
     public BukkitTask run() {
-        BukkitTask task;
         if (bukkitRunnable != null) {
             if (async) { // async
                 if (repeat > 0) {
