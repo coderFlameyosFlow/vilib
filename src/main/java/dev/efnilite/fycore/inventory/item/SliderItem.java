@@ -1,4 +1,4 @@
-package dev.efnilite.fycore.item;
+package dev.efnilite.fycore.inventory.item;
 
 import dev.efnilite.fycore.util.FyMap;
 import org.bukkit.event.inventory.ClickType;

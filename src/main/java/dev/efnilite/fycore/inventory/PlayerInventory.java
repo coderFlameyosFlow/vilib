@@ -1,4 +1,4 @@
-package dev.efnilite.fycore.item;
+package dev.efnilite.fycore.inventory;
 
 import com.google.gson.annotations.Expose;
 import org.bukkit.inventory.ItemStack;

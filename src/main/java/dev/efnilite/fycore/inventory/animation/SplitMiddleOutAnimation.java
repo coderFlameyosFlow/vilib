@@ -1,4 +1,4 @@
-package dev.efnilite.fycore.item.animation;
+package dev.efnilite.fycore.inventory.animation;
 
 /**
  * An animation which goes from the middle to the sides.

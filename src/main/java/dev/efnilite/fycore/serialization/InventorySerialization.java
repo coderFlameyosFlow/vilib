@@ -1,6 +1,6 @@
 package dev.efnilite.fycore.serialization;
 
-import dev.efnilite.fycore.item.PlayerInventory;
+import dev.efnilite.fycore.inventory.PlayerInventory;
 
 import java.util.HashMap;
 import java.util.Map;

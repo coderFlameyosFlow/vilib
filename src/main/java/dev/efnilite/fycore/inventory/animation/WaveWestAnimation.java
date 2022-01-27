@@ -1,4 +1,4 @@
-package dev.efnilite.fycore.item.animation;
+package dev.efnilite.fycore.inventory.animation;
 
 /**
  * An animation which waves towards the west.

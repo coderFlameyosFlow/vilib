@@ -1,4 +1,4 @@
-package dev.efnilite.fycore.item.animation;
+package dev.efnilite.fycore.inventory.animation;
 
 import dev.efnilite.fycore.util.Numbers;
 

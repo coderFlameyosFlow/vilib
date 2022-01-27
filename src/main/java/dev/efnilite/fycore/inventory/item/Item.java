@@ -1,4 +1,4 @@
-package dev.efnilite.fycore.item;
+package dev.efnilite.fycore.inventory.item;
 
 import dev.efnilite.fycore.util.Version;
 import dev.efnilite.fycore.util.colour.Colours;

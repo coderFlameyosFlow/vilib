@@ -42,4 +42,21 @@ public class Numbers {
         return min;
     }
 
+    public static int max(int... ints) {
+        int max = Integer.MIN_VALUE;
+
+        for (int value : ints) {
+            max = Math.max(max, value);
+        }
+
+        return max;
+    }
+
+    public static List<Integer> getFromTo(int from, int to) {
+        List<Integer> result = new ArrayList<>();
+        for (int i = min(from, to); i <= max(from, to); i++) {
+            result.add(i);
+        }
+        return result;
+    }
 }

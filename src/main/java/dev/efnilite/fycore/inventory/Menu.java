@@ -1,7 +1,9 @@
-package dev.efnilite.fycore.item;
+package dev.efnilite.fycore.inventory;
 
 import dev.efnilite.fycore.event.EventWatcher;
-import dev.efnilite.fycore.item.animation.MenuAnimation;
+import dev.efnilite.fycore.inventory.animation.MenuAnimation;
+import dev.efnilite.fycore.inventory.item.Item;
+import dev.efnilite.fycore.inventory.item.MenuItem;
 import dev.efnilite.fycore.util.FyList;
 import dev.efnilite.fycore.util.Numbers;
 import dev.efnilite.fycore.util.colour.Colours;
@@ -24,13 +26,13 @@ import java.util.*;
  */
 public class Menu implements EventWatcher {
 
-    private Player player;
-    private Material filler = null;
-    private MenuAnimation animation = null;
-    private final int rows;
-    private final String title;
-    private final Map<Integer, MenuItem> items = new HashMap<>();
-    private final List<Integer> evenlyDistributedRows = new ArrayList<>();
+    protected Player player;
+    protected Material filler = null;
+    protected MenuAnimation animation = null;
+    protected final int rows;
+    protected final String title;
+    protected final Map<Integer, MenuItem> items = new HashMap<>();
+    protected final List<Integer> evenlyDistributedRows = new ArrayList<>();
 
     public Menu(int rows, String name) {
         if (rows < 0 || rows > 6) {
@@ -107,15 +109,21 @@ public class Menu implements EventWatcher {
         return this;
     }
 
+    public void update() {
+        Inventory inventory = player.getOpenInventory().getTopInventory();
+
+        for (int slot : items.keySet()) { // no animation means just setting it normally
+            inventory.setItem(slot, items.get(slot).build());
+        }
+    }
+
     /**
      * Opens the menu for the player. This distributes items on the same row automatically if these rows are assigned to automatically distribute.
      *
      * @param   player
      *          The player to open it to
-     *
-     * @return the instance of this class
      */
-    public Menu open(Player player) {
+    public void open(Player player) {
         this.player = player;
         Inventory inventory = Bukkit.createInventory(null, rows * 9, title);
 
@@ -170,7 +178,6 @@ public class Menu implements EventWatcher {
         }
 
         register();
-        return this;
     }
 
     @EventHandler
@@ -215,6 +222,10 @@ public class Menu implements EventWatcher {
      */
     public Player getPlayer() {
         return player;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     private List<Integer> getEvenlyDistributedSlots(int amountInRow) {

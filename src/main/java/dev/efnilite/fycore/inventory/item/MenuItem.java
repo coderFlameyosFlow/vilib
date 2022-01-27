@@ -1,4 +1,4 @@
-package dev.efnilite.fycore.item;
+package dev.efnilite.fycore.inventory.item;
 
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
