@@ -47,16 +47,16 @@ public class Strings {
         int[][] minDistanceMatrix = new int[sourceLength + 1][otherLength + 1];  // init the minimum distance matrix and add one to account for default values
         minDistanceMatrix[0][0] = 0;
 
-        for (int row = 0; row < sourceLength; row++) { // enter default edit values for the source string (in rows)
+        for (int row = 1; row <= sourceLength; row++) { // enter default edit values for the source string (in rows)
             minDistanceMatrix[row][0] = row;
         }
 
-        for (int col = 0; col < otherLength; col++) { // enter default edit values for the other string (in cols)
+        for (int col = 1; col <= otherLength; col++) { // enter default edit values for the other string (in cols)
             minDistanceMatrix[0][col] = col;
         }
 
-        for (int row = 0; row < sourceLength; row++) {
-            for (int col = 0; col < otherLength; col++) { // go through every value and get the min value
+        for (int row = 1; row <= sourceLength; row++) {
+            for (int col = 1; col <= otherLength; col++) { // go through every value and get the min value
                 minDistanceMatrix[row][col] = getMinLevenshteinCost(source, other, minDistanceMatrix, row, col);
             }
         }
