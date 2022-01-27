@@ -190,6 +190,7 @@ public class Item extends MenuItem {
         if (lore == null || lore.isEmpty()) {
             return this;
         }
+        this.lore.clear();
         for (String l : lore) {
             this.lore.add(Colours.colour(l));
         }

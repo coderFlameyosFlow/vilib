@@ -22,7 +22,7 @@ public class ChatAnswer implements EventWatcher {
     /**
      * The text, when entered, which will disable the instance of this class
      */
-    private String cancelText;
+    private String cancelText = "XXXXXX";
 
     /**
      * What to do after the message has been sent. This BiConsumer provides the answer and the player instance.
@@ -34,24 +34,15 @@ public class ChatAnswer implements EventWatcher {
      *
      * @param   player
      *          The player of which the chat will be monitored for answers
-     */
-    public ChatAnswer(Player player) {
-        this.player = player;
-
-        register();
-    }
-
-    /**
-     * The text which will cancel waiting for an answer
      *
      * @param   cancelText
-     *          If this text is entered, this instance gets disabled.
-     *
-     * @return the instance of this class
+     *          The text, which on entering, will cancel this answer listener.
      */
-    public ChatAnswer cancelText(String cancelText) {
+    public ChatAnswer(Player player, String cancelText) {
+        this.player = player;
         this.cancelText = cancelText;
-        return this;
+
+        register();
     }
 
     /**
@@ -88,6 +79,7 @@ public class ChatAnswer implements EventWatcher {
         }
 
         String message = event.getMessage();
+        event.setCancelled(true);
         if (Strings.getLevenshteinDistance(cancelText, message) < 2) {
             postMessage.accept(player, message);
         }

@@ -1,11 +1,12 @@
 package dev.efnilite.fycore.inventory.item;
 
+import dev.efnilite.fycore.inventory.Menu;
 import dev.efnilite.fycore.util.FyMap;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 /**
  * Class for an item which uses the difference between left/right click to assign values
@@ -19,7 +20,7 @@ public class SliderItem extends MenuItem {
      */
     private int current;
     private final FyMap<Integer, Item> items = new FyMap<>();
-    private final FyMap<Integer, Consumer<ItemStack>> switchFunctions = new FyMap<>();
+    private final FyMap<Integer, BiConsumer<Menu, InventoryClickEvent>> switchFunctions = new FyMap<>();
 
     /**
      * Sets the initial viewing index.
@@ -46,14 +47,14 @@ public class SliderItem extends MenuItem {
      *
      * @return the instance of this class
      */
-    public SliderItem add(int value, Item item, Consumer<ItemStack> onSwitchTo) {
+    public SliderItem add(int value, Item item, BiConsumer<Menu, InventoryClickEvent> onSwitchTo) {
         items.put(value, item);
         switchFunctions.put(value, onSwitchTo);
         return this;
     }
 
     @Override
-    public void handleClick(ItemStack item, InventoryClickEvent event, ClickType clickType) {
+    public void handleClick(Menu menu, InventoryClickEvent event, ClickType clickType) {
         switch (clickType) {
             case LEFT:
                 current++;
@@ -77,11 +78,11 @@ public class SliderItem extends MenuItem {
                 return;
         }
 
-        Consumer<ItemStack> consumer = switchFunctions.get(current);
+        BiConsumer<Menu, InventoryClickEvent> consumer = switchFunctions.get(current);
         if (consumer == null) {
             return;
         }
-        consumer.accept(item);
+        consumer.accept(menu, event);
         event.getInventory().setItem(event.getSlot(), items.get(current).build());
     }
 

@@ -1,7 +1,6 @@
 package dev.efnilite.fycore;
 
 import dev.efnilite.fycore.command.FyCommand;
-import dev.efnilite.fycore.reflection.Reflection;
 import dev.efnilite.fycore.util.Logging;
 import dev.efnilite.fycore.util.Version;
 import org.bukkit.Bukkit;

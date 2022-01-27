@@ -115,10 +115,35 @@ public class Menu implements EventWatcher {
         return this;
     }
 
+    /**
+     * Updates a specific item
+     *
+     * @param   slots
+     *          The slots which are to be updated
+     */
+    public void updateItem(int... slots) {
+        Inventory inventory = player.getOpenInventory().getTopInventory();
+
+        if (inventory.getSize() % 9 != 0) {
+            return;
+        }
+
+        for (int slot : slots) {
+            inventory.setItem(slot, items.get(slot).build());
+        }
+    }
+
+    /**
+     * Updates all items in the inventory
+     */
     public void update() {
         Inventory inventory = player.getOpenInventory().getTopInventory();
 
-        for (int slot : items.keySet()) { // no animation means just setting it normally
+        if (inventory.getSize() % 9 != 0) {
+            return;
+        }
+
+        for (int slot : items.keySet()) {
             inventory.setItem(slot, items.get(slot).build());
         }
     }
@@ -148,14 +173,24 @@ public class Menu implements EventWatcher {
             if (itemsInRow.keySet().size() > 0) {
                 List<Integer> sortedSlots = FyList.sort(itemsInRow.keySet()); // sort all slots
                 List<Integer> slots = getEvenlyDistributedSlots(sortedSlots.size()); // evenly distribute items
+                List<Integer> olds = new ArrayList<>();
+                List<Integer> news = new ArrayList<>();
 
                 for (int i = 0; i < slots.size(); i++) {
-                    int newSlot = slots.get(i) + 9 * row; // gets the new slot
+                    int newSlot = slots.get(i) + (9 * row); // gets the new slot
                     int oldSlot = sortedSlots.get(i); // the previous slot
                     MenuItem item = itemsInRow.get(oldSlot); // the item in the previous slot
 
-                    items.remove(oldSlot); // remove item from previous slot
+                    news.add(newSlot);
+                    olds.add(oldSlot);
                     items.put(newSlot, item); // put item in new slot
+                }
+
+                for (int oldSlot : olds) {
+                    if (news.contains(oldSlot)) {
+                        continue;
+                    }
+                    items.remove(oldSlot); // remove items from previous slot without deleting ones that are to-be moved
                 }
             }
         }
@@ -201,7 +236,7 @@ public class Menu implements EventWatcher {
         }
         event.setCancelled(!clickedItem.isMovable());
 
-        clickedItem.handleClick(event.getCurrentItem(), event, event.getClick());
+        clickedItem.handleClick(this, event, event.getClick());
     }
 
     @EventHandler

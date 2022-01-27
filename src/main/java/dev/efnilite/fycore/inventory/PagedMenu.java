@@ -38,8 +38,12 @@ public class PagedMenu extends Menu {
         int end = Integer.MIN_VALUE;
 
         for (int row : rows) {
-            int max = row * 9 - 1;
-            int min = (row - 1) * 9;
+            if (row < 0 || row > 5) {
+                throw new IllegalArgumentException("Row must be above 0 and below 6!");
+            }
+
+            int min = row * 9;
+            int max = min + 8;
 
             begin = Numbers.min(begin, min);
             end = Numbers.max(end, max);
@@ -78,7 +82,6 @@ public class PagedMenu extends Menu {
         if (newPage < total - 1) {
             items.put(nextPageSlot, nextPageItem);
         }
-        update();
     }
 
     private void assignPages() {

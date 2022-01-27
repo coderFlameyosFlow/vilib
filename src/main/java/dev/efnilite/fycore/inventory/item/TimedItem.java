@@ -3,7 +3,6 @@ package dev.efnilite.fycore.inventory.item;
 import dev.efnilite.fycore.inventory.Menu;
 import dev.efnilite.fycore.util.Task;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 

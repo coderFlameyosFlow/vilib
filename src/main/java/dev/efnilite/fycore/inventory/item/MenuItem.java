@@ -1,5 +1,6 @@
 package dev.efnilite.fycore.inventory.item;
 
+import dev.efnilite.fycore.inventory.Menu;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -15,7 +16,7 @@ import java.util.function.BiConsumer;
  */
 public abstract class MenuItem {
 
-    protected Map<ClickType, BiConsumer<ItemStack, InventoryClickEvent>> clickFunctions = new HashMap<>();
+    protected Map<ClickType, BiConsumer<Menu, InventoryClickEvent>> clickFunctions = new HashMap<>();
 
     /**
      * Set the function on click
@@ -25,7 +26,7 @@ public abstract class MenuItem {
      *
      * @return the instance of this class
      */
-    public MenuItem click(BiConsumer<ItemStack, InventoryClickEvent> consumer,  ClickType... clickType) {
+    public MenuItem click(BiConsumer<Menu, InventoryClickEvent> consumer, ClickType... clickType) {
         if (clickType.length == 0) {
             for (ClickType type : ClickType.values()) {
                 clickFunctions.put(type, consumer);
@@ -38,12 +39,12 @@ public abstract class MenuItem {
         return this;
     }
 
-    public void handleClick(ItemStack item, InventoryClickEvent watcher, ClickType clickType) {
-        BiConsumer<ItemStack, InventoryClickEvent> consumer = clickFunctions.get(clickType);
+    public void handleClick(Menu menu, InventoryClickEvent event, ClickType clickType) {
+        BiConsumer<Menu, InventoryClickEvent> consumer = clickFunctions.get(clickType);
         if (consumer == null)  {
             return;
         }
-        consumer.accept(item, watcher);
+        consumer.accept(menu, event);
     }
 
     /**
