@@ -59,21 +59,27 @@ public class Menu implements EventWatcher {
     }
 
     /**
-     * Sets a specific row to be distributed evenly. The items will be distributed.
+     * Sets a specific set of rows to be distributed evenly. The items will be distributed.
+     * Starts from 0 and goes up to 5.
      *
-     * @param   row
-     *          The row
+     * @param   rows
+     *          The rows
      *
      * @return the instance of this class
      */
-    public Menu distributeRowEvenly(int row) {
-        evenlyDistributedRows.add(row);
+    public Menu distributeRowEvenly(int... rows) {
+        for (int row : rows) {
+            if (row < 0 || row > 5) {
+                throw new IllegalArgumentException("Row must be above 0 and below 6!");
+            }
+            evenlyDistributedRows.add(row);
+        }
         return this;
     }
 
     /**
-     * Will distribute all rows evenly
-     * @see #distributeRowEvenly(int)
+     * Will distribute all rows evenly.
+     * @see #distributeRowEvenly(int...)
      *
      * @return the instance of this class
      */
@@ -129,8 +135,8 @@ public class Menu implements EventWatcher {
 
         // Evenly distributed rows
         for (int row : evenlyDistributedRows) {
-            int max = row * 9 - 1; // 1 * 9 - 1 = slot 8
-            int min = (row - 1) * 9; // (1 - 1) * 9 = 0
+            int min = row * 9; // 0 * 9 = 0
+            int max = min + 8; // 0 + 8 = slot 8
             Map<Integer, MenuItem> itemsInRow = new HashMap<>();
 
             for (int slot : items.keySet()) { // get all items in the specified row
