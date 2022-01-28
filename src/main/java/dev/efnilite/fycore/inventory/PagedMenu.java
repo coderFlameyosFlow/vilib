@@ -1,5 +1,6 @@
 package dev.efnilite.fycore.inventory;
 
+import dev.efnilite.fycore.inventory.item.Item;
 import dev.efnilite.fycore.inventory.item.MenuItem;
 import dev.efnilite.fycore.util.Numbers;
 import org.bukkit.entity.Player;
@@ -9,6 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A menu which contains multiple pages
+ *
+ * @author Efnilite
+ */
 public class PagedMenu extends Menu {
 
     private int total;
@@ -55,8 +61,8 @@ public class PagedMenu extends Menu {
     @Override
     public void open(Player player) {
         assignPages();
-        page(0);
 
+        page(0);
         super.open(player);
     }
 
@@ -65,31 +71,45 @@ public class PagedMenu extends Menu {
         if (newPage < 0 || newPage > total) {
             return;
         }
-        List<MenuItem> vals = assigned.get(newPage);
-        for (int slot : displaySlots) {
-            items.remove(slot);
-            if (vals.size() <= 0) {
-                break;
-            }
-            items.put(slot, vals.get(0));
-            vals.remove(0);
-        }
+        List<MenuItem> values = new ArrayList<>(assigned.get(newPage));
+        Item missingFiller = new Item(filler, "&c");
+
         items.remove(prevPageSlot);
         items.remove(nextPageSlot);
-        if (newPage > 1) {
+
+        if (newPage > 0) {
             items.put(prevPageSlot, prevPageItem);
+        } else if (filler != null) {
+            items.put(prevPageSlot, missingFiller);
         }
         if (newPage < total - 1) {
             items.put(nextPageSlot, nextPageItem);
+        } else if (filler != null) {
+            items.put(nextPageSlot, missingFiller);
         }
+
+        for (int slot : displaySlots) {
+            items.remove(slot);
+
+            if (values.size() > 0) {
+                items.put(slot, values.get(0));
+                values.remove(0);
+            } else if (filler != null) {
+                items.put(slot, missingFiller);
+            }
+        }
+        if (delta != 0) {
+            update();
+        }
+        current = newPage;
     }
 
     private void assignPages() {
         List<MenuItem> total = new ArrayList<>(totalToDisplay);
         List<MenuItem> thisPage = new ArrayList<>();
 
-        int totalPages = (int) Math.ceil((total.size() + 0.0) / displaySlots.size());
-        for (int page = 0; page < totalPages; page++) {
+        int page = 0;
+        while (total.size() > 0) {
             for (int slot = 0; slot < displaySlots.size(); slot++) {
                 if (total.size() <= 0) {
                     break;
@@ -98,9 +118,12 @@ public class PagedMenu extends Menu {
                 total.remove(0);
             }
 
-            assigned.put(page, thisPage);
+            this.assigned.put(page, new ArrayList<>(thisPage));
+            thisPage.clear();
+            page++;
         }
-        current = 0;
+
+        this.current = 0;
         this.total = assigned.keySet().size();
     }
 

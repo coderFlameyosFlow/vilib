@@ -1,7 +1,6 @@
 package dev.efnilite.fycore.chat;
 
 import dev.efnilite.fycore.event.EventWatcher;
-import dev.efnilite.fycore.util.Logging;
 import dev.efnilite.fycore.util.Strings;
 import dev.efnilite.fycore.util.Task;
 import org.bukkit.entity.Player;
@@ -9,7 +8,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerCommandSendEvent;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;

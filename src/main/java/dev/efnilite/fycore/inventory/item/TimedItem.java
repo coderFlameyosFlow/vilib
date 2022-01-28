@@ -1,9 +1,6 @@
 package dev.efnilite.fycore.inventory.item;
 
 import dev.efnilite.fycore.inventory.Menu;
-import dev.efnilite.fycore.inventory.item.Item;
-import dev.efnilite.fycore.inventory.item.MenuItem;
-import dev.efnilite.fycore.util.Logging;
 import dev.efnilite.fycore.util.Task;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
