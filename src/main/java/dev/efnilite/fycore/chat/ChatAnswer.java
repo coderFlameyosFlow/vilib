@@ -1,10 +1,15 @@
 package dev.efnilite.fycore.chat;
 
 import dev.efnilite.fycore.event.EventWatcher;
+import dev.efnilite.fycore.util.Logging;
 import dev.efnilite.fycore.util.Strings;
+import dev.efnilite.fycore.util.Task;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerCommandSendEvent;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -27,12 +32,17 @@ public class ChatAnswer implements EventWatcher {
     /**
      * The amount of chars that have to be added, removed or changed to get the change message;
      */
-    private int matchDistance;
+    private int matchDistance = 2;
 
     /**
      * What to do after the message has been sent. This BiConsumer provides the answer and the player instance.
      */
     private BiConsumer<Player, String> postMessage;
+
+    /**
+     * What to do if the message is cancelled
+     */
+    private Consumer<Player> cancelMessage;
 
     /**
      * Constructor.
@@ -50,6 +60,14 @@ public class ChatAnswer implements EventWatcher {
         register();
     }
 
+    /**
+     * Updates the match distance for the cancel string
+     *
+     * @param   matchDistance
+     *          The distance
+     *
+     * @return the instance of this class
+     */
     public ChatAnswer matchDistance(int matchDistance) {
         this.matchDistance = matchDistance;
         return this;
@@ -82,7 +100,21 @@ public class ChatAnswer implements EventWatcher {
         return this;
     }
 
-    @EventHandler
+
+    /**
+     * What will happen if the answer is cancelled
+     *
+     * @param   consumer
+     *          What to do on cancel. The player is given.
+     *
+     * @return the instance of this class
+     */
+    public ChatAnswer cancel(Consumer<Player> consumer) {
+        this.cancelMessage = consumer;
+        return this;
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST) // highest to prevent interference from chat plugins
     public void chat(AsyncPlayerChatEvent event) {
         if (event.getPlayer() != player) {
             return;
@@ -90,8 +122,44 @@ public class ChatAnswer implements EventWatcher {
 
         String message = event.getMessage();
         event.setCancelled(true);
+
         if (Strings.getLevenshteinDistance(cancelText, message) > matchDistance) {
-            postMessage.accept(player, message);
+            if (postMessage == null) {
+                unregister();
+                return;
+            }
+            new Task() // move from async to sync
+                    .execute(() -> postMessage.accept(player, message))
+                    .run();
+        } else {
+            if (cancelMessage == null) {
+                unregister();
+                return;
+            }
+
+            new Task() // move from async to sync
+                    .execute(() -> cancelMessage.accept(player))
+                    .run();
+        }
+        unregister();
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST) // highest to prevent interference from chat plugins
+    public void chat(PlayerCommandPreprocessEvent event) {
+        if (event.getPlayer() != player) {
+            return;
+        }
+
+        String message = event.getMessage();
+        event.setCancelled(true);
+        if (Strings.getLevenshteinDistance(cancelText, message) > matchDistance) {
+            new Task() // move from async to sync
+                    .execute(() -> postMessage.accept(player, message))
+                    .run();
+        } else {
+            new Task() // move from async to sync
+                    .execute(() -> cancelMessage.accept(player))
+                    .run();
         }
         unregister();
     }

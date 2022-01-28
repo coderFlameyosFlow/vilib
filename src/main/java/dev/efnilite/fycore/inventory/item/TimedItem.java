@@ -1,6 +1,9 @@
 package dev.efnilite.fycore.inventory.item;
 
 import dev.efnilite.fycore.inventory.Menu;
+import dev.efnilite.fycore.inventory.item.Item;
+import dev.efnilite.fycore.inventory.item.MenuItem;
+import dev.efnilite.fycore.util.Logging;
 import dev.efnilite.fycore.util.Task;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -52,7 +55,7 @@ public class TimedItem extends MenuItem {
 
     @Override
     public void handleClick(Menu menu, InventoryClickEvent event, ClickType clickType) {
-        super.handleClick(menu, event, clickType);
+        item.handleClick(menu, event, clickType);
 
         task.cancelAndRunImmediately();
     }
