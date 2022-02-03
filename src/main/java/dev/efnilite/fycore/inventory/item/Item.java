@@ -1,7 +1,7 @@
 package dev.efnilite.fycore.inventory.item;
 
+import dev.efnilite.fycore.chat.Colours;
 import dev.efnilite.fycore.util.Version;
-import dev.efnilite.fycore.util.colour.Colours;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;

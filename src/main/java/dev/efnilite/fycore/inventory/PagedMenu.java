@@ -71,6 +71,10 @@ public class PagedMenu extends Menu {
         if (newPage < 0 || newPage > total) {
             return;
         }
+        if (!assigned.containsKey(newPage) || assigned.get(newPage) == null) {
+            return;
+        }
+
         List<MenuItem> values = new ArrayList<>(assigned.get(newPage));
         Item missingFiller = new Item(filler, "&c");
 

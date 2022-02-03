@@ -1,12 +1,12 @@
 package dev.efnilite.fycore.inventory;
 
+import dev.efnilite.fycore.chat.Colours;
 import dev.efnilite.fycore.event.EventWatcher;
 import dev.efnilite.fycore.inventory.animation.MenuAnimation;
 import dev.efnilite.fycore.inventory.item.Item;
 import dev.efnilite.fycore.inventory.item.MenuItem;
 import dev.efnilite.fycore.util.FyList;
 import dev.efnilite.fycore.util.Numbers;
-import dev.efnilite.fycore.util.colour.Colours;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
