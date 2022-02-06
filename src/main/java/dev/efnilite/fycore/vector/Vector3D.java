@@ -57,6 +57,13 @@ public class Vector3D {
         return this;
     }
 
+    public Vector3D multiply(double xMod, double yMod, double zMod) {
+        this.x *= xMod;
+        this.y *= yMod;
+        this.z *= zMod;
+        return this;
+    }
+
     public Vector3D subtract(Vector3D vector) {
         this.x -= vector.x;
         this.y -= vector.y;
