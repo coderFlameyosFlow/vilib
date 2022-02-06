@@ -1,6 +1,6 @@
 package dev.efnilite.fycore.inventory;
 
-import dev.efnilite.fycore.chat.Colours;
+import dev.efnilite.fycore.chat.Message;
 import dev.efnilite.fycore.event.EventWatcher;
 import dev.efnilite.fycore.inventory.animation.MenuAnimation;
 import dev.efnilite.fycore.inventory.item.Item;
@@ -39,7 +39,7 @@ public class Menu implements EventWatcher {
             throw new IllegalArgumentException("Rows is below 0 or above 6");
         }
         this.rows = rows;
-        this.title = Colours.colour(name);
+        this.title = Message.parseFormatting(name);
     }
 
     /**

@@ -1,6 +1,6 @@
 package dev.efnilite.fycore.inventory.item;
 
-import dev.efnilite.fycore.chat.Colours;
+import dev.efnilite.fycore.chat.Message;
 import dev.efnilite.fycore.util.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -79,7 +79,7 @@ public class Item extends MenuItem {
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
 
-        meta.setDisplayName(Colours.colour(name));
+        meta.setDisplayName(Message.parseFormatting(name));
         meta.setLore(lore);
 
         if (Version.isHigherOrEqual(Version.V1_13)) {
@@ -192,7 +192,7 @@ public class Item extends MenuItem {
         }
         this.lore.clear();
         for (String l : lore) {
-            this.lore.add(Colours.colour(l));
+            this.lore.add(Message.parseFormatting(l));
         }
         return this;
     }
