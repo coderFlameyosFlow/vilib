@@ -6,6 +6,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
@@ -15,6 +16,13 @@ import java.util.function.BiConsumer;
  * @author Efnilite
  */
 public abstract class MenuItem {
+
+    /**
+     * Prevent shift clicking from causing problems on inventory close
+     */
+    private static final ClickType[] DEFAULT_TYPES = new ClickType[] {
+            ClickType.LEFT, ClickType.RIGHT, ClickType.MIDDLE
+    };
 
     protected Map<ClickType, BiConsumer<Menu, InventoryClickEvent>> clickFunctions = new HashMap<>();
 
@@ -28,7 +36,7 @@ public abstract class MenuItem {
      */
     public MenuItem click(BiConsumer<Menu, InventoryClickEvent> consumer, ClickType... clickType) {
         if (clickType.length == 0) {
-            for (ClickType type : ClickType.values()) {
+            for (ClickType type : DEFAULT_TYPES) {
                 clickFunctions.put(type, consumer);
             }
         } else {
