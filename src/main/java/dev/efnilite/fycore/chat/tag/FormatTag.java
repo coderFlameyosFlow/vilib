@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  */
 public class FormatTag extends TextTag {
 
-    private final Pattern DOUBLE_TAG_PATTERN = Pattern.compile("<(\\S+)>(.+)</(\\S+)>");
+    private final Pattern DOUBLE_TAG_PATTERN = Pattern.compile("<(\\S+?)>(.+)</(\\S+?)>");
 
     @Override
     public String apply(String message) {
@@ -27,7 +27,6 @@ public class FormatTag extends TextTag {
             String betweenText = matcher.group(2);
             String closeTag = matcher.group(3);
 
-
             ChatFormat startFormat = ChatFormat.getByName(startTag);
             ChatFormat closeFormat = ChatFormat.getByName(closeTag);
             if (closeFormat == null || startFormat != closeFormat) { // if tags dont match it means another closing tag has been found
@@ -39,7 +38,7 @@ public class FormatTag extends TextTag {
                     betweenText + ChatColor.of(closeFormat.getName()));
         }
 
-        matcher = pattern.matcher(message);
+        matcher = pattern.matcher(result);
 
         // Single tags last
         while (matcher.find()) {

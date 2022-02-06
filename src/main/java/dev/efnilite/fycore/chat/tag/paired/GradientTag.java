@@ -75,8 +75,8 @@ public class GradientTag extends TextTag {
             String code = toHex(r) + toHex(g) + toHex(b);
 
             result
-                    .append(ChatColor.of("#" + code))
                     .append(last)
+                    .append(ChatColor.of("#" + code))
                     .append(character);
         }
 

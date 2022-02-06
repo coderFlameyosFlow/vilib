@@ -19,7 +19,7 @@ public abstract class TextTag {
     /**
      * The default tag pattern
      */
-    protected Pattern pattern = Pattern.compile("<(\\S+)>");
+    protected Pattern pattern = Pattern.compile("<(\\S+?)>");
 
     /**
      * Applies an instance of a tag to a message

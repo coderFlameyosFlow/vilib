@@ -19,4 +19,8 @@ public class Message {
         sender.sendMessage(TextTag.parse(message));
     }
 
+    public static String parseFormatting(String message) {
+        return TextTag.parse(message);
+    }
+
 }

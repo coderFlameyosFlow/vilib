@@ -27,7 +27,7 @@ public class ColourTag extends TextTag {
             result = result.replace(full, ChatColor.of("#" + hex).toString());
         }
 
-        matcher = pattern.matcher(message);
+        matcher = pattern.matcher(result);
 
         // Default color second
         while (matcher.find()) {
