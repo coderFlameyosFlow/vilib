@@ -1,5 +1,7 @@
 package dev.efnilite.fycore;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import dev.efnilite.fycore.command.FyCommand;
 import dev.efnilite.fycore.util.Logging;
 import dev.efnilite.fycore.util.Version;
@@ -12,7 +14,8 @@ public abstract class FyPlugin extends JavaPlugin {
 
     protected static boolean verbosing;
     protected static FyPlugin fyPlugin;
-    protected Version version;
+    protected static Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().disableHtmlEscaping().setLenient().create();
+    protected static Version version;
 
     @Override
     public void onEnable() {
@@ -50,6 +53,10 @@ public abstract class FyPlugin extends JavaPlugin {
 
     public void registerListener(Listener listener) {
         getServer().getPluginManager().registerEvents(listener, this);
+    }
+
+    public static Gson getGson() {
+        return gson;
     }
 
     public static boolean vebosing() {

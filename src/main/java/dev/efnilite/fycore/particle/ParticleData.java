@@ -16,7 +16,8 @@ public class ParticleData<Data> {
     private double offsetY;
     private double offsetZ;
     private Particle type;
-    private @Nullable Data data;
+    @Nullable
+    private Data data;
 
     public ParticleData(Particle type, @Nullable Data data, int size) {
         this(type, data, size, 0, 0, 0, 0);

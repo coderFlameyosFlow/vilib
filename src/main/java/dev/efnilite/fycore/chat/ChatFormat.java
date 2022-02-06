@@ -44,7 +44,8 @@ public enum ChatFormat {
      *
      * @return the ChatFormat if found, null if n ot
      */
-    public static @Nullable ChatFormat getByName(String name) {
+    @Nullable
+    public static ChatFormat getByName(String name) {
         if (BY_NAME.size() == 0) {
             for (ChatFormat format : values()) {
                 BY_NAME.put(format.name, format);

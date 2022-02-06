@@ -12,7 +12,7 @@ import java.io.ByteArrayOutputStream;
 
 /**
  * Class for basic ItemStack serialization.
- * This uses a custom method for saving, so it is not compatible with ItemStack#serialize/ItemStack#deserialize.
+ * This uses a custom base 64 method for saving, so it is not compatible with ItemStack#serialize/ItemStack#deserialize.
  * These methods are very lacking and outdated in comparison.
  */
 public class ItemSerializer {

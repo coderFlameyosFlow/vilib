@@ -56,7 +56,8 @@ public enum ChatColour {
      *
      * @return the ChatFormat if found, null if n ot
      */
-    public static @Nullable ChatColour getByName(String name) {
+    @Nullable
+    public static ChatColour getByName(String name) {
         if (BY_NAME.size() == 0) {
             for (ChatColour colour : values()) {
                 BY_NAME.put(colour.name, colour);
