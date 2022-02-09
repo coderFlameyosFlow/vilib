@@ -3,6 +3,9 @@ package dev.efnilite.fycore.config;
 import dev.efnilite.fycore.util.Logging;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Class for config options
  *
@@ -13,8 +16,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 public class ConfigOption<Type> {
 
     private Type value;
+    private Pattern regex;
 
-    public ConfigOption(FileConfiguration config, String path) {
+    public ConfigOption(FileConfiguration config, String path, String regex) {
         try {
             value = (Type) config.get(path);
         } catch (ClassCastException ex) {
@@ -26,7 +30,17 @@ public class ConfigOption<Type> {
         if (value == null) {
             Logging.stack("No value found for option '" + path + "'",
                     "Please check if you have entered anything for path '" + path + "'");
+        } else if (regex != null) {
+            this.regex = Pattern.compile(regex);
+            Matcher matcher = this.regex.matcher(String.valueOf(value));
+            if (!matcher.find()) {
+                Logging.stack("Invalid type regex found for option '" + path + "'", "Please check if you have entered the correct syntax!");
+            }
         }
+    }
+
+    public ConfigOption(FileConfiguration config, String path) {
+        this(config, path, null);
     }
 
     public ConfigOption(Type value) {
@@ -47,6 +61,10 @@ public class ConfigOption<Type> {
             return Double.parseDouble(String.valueOf(value));
         }
         return 0D;
+    }
+
+    public Pattern getRegex() {
+        return regex;
     }
 
     public Type get() {

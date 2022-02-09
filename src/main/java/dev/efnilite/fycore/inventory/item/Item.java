@@ -210,6 +210,28 @@ public class Item extends MenuItem {
     }
 
     /**
+     * Replaces a certain regex inside the lore.
+     * Useful for updating items.
+     *
+     * @param   regex
+     *          The regex to match
+     *
+     * @param   value
+     *          The value to replace it with, if found
+     *
+     * @return the instance of this class
+     */
+    public Item replaceInLore(String regex, String value) {
+        List<String> newLore = new ArrayList<>();
+        for (String l : lore) {
+            newLore.add(Message.parseFormatting(l.replaceAll(regex, value)));
+        }
+        this.lore.clear();
+        this.lore.addAll(newLore);
+        return this;
+    }
+
+    /**
      * Gets the amount
      *
      * @return the amount
