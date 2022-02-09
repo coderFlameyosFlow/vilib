@@ -93,6 +93,19 @@ public class Item extends MenuItem {
     }
 
     @Override
+    public Item clone() {
+        Item item = new Item(material, amount, name);
+
+        item.glowing = glowing;
+        item.durability = durability;
+        item.unbreakable = unbreakable;
+
+        item.lore.addAll(lore);
+
+        return item;
+    }
+
+    @Override
     public boolean isMovable() {
         return false;
     }
