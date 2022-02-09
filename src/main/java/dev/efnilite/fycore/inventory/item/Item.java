@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * A class for creating items.
@@ -213,18 +214,15 @@ public class Item extends MenuItem {
      * Replaces a certain regex inside the lore.
      * Useful for updating items.
      *
-     * @param   regex
-     *          The regex to match
-     *
-     * @param   value
-     *          The value to replace it with, if found
+     * @param   function
+     *          The function. The line of lore is given, and it must return the modified version of that lore line
      *
      * @return the instance of this class
      */
-    public Item replaceInLore(String regex, String value) {
+    public Item modifyLore(Function<String, String> function) {
         List<String> newLore = new ArrayList<>();
         for (String l : lore) {
-            newLore.add(Message.parseFormatting(l.replaceAll(regex, value)));
+            newLore.add(Message.parseFormatting(function.apply(l)));
         }
         this.lore.clear();
         this.lore.addAll(newLore);
