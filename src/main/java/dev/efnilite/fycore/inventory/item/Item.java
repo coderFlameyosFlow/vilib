@@ -211,7 +211,7 @@ public class Item extends MenuItem {
     }
 
     /**
-     * Replaces a certain regex inside the lore.
+     * Modifies the lore line by line.
      * Useful for updating items.
      *
      * @param   function
@@ -224,8 +224,22 @@ public class Item extends MenuItem {
         for (String l : lore) {
             newLore.add(Message.parseFormatting(function.apply(l)));
         }
-        this.lore.clear();
-        this.lore.addAll(newLore);
+        lore.clear();
+        lore.addAll(newLore);
+        return this;
+    }
+
+    /**
+     * Modifies the name of an item.
+     * Useful for updating items.
+     *
+     * @param   function
+     *          The function. The title is given, and it must return an altered version of this title.
+     *
+     * @return the instance of this class
+     */
+    public Item modifyName(Function<String, String> function) {
+        name = function.apply(name);
         return this;
     }
 
