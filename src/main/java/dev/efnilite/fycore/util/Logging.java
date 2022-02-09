@@ -32,7 +32,6 @@ public class Logging {
         error("##");
         error("## " + FyPlugin.getFyPlugin().getName() + " has encountered a critical error!");
         error("## " + error);
-        error("## " + error);
 
         if (optionals != null) {
             Throwable throwable = optionals[0];
