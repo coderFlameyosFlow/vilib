@@ -39,8 +39,8 @@ public abstract class TextTag {
      *
      * @return the message but tags parsed
      */
-    public static String parse(@NotNull String message) {
-        if (message.length() == 0) {
+    public static String parse(String message) {
+        if (message == null || message.length() == 0) {
             return message;
         }
 
