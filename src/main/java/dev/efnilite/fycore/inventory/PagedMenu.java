@@ -18,11 +18,11 @@ import java.util.Map;
 public class PagedMenu extends Menu {
 
     private int total;
-    public int current;
-    public int nextPageSlot;
-    public MenuItem nextPageItem;
-    public int prevPageSlot;
-    public MenuItem prevPageItem;
+    private int current;
+    private int nextPageSlot;
+    private MenuItem nextPageItem;
+    private int prevPageSlot;
+    private MenuItem prevPageItem;
     private final List<Integer> displaySlots = new ArrayList<>();
     private final List<MenuItem> totalToDisplay = new ArrayList<>();
     private final Map<Integer, List<MenuItem>> assigned = new HashMap<>();
@@ -35,7 +35,7 @@ public class PagedMenu extends Menu {
      * Excludes a specific set of rows from being used to display items
      *
      * @param   rows
-     *          The rows which will be excluded
+     *          The rows which will be excluded. Starts from 0.
      *
      * @return the instance of this
      */
@@ -146,5 +146,9 @@ public class PagedMenu extends Menu {
         this.prevPageSlot = slot;
         this.prevPageItem = item;
         return this;
+    }
+
+    public List<MenuItem> getTotalToDisplay() {
+        return totalToDisplay;
     }
 }

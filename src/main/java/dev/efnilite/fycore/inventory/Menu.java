@@ -16,6 +16,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -249,6 +250,18 @@ public class Menu implements EventWatcher {
             animation.stop();
         }
         unregister();
+    }
+
+    /**
+     * Returns the item in the respective slot.
+     *
+     * @param   slot
+     *          The slot
+     *
+     * @return the item in this slot. This may be null.
+     */
+    public @Nullable MenuItem getItem(int slot) {
+        return items.get(slot);
     }
 
     /**
