@@ -28,6 +28,7 @@ public class Item extends MenuItem {
     private boolean glowing;
     private boolean unbreakable;
     private String name;
+    private ItemMeta meta;
     private Material material;
     private final List<String> lore;
 
@@ -72,8 +73,12 @@ public class Item extends MenuItem {
     @Override
     public ItemStack build() {
         ItemStack item = new ItemStack(material, amount);
-        ItemMeta meta = Bukkit.getItemFactory().getItemMeta(item.getType());
-        assert meta != null;
+        if (meta == null) {
+            meta = Bukkit.getItemFactory().getItemMeta(item.getType());
+        }
+        if (meta == null) {
+            throw new IllegalStateException("Meta is null");
+        }
 
         if (glowing) {
             meta.addEnchant(Enchantment.DURABILITY, 1, false);
@@ -152,6 +157,19 @@ public class Item extends MenuItem {
      */
     public Item name(String name) {
         this.name = name;
+        return this;
+    }
+
+    /**
+     * Sets the ItemMeta
+     *
+     * @param   meta
+     *          The meta
+     *
+     * @return  the instance this class
+     */
+    public Item meta(ItemMeta meta) {
+        this.meta = meta;
         return this;
     }
 
