@@ -54,6 +54,10 @@ public class Menu implements EventWatcher {
      * @return the instance of this class
      */
     public Menu item(int slot, MenuItem item) {
+        if (slot > rows * 9 || slot < 0) {
+            throw new IllegalArgumentException("Slot " + slot + " is not in inventory");
+        }
+
         items.put(slot, item);
         return this;
     }

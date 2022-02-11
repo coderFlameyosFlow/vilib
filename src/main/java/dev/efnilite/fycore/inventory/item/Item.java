@@ -104,7 +104,7 @@ public class Item extends MenuItem {
         item.glowing = glowing;
         item.durability = durability;
         item.unbreakable = unbreakable;
-
+        item.meta = meta;
         item.lore.addAll(lore);
 
         return item;

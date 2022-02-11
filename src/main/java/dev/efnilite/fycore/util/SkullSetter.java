@@ -1,5 +1,6 @@
 package dev.efnilite.fycore.util;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.SkullMeta;
 
@@ -19,9 +20,13 @@ public class SkullSetter {
             hasTexturesMethod = playerProfileClass.getDeclaredMethod("hasTextures");
             setPlayerProfileMethod = SkullMeta.class.getDeclaredMethod("setPlayerProfile", playerProfileClass);
             isPaper = true;
-        } catch (Throwable e) {
+        } catch (Throwable ex) {
             isPaper = false;
         }
+    }
+
+    public static void setPlayerHead(OfflinePlayer player, SkullMeta meta) {
+        meta.setOwningPlayer(player);
     }
 
     public static void setPlayerHead(Player player, SkullMeta meta) {

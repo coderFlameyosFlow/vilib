@@ -2,7 +2,6 @@ package dev.efnilite.fycore.chat.tag;
 
 import dev.efnilite.fycore.chat.tag.paired.GradientTag;
 import net.md_5.bungee.api.ChatColor;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
 
