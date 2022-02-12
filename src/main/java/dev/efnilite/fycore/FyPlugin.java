@@ -14,13 +14,18 @@ public abstract class FyPlugin extends JavaPlugin {
 
     protected static boolean verbosing;
     protected static FyPlugin fyPlugin;
-    protected static Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().disableHtmlEscaping().setLenient().create();
+    protected static Gson gson;
     protected static Version version;
 
     @Override
     public void onEnable() {
         fyPlugin = this;
         version = Version.getVersion();
+
+        if (Version.isHigherOrEqual(Version.V1_13)) {
+            gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().disableHtmlEscaping().setLenient().create();
+        }
+
         Logging.init(this);
 
         enable();
