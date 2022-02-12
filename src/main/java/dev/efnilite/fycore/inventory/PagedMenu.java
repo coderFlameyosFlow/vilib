@@ -136,6 +136,11 @@ public class PagedMenu extends Menu {
         return this;
     }
 
+    public void setToDisplay(List<MenuItem> items) {
+        totalToDisplay.clear();
+        totalToDisplay.addAll(items);
+    }
+
     public PagedMenu nextPage(int slot, MenuItem item) {
         this.nextPageSlot = slot;
         this.nextPageItem = item;

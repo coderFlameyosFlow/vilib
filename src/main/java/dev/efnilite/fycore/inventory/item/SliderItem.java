@@ -84,7 +84,7 @@ public class SliderItem extends MenuItem {
         }
         consumer.accept(menu, event);
 
-        menu.item(event.getSlot(), items.get(current));
+        event.getInventory().setItem(event.getSlot(), items.get(current).build());
         menu.updateItem(event.getSlot());
     }
 
