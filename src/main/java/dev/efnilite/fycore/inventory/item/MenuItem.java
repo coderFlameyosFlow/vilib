@@ -1,13 +1,14 @@
 package dev.efnilite.fycore.inventory.item;
 
 import dev.efnilite.fycore.inventory.Menu;
+import dev.efnilite.fycore.inventory.MenuClickEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * Super class for every type of item which will be displayed in the menu
@@ -23,7 +24,7 @@ public abstract class MenuItem {
             ClickType.LEFT, ClickType.RIGHT, ClickType.MIDDLE
     };
 
-    protected Map<ClickType, BiConsumer<Menu, InventoryClickEvent>> clickFunctions = new HashMap<>();
+    protected Map<ClickType, Consumer<MenuClickEvent>> clickFunctions = new HashMap<>();
 
     /**
      * Set the function on click
@@ -33,7 +34,7 @@ public abstract class MenuItem {
      *
      * @return the instance of this class
      */
-    public MenuItem click(BiConsumer<Menu, InventoryClickEvent> consumer, ClickType... clickType) {
+    public MenuItem click(Consumer<MenuClickEvent> consumer, ClickType... clickType) {
         if (clickType.length == 0) {
             for (ClickType type : DEFAULT_TYPES) {
                 clickFunctions.put(type, consumer);
@@ -47,11 +48,11 @@ public abstract class MenuItem {
     }
 
     public void handleClick(Menu menu, InventoryClickEvent event, ClickType clickType) {
-        BiConsumer<Menu, InventoryClickEvent> consumer = clickFunctions.get(clickType);
+        Consumer<MenuClickEvent> consumer = clickFunctions.get(clickType);
         if (consumer == null)  {
             return;
         }
-        consumer.accept(menu, event);
+        consumer.accept(new MenuClickEvent(event.getSlot(), menu, this, event));
     }
 
     /**

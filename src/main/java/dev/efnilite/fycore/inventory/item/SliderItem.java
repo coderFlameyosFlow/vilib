@@ -1,12 +1,14 @@
 package dev.efnilite.fycore.inventory.item;
 
 import dev.efnilite.fycore.inventory.Menu;
+import dev.efnilite.fycore.inventory.MenuClickEvent;
 import dev.efnilite.fycore.util.FyMap;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Class for an item which uses the difference between left/right click to assign values
@@ -20,7 +22,7 @@ public class SliderItem extends MenuItem {
      */
     private int current;
     private final FyMap<Integer, Item> items = new FyMap<>();
-    private final FyMap<Integer, BiConsumer<Menu, InventoryClickEvent>> switchFunctions = new FyMap<>();
+    private final FyMap<Integer, Function<MenuClickEvent, Boolean>> switchFunctions = new FyMap<>();
 
     /**
      * Sets the initial viewing index.
@@ -45,13 +47,42 @@ public class SliderItem extends MenuItem {
      * @param   item
      *          The item which will be displayed
      *
+     * @param   onSwitchTo
+     *          What happens on switch to this item
+     *
      * @return the instance of this class
      */
-    public SliderItem add(int value, Item item, BiConsumer<Menu, InventoryClickEvent> onSwitchTo) {
+    public SliderItem add(int value, Item item, Consumer<MenuClickEvent> onSwitchTo) {
+        items.put(value, item);
+        switchFunctions.put(value, menuClickEvent -> {
+            onSwitchTo.accept(menuClickEvent);
+            return true;
+        });
+        return this;
+    }
+
+    /**
+     * Adds an item to the possible options. Instead of a Consumer, this uses a Function.
+     * The Function will determine whether the item will update in the inventory.
+     * If this returns false, it will not update the item in the menu, but it will execute the code.
+     *
+     * @param   value
+     *          The value assigned to this item
+     *
+     * @param   item
+     *          The item
+     *
+     * @param   onSwitchTo
+     *          What happens on switch to this item. Returns true if it should update, false if not.
+     *
+     * @return the instance of this class
+     */
+    public SliderItem add(int value, Item item, Function<MenuClickEvent, Boolean> onSwitchTo) {
         items.put(value, item);
         switchFunctions.put(value, onSwitchTo);
         return this;
     }
+
 
     @Override
     public void handleClick(Menu menu, InventoryClickEvent event, ClickType clickType) {
@@ -78,14 +109,16 @@ public class SliderItem extends MenuItem {
                 return;
         }
 
-        BiConsumer<Menu, InventoryClickEvent> consumer = switchFunctions.get(current);
-        if (consumer == null) {
+        Function<MenuClickEvent, Boolean> function = switchFunctions.get(current);
+        if (function == null) {
             return;
         }
-        consumer.accept(menu, event);
+        boolean update = function.apply(new MenuClickEvent(event.getSlot(), menu, this, event));
 
-        event.getInventory().setItem(event.getSlot(), items.get(current).build());
-        menu.updateItem(event.getSlot());
+        if (update) {
+            event.getInventory().setItem(event.getSlot(), items.get(current).build());
+            menu.updateItem(event.getSlot());
+        }
     }
 
     @Override
