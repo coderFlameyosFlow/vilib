@@ -39,30 +39,7 @@ public class SliderItem extends MenuItem {
     }
 
     /**
-     * Adds an item to the possible options
-     *
-     * @param   value
-     *          The int value which the item will be assigned to. This must start from 0 and specifies the index of the panel.
-     *
-     * @param   item
-     *          The item which will be displayed
-     *
-     * @param   onSwitchTo
-     *          What happens on switch to this item
-     *
-     * @return the instance of this class
-     */
-    public SliderItem add(int value, Item item, Consumer<MenuClickEvent> onSwitchTo) {
-        items.put(value, item);
-        switchFunctions.put(value, menuClickEvent -> {
-            onSwitchTo.accept(menuClickEvent);
-            return true;
-        });
-        return this;
-    }
-
-    /**
-     * Adds an item to the possible options. Instead of a Consumer, this uses a Function.
+     * Adds an item to the possible options. This uses a Function.
      * The Function will determine whether the item will update in the inventory.
      * If this returns false, it will not update the item in the menu, but it will execute the code.
      *
