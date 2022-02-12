@@ -1,6 +1,7 @@
 package dev.efnilite.fycore.inventory.item;
 
 import dev.efnilite.fycore.inventory.Menu;
+import dev.efnilite.fycore.inventory.MenuClickEvent;
 import dev.efnilite.fycore.util.Task;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -23,16 +24,16 @@ public class TimedItem extends MenuItem {
     private final Menu menu;
     private final MenuItem item;
 
-    public TimedItem(MenuItem item, Menu menu, InventoryClickEvent event, int timeStay) {
+    public TimedItem(MenuItem item, MenuClickEvent event, int timeStay) {
         this.item = item;
         this.timeStay = timeStay;
         this.slot = event.getSlot();
-        this.revertTo = menu.getItems().get(slot);
+        this.revertTo = event.getMenu().getItem(slot);
         if (revertTo == null) {
             revertTo = new Item(Material.AIR, "&c");
         }
-        this.player = (Player) event.getWhoClicked();
-        this.menu = menu;
+        this.player = (Player) event.getEvent().getWhoClicked();
+        this.menu = event.getMenu();
     }
 
     @Override
