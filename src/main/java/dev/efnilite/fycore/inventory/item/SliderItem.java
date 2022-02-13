@@ -7,7 +7,6 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -60,39 +59,41 @@ public class SliderItem extends MenuItem {
         return this;
     }
 
-
     @Override
     public void handleClick(Menu menu, InventoryClickEvent event, ClickType clickType) {
+        int currentTo = current;
         switch (clickType) {
             case LEFT:
-                current++;
-                if (current >= items.size()) {
-                    current = 0;
+                currentTo++;
+                if (currentTo >= items.size()) {
+                    currentTo = 0;
                 }
                 break;
             case SHIFT_LEFT:
-                current = items.size() - 1;
+                currentTo = items.size() - 1;
                 break;
             case RIGHT:
-                current--;
-                if (current == -1) {
-                    current = items.size() - 1;
+                currentTo--;
+                if (currentTo == -1) {
+                    currentTo = items.size() - 1;
                 }
                 break;
             case SHIFT_RIGHT:
-                current = 0;
+                currentTo = 0;
                 break;
             default:
                 return;
         }
 
-        Function<MenuClickEvent, Boolean> function = switchFunctions.get(current);
+        Function<MenuClickEvent, Boolean> function = switchFunctions.get(currentTo);
         if (function == null) {
             return;
         }
         boolean update = function.apply(new MenuClickEvent(event.getSlot(), menu, this, event));
 
         if (update) {
+            current = currentTo;
+
             event.getInventory().setItem(event.getSlot(), items.get(current).build());
             menu.updateItem(event.getSlot());
         }
