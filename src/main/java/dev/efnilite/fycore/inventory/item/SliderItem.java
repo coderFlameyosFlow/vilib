@@ -92,10 +92,10 @@ public class SliderItem extends MenuItem {
         boolean update = function.apply(new MenuClickEvent(event.getSlot(), menu, this, event));
 
         if (update) {
-            current = currentTo;
-
-            event.getInventory().setItem(event.getSlot(), items.get(current).build());
+            event.getInventory().setItem(event.getSlot(), items.get(currentTo).build());
             menu.updateItem(event.getSlot());
+
+            current = currentTo;
         }
     }
 
