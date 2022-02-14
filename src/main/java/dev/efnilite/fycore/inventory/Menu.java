@@ -42,20 +42,19 @@ public class Menu implements EventWatcher {
     private final static Map<UUID, UUID> openMenus = new HashMap<>();
     private final static List<Menu> disabledMenus = new ArrayList<>();
 
-        static {
-            new Task()
-                    .repeat(5 * 20)
-                    .execute(() -> {
-                        if (openMenus.keySet().size() == 0) {
-                            for (Menu menu : disabledMenus) {
-                                menu.unregisterAll();
-                            }
-                            Logging.info("clear disabled menus");
-                            disabledMenus.clear();
+    static { // Prevent big boy memory usage by unregistering unused menus
+        new Task()
+                .repeat(5 * 20)
+                .execute(() -> {
+                    if (openMenus.keySet().size() == 0) {
+                        for (Menu menu : disabledMenus) {
+                            menu.unregisterAll();
                         }
-                    })
-                    .run();
-        }
+                        disabledMenus.clear();
+                    }
+                })
+                .run();
+    }
 
     public Menu(int rows, String name) {
         if (rows < 0 || rows > 6) {
