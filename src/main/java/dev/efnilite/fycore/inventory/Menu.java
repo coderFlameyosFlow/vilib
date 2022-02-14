@@ -6,7 +6,9 @@ import dev.efnilite.fycore.inventory.animation.MenuAnimation;
 import dev.efnilite.fycore.inventory.item.Item;
 import dev.efnilite.fycore.inventory.item.MenuItem;
 import dev.efnilite.fycore.util.FyList;
+import dev.efnilite.fycore.util.Logging;
 import dev.efnilite.fycore.util.Numbers;
+import dev.efnilite.fycore.util.Task;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -38,20 +40,22 @@ public class Menu implements EventWatcher {
     protected final List<Integer> evenlyDistributedRows = new ArrayList<>();
 
     private final static Map<UUID, UUID> openMenus = new HashMap<>();
+    private final static List<Menu> disabledMenus = new ArrayList<>();
 
-    //    static {
-    //        new Task()
-    //                .repeat(20)
-    //                .execute(() -> {
-    //                    if (activeMenus.size() == 0) {
-    //                        for (Menu menu : deactivatedMenus) {
-    //                            menu.unregisterAll();
-    //                        }
-    //                        deactivatedMenus.clear();
-    //                    }
-    //                })
-    //                .run();
-    //    }
+        static {
+            new Task()
+                    .repeat(5 * 20)
+                    .execute(() -> {
+                        if (openMenus.keySet().size() == 0) {
+                            for (Menu menu : disabledMenus) {
+                                menu.unregisterAll();
+                            }
+                            Logging.info("clear disabled menus");
+                            disabledMenus.clear();
+                        }
+                    })
+                    .run();
+        }
 
     public Menu(int rows, String name) {
         if (rows < 0 || rows > 6) {
@@ -283,6 +287,7 @@ public class Menu implements EventWatcher {
         }
 
         deactivated = true;
+        disabledMenus.add(this);
         openMenus.remove(viewerId);
     }
 
