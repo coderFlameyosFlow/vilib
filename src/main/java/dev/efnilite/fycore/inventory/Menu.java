@@ -7,7 +7,6 @@ import dev.efnilite.fycore.inventory.item.Item;
 import dev.efnilite.fycore.inventory.item.MenuItem;
 import dev.efnilite.fycore.util.FyList;
 import dev.efnilite.fycore.util.Numbers;
-import dev.efnilite.fycore.util.Task;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -29,6 +28,7 @@ import java.util.*;
 public class Menu implements EventWatcher {
 
     protected boolean deactivated = false;
+    protected UUID inventoryId;
     protected Player player;
     protected Material filler = null;
     protected MenuAnimation animation = null;
@@ -37,22 +37,21 @@ public class Menu implements EventWatcher {
     protected final Map<Integer, MenuItem> items = new HashMap<>();
     protected final List<Integer> evenlyDistributedRows = new ArrayList<>();
 
-    private final static List<Menu> activeMenus = new ArrayList<>();
-    private final static List<Menu> deactivatedMenus = new ArrayList<>();
+    private final static Map<UUID, UUID> openMenus = new HashMap<>();
 
-//    static {
-//        new Task()
-//                .repeat(20)
-//                .execute(() -> {
-//                    if (activeMenus.size() == 0) {
-//                        for (Menu menu : deactivatedMenus) {
-//                            menu.unregisterAll();
-//                        }
-//                        deactivatedMenus.clear();
-//                    }
-//                })
-//                .run();
-//    }
+    //    static {
+    //        new Task()
+    //                .repeat(20)
+    //                .execute(() -> {
+    //                    if (activeMenus.size() == 0) {
+    //                        for (Menu menu : deactivatedMenus) {
+    //                            menu.unregisterAll();
+    //                        }
+    //                        deactivatedMenus.clear();
+    //                    }
+    //                })
+    //                .run();
+    //    }
 
     public Menu(int rows, String name) {
         if (rows < 0 || rows > 6) {
@@ -60,6 +59,7 @@ public class Menu implements EventWatcher {
         }
         this.rows = rows;
         this.title = Message.parseFormatting(name);
+        this.inventoryId = UUID.randomUUID();
     }
 
     /**
@@ -239,27 +239,28 @@ public class Menu implements EventWatcher {
                 inventory.setItem(slot, items.get(slot).build());
             }
         } else {
-            animation.run(this);
+            //            animation.run(this);
+            for (int slot : items.keySet()) { // no animation means just setting it normally
+                inventory.setItem(slot, items.get(slot).build());
+            }
         }
 
-        activeMenus.add(this);
+        openMenus.put(player.getUniqueId(), inventoryId);
         register();
     }
 
     @EventHandler
     public void click(@NotNull InventoryClickEvent event) {
-        if (deactivated) {
+        if (deactivated || event.getClickedInventory() != event.getView().getTopInventory()) {
             return;
         }
 
-        InventoryView view = event.getView();
-        int slot = event.getSlot();
-
-        if (!view.getTitle().equals(title) || event.getClickedInventory() != view.getTopInventory()) {
+        UUID id = openMenus.get(event.getWhoClicked().getUniqueId());
+        if (id != inventoryId) {
             return;
         }
 
-        MenuItem clickedItem = items.get(slot);
+        MenuItem clickedItem = items.get(event.getSlot());
         if (clickedItem == null) {
             return;
         }
@@ -274,17 +275,18 @@ public class Menu implements EventWatcher {
             return;
         }
 
+        UUID viewerId = event.getPlayer().getUniqueId();
+        UUID id = openMenus.get(viewerId);
+        if (id != inventoryId) {
+            return;
+        }
+
         if (animation != null) {
             animation.stop();
         }
 
-        deactivate();
-    }
-
-    public void deactivate() {
         deactivated = true;
-        deactivatedMenus.add(this);
-        activeMenus.remove(this);
+        openMenus.remove(viewerId);
     }
 
     /**
