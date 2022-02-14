@@ -6,6 +6,8 @@ import dev.efnilite.fycore.util.Task;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
@@ -123,7 +125,7 @@ public class ChatAnswer implements EventWatcher {
 
         if (Strings.getLevenshteinDistance(cancelText, message) > matchDistance) {
             if (postMessage == null) {
-                unregister();
+                AsyncPlayerChatEvent.getHandlerList().unregister(this);
                 return;
             }
             new Task() // move from async to sync
@@ -131,7 +133,7 @@ public class ChatAnswer implements EventWatcher {
                     .run();
         } else {
             if (cancelMessage == null) {
-                unregister();
+                AsyncPlayerChatEvent.getHandlerList().unregister(this);
                 return;
             }
 
@@ -139,7 +141,8 @@ public class ChatAnswer implements EventWatcher {
                     .execute(() -> cancelMessage.accept(player))
                     .run();
         }
-        unregister();
+
+        AsyncPlayerChatEvent.getHandlerList().unregister(this);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST) // highest to prevent interference from chat plugins
@@ -159,6 +162,7 @@ public class ChatAnswer implements EventWatcher {
                     .execute(() -> cancelMessage.accept(player))
                     .run();
         }
-        unregister();
+
+        PlayerCommandPreprocessEvent.getHandlerList().unregister(this);
     }
 }

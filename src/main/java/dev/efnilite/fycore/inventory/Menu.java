@@ -249,7 +249,9 @@ public class Menu implements EventWatcher {
         if (animation != null) {
             animation.stop();
         }
-        unregister();
+
+        InventoryClickEvent.getHandlerList().unregister(this); // todo make reflection class to take only class and automatically unregister it
+        InventoryCloseEvent.getHandlerList().unregister(this);
     }
 
     /**
