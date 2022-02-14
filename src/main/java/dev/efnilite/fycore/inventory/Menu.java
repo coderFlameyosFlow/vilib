@@ -40,19 +40,19 @@ public class Menu implements EventWatcher {
     private final static List<Menu> activeMenus = new ArrayList<>();
     private final static List<Menu> deactivatedMenus = new ArrayList<>();
 
-    static {
-        new Task()
-                .repeat(20)
-                .execute(() -> {
-                    if (activeMenus.size() == 0) {
-                        for (Menu menu : deactivatedMenus) {
-                            menu.unregisterAll();
-                        }
-                        deactivatedMenus.clear();
-                    }
-                })
-                .run();
-    }
+//    static {
+//        new Task()
+//                .repeat(20)
+//                .execute(() -> {
+//                    if (activeMenus.size() == 0) {
+//                        for (Menu menu : deactivatedMenus) {
+//                            menu.unregisterAll();
+//                        }
+//                        deactivatedMenus.clear();
+//                    }
+//                })
+//                .run();
+//    }
 
     public Menu(int rows, String name) {
         if (rows < 0 || rows > 6) {
