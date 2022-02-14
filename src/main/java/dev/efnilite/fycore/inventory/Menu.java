@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
@@ -250,10 +251,7 @@ public class Menu implements EventWatcher {
             animation.stop();
         }
 
-        InventoryClickEvent.getHandlerList().unregister(this); // todo make reflection class to take only class and automatically unregister it
-        InventoryClickEvent.getHandlerList().bake(); // prevent all other instances being removed (why is this a thing?)
-        InventoryCloseEvent.getHandlerList().unregister(this);
-        InventoryCloseEvent.getHandlerList().bake();
+        unregister();
     }
 
     /**
