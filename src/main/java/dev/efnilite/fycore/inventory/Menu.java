@@ -7,11 +7,11 @@ import dev.efnilite.fycore.inventory.item.Item;
 import dev.efnilite.fycore.inventory.item.MenuItem;
 import dev.efnilite.fycore.util.FyList;
 import dev.efnilite.fycore.util.Numbers;
+import dev.efnilite.fycore.util.Task;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
@@ -28,6 +28,7 @@ import java.util.*;
  */
 public class Menu implements EventWatcher {
 
+    protected boolean deactivated = false;
     protected Player player;
     protected Material filler = null;
     protected MenuAnimation animation = null;
@@ -35,6 +36,23 @@ public class Menu implements EventWatcher {
     protected final String title;
     protected final Map<Integer, MenuItem> items = new HashMap<>();
     protected final List<Integer> evenlyDistributedRows = new ArrayList<>();
+
+    private final static List<Menu> activeMenus = new ArrayList<>();
+    private final static List<Menu> deactivatedMenus = new ArrayList<>();
+
+    static {
+        new Task()
+                .repeat(20)
+                .execute(() -> {
+                    if (activeMenus.size() == 0) {
+                        for (Menu menu : deactivatedMenus) {
+                            menu.unregisterAll();
+                        }
+                        deactivatedMenus.clear();
+                    }
+                })
+                .run();
+    }
 
     public Menu(int rows, String name) {
         if (rows < 0 || rows > 6) {
@@ -224,11 +242,16 @@ public class Menu implements EventWatcher {
             animation.run(this);
         }
 
+        activeMenus.add(this);
         register();
     }
 
     @EventHandler
     public void click(@NotNull InventoryClickEvent event) {
+        if (deactivated) {
+            return;
+        }
+
         InventoryView view = event.getView();
         int slot = event.getSlot();
 
@@ -247,11 +270,21 @@ public class Menu implements EventWatcher {
 
     @EventHandler
     public void close(InventoryCloseEvent event) {
+        if (deactivated) {
+            return;
+        }
+
         if (animation != null) {
             animation.stop();
         }
 
-        unregister();
+        deactivate();
+    }
+
+    public void deactivate() {
+        deactivated = true;
+        deactivatedMenus.add(this);
+        activeMenus.remove(this);
     }
 
     /**
