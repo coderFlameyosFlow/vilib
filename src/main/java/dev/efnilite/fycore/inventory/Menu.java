@@ -239,10 +239,7 @@ public class Menu implements EventWatcher {
                 inventory.setItem(slot, items.get(slot).build());
             }
         } else {
-            //            animation.run(this);
-            for (int slot : items.keySet()) { // no animation means just setting it normally
-                inventory.setItem(slot, items.get(slot).build());
-            }
+            animation.run(this);
         }
 
         openMenus.put(player.getUniqueId(), inventoryId);
