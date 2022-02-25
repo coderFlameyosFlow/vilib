@@ -6,7 +6,6 @@ import dev.efnilite.fycore.inventory.animation.MenuAnimation;
 import dev.efnilite.fycore.inventory.item.Item;
 import dev.efnilite.fycore.inventory.item.MenuItem;
 import dev.efnilite.fycore.util.FyList;
-import dev.efnilite.fycore.util.Logging;
 import dev.efnilite.fycore.util.Numbers;
 import dev.efnilite.fycore.util.Task;
 import org.bukkit.Bukkit;
@@ -16,7 +15,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -116,7 +116,7 @@ public class MessageFormat {
 
         while (matcher.find()) {
             String group = matcher.group(1); // inner group
-            message = message.replace(matcher.group(), group); // outer group, todo add chatcolor.of
+            message = message.replace(matcher.group(), group); // outer group,  add chatcolor.of
         }
 
         return message;
@@ -127,7 +127,7 @@ public class MessageFormat {
 
         while (matcher.find()) {
             String group = matcher.group(1); // inner group
-            message = message.replace(matcher.group(), group); // outer group, todo add chatcolor.of
+            message = message.replace(matcher.group(), group); // outer group,  add chatcolor.of
         }
 
         return message;
@@ -140,7 +140,7 @@ public class MessageFormat {
             String group = matcher.group(); // inner group
             ChatColour colour = ChatColour.getByName(group.replaceAll("[<>]", ""));
             if (colour != null) {
-                message = message.replace(matcher.group(), "#" + colour.getHex()); // outer group, todo add chatcolor.of
+                message = message.replace(matcher.group(), "#" + colour.getHex()); // outer group,  add chatcolor.of
             }
         }
 
@@ -162,7 +162,7 @@ public class MessageFormat {
             String group = matcher.group(1); // inner group
             ChatFormat format = ChatFormat.getByName(group.replaceAll("[<>]", ""));
             if (format != null) {
-                message = message.replace(matcher.group(), "&" + format.getCode()); // outer group, todo add chatcolor
+                message = message.replace(matcher.group(), "&" + format.getCode()); // outer group,  add chatcolor
             }
         }
 

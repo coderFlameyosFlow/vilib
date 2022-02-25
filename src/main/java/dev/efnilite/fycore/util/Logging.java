@@ -32,20 +32,22 @@ public class Logging {
         error("##");
         error("## " + FyPlugin.getFyPlugin().getName() + " has encountered a critical error!");
         error("## " + error);
+        error("##");
 
         if (optionals != null) {
             Throwable throwable = optionals[0];
-            error("##");
             error("## Stack trace:");
             error("## " + throwable);
             StackTraceElement[] stack = throwable.getStackTrace();
             for (StackTraceElement stackTraceElement : stack) {
                 error("## \t" + stackTraceElement.toString());
             }
+        } else {
+            error("## No stack trace provided");
         }
 
         error("##");
-        error("## This is an internal error which may be able to fix.");
+        error("## This is an internal error which you may be able to fix.");
         error("## How to fix: " + fix);
         error("## Unable to solve this problem using the fix? Visit the Discord or GitHub.");
         error("##");

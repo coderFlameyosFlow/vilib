@@ -78,6 +78,15 @@ public class Vector3D {
         return Math.sqrt(x2 + y2 + z2);
     }
 
+    public void rotateXZ(int deg) {
+        double rad =  Math.toRadians(deg * -1); // somehow the below rotation matrix gets the inversed degree? todo
+        double rotatedX = (Math.cos(rad) * x) - (Math.sin(rad) * z);
+        double rotatedZ = (Math.sin(rad) * x) + (Math.cos(rad) * z);
+
+        this.x = (int) rotatedX;
+        this.z = (int) rotatedZ;
+    }
+
     public Vector3D setX(int x) {
         this.x = x;
         return this;

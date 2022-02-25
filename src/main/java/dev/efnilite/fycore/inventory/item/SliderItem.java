@@ -3,7 +3,6 @@ package dev.efnilite.fycore.inventory.item;
 import dev.efnilite.fycore.inventory.Menu;
 import dev.efnilite.fycore.inventory.MenuClickEvent;
 import dev.efnilite.fycore.util.FyMap;
-import dev.efnilite.fycore.util.Logging;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
