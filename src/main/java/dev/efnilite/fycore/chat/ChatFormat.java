@@ -30,6 +30,7 @@ public enum ChatFormat {
     private final char code;
 
     private static final Map<String, ChatFormat> BY_NAME = new HashMap<>();
+    private static final Map<Character, ChatFormat> BY_CODE = new HashMap<>();
 
     ChatFormat(String name, char code) {
         this.name = name;
@@ -53,6 +54,17 @@ public enum ChatFormat {
         }
 
         return BY_NAME.get(name.toLowerCase());
+    }
+
+    @Nullable
+    public static ChatFormat getByCode(char character) {
+        if (BY_CODE.size() == 0) {
+            for (ChatFormat format : values()) {
+                BY_CODE.put(format.code, format);
+            }
+        }
+
+        return BY_CODE.get(character);
     }
 
     public String getName() {

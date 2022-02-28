@@ -1,7 +1,9 @@
 package dev.efnilite.fycore.chat.tag.paired;
 
+import dev.efnilite.fycore.chat.ChatFormat;
 import dev.efnilite.fycore.chat.tag.TextTag;
 import net.md_5.bungee.api.ChatColor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -66,7 +68,7 @@ public class GradientTag extends TextTag {
             }
 
             String character = String.valueOf(message.charAt(i));
-            String last = org.bukkit.ChatColor.getLastColors(result.toString());
+            String last = getLastFormats(result.toString());
 
             // increment rgb values
             r += incrementR;
@@ -110,5 +112,27 @@ public class GradientTag extends TextTag {
         }
 
         return hex;
+    }
+
+    @NotNull
+    private String getLastFormats(@NotNull String input) {
+        StringBuilder result = new StringBuilder();
+        int length = input.length();
+
+        for (int index = length - 1; index > -1; --index) {
+            char section = input.charAt(index);
+            if (section == 167 && index < length - 1) {
+                char c = input.charAt(index + 1);
+                ChatFormat format = ChatFormat.getByCode(c);
+                if (format != null) {
+                    result.insert(0, COLOUR_CHAR + format.getCode());
+                    if (format.equals(ChatFormat.RESET)) {
+                        break;
+                    }
+                }
+            }
+        }
+
+        return result.toString();
     }
 }
