@@ -61,9 +61,9 @@ public class GradientTag extends TextTag {
         StringBuilder result = new StringBuilder();
 
         for (int i = 0; i < message.length(); i++) {
-            if (message.charAt(i) == COLOUR_CHAR && i + 1 > message.length()) { // if characters are color codes skip them
+            if (message.charAt(i) == COLOUR_CHAR && i + 1 > message.length() && ChatFormat.getByCode(message.charAt(i + 1)) == null) { // if characters are color codes skip them
                 result.append(message.charAt(i)).append(message.charAt(i + 1));
-                i++;
+                i += 2;
                 continue;
             }
 
@@ -114,8 +114,7 @@ public class GradientTag extends TextTag {
         return hex;
     }
 
-    @NotNull
-    private String getLastFormats(@NotNull String input) {
+    private String getLastFormats(String input) {
         StringBuilder result = new StringBuilder();
         int length = input.length();
 
