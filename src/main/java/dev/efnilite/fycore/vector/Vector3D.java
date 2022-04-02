@@ -1,6 +1,9 @@
 package dev.efnilite.fycore.vector;
 
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 3D vector.
@@ -85,6 +88,18 @@ public class Vector3D {
 
         this.x = (int) rotatedX;
         this.z = (int) rotatedZ;
+    }
+
+    /**
+     * Turns this Vector3D instance into a Bukkit Location.
+     *
+     * @param   world
+     *          The world in which this location is
+     *
+     * @return the Location instance with the same coordinates
+     */
+    public Location toLocation(@NotNull World world) {
+        return new Location(world, x, y, z);
     }
 
     public Vector3D setX(int x) {
