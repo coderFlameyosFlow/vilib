@@ -1,6 +1,5 @@
 package dev.efnilite.vilib.util;
 
-
 import java.util.HashMap;
 
 /**

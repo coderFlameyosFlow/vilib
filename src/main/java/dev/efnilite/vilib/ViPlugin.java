@@ -10,6 +10,11 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * Main class which plugins may inherit to reduce the amount of setup required.
+ *
+ * vilib v1.0.0, by Efnilite (c) 2021-2022
+ */
 public abstract class ViPlugin extends JavaPlugin {
 
     protected static boolean verbosing;
@@ -22,7 +27,7 @@ public abstract class ViPlugin extends JavaPlugin {
         viPlugin = this;
         version = Version.getVersion();
 
-        if (Version.isHigherOrEqual(Version.V1_13)) {
+        if (Version.isHigherOrEqual(Version.V1_13)) { // <1.13 makes me sad
             gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().disableHtmlEscaping().setLenient().create();
         }
 

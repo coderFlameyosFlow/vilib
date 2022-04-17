@@ -46,6 +46,14 @@ public class Vector3D {
         return new Vector3D(x, y, z);
     }
 
+    /**
+     * Adds another vector to this one by adding all coordinates one by one.
+     *
+     * @param   other
+     *          The other vector.
+     *
+     * @return the instance of this class with updated coordinates
+     */
     public Vector3D add(Vector3D other) {
         this.x += other.x;
         this.y += other.y;
@@ -53,6 +61,14 @@ public class Vector3D {
         return this;
     }
 
+    /**
+     * Multiplies all coordinates by the same modifier.
+     *
+     * @param   modifier
+     *          The modifier which all coordinates will be multiplied by.
+     *
+     * @return the instance of this class with updated coordinates
+     */
     public Vector3D multiply(double modifier) {
         this.x *= modifier;
         this.y *= modifier;
@@ -60,6 +76,20 @@ public class Vector3D {
         return this;
     }
 
+    /**
+     * Multiplies all coordinates by a different modifier, unique to every coordinate.
+     *
+     * @param   xMod
+     *          The modifier of the x-coordinate.
+     *
+     * @param   yMod
+     *          The modifier of the y-coordinate.
+     *
+     * @param   zMod
+     *          The modifier of the z-coordinate.
+     *
+     * @return the instance of this class with updated coordinates
+     */
     public Vector3D multiply(double xMod, double yMod, double zMod) {
         this.x *= xMod;
         this.y *= yMod;
@@ -67,27 +97,51 @@ public class Vector3D {
         return this;
     }
 
-    public Vector3D subtract(Vector3D vector) {
-        this.x -= vector.x;
-        this.y -= vector.y;
-        this.z -= vector.z;
+    /**
+     * Subtracts another vector from this one by subtracting all coordinates one by one.
+     *
+     * @param   other
+     *          The other vector.
+     *
+     * @return the instance of this class with updated coordinates
+     */
+    public Vector3D subtract(Vector3D other) {
+        this.x -= other.x;
+        this.y -= other.y;
+        this.z -= other.z;
         return this;
     }
 
+    /**
+     * Gets the distance to another vector.
+     *
+     * @param   other
+     *          The other vector.
+     *
+     * @return the distance between the two vectors. Always positive.
+     */
     public double distanceTo(Vector3D other) {
         double x2 = Math.pow(other.x - x, 2);
         double y2 = Math.pow(other.y - y, 2);
         double z2 = Math.pow(other.z - z, 2);
-        return Math.sqrt(x2 + y2 + z2);
+        return Math.sqrt(Math.abs(x2 + y2 + z2));
     }
 
-    public void rotateXZ(int deg) {
-        double rad =  Math.toRadians(deg * -1); // somehow the below rotation matrix gets the inversed degree? todo
+    /**
+     * Rotates this vector a specific amount of degrees around the Oxz-axis.
+     * Clockwise is negative and counterclockwise is positive.
+     *
+     * @param   deg
+     *          The angle in degrees.
+     */
+    public Vector3D rotateXZ(int deg) {
+        double rad =  Math.toRadians(deg * -1); // * -1 is required to follow clockwise rotation = negative and other way around, not sure why
         double rotatedX = (Math.cos(rad) * x) - (Math.sin(rad) * z);
         double rotatedZ = (Math.sin(rad) * x) + (Math.cos(rad) * z);
 
-        this.x = (int) rotatedX;
-        this.z = (int) rotatedZ;
+        this.x = (int) Math.round(rotatedX);
+        this.z = (int) Math.round(rotatedZ);
+        return this;
     }
 
     /**
