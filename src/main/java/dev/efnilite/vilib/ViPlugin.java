@@ -73,7 +73,7 @@ public abstract class ViPlugin extends JavaPlugin {
         return verbosing;
     }
 
-    public static ViPlugin getFyPlugin() {
+    public static ViPlugin getViPlugin() {
         return viPlugin;
     }
 }

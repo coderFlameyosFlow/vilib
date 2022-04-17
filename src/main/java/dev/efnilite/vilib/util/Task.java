@@ -23,7 +23,7 @@ public class Task {
     private BukkitRunnable bukkitRunnable;
 
     public Task() {
-        this.plugin = ViPlugin.getFyPlugin();
+        this.plugin = ViPlugin.getViPlugin();
         this.delay = 0;
         this.repeat = 0;
         this.async = false;

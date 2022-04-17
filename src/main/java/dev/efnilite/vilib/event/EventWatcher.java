@@ -22,6 +22,6 @@ public interface EventWatcher extends Listener {
      * Registers this listener
      */
     default void register() {
-        ViPlugin.getFyPlugin().registerListener(this);
+        ViPlugin.getViPlugin().registerListener(this);
     }
 }

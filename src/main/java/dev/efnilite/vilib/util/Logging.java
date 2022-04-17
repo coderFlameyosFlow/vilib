@@ -30,7 +30,7 @@ public class Logging {
 
     public static void stack(String error, String fix, Throwable... optionals) {
         error("##");
-        error("## " + ViPlugin.getFyPlugin().getName() + " has encountered a critical error!");
+        error("## " + ViPlugin.getViPlugin().getName() + " has encountered a critical error!");
         error("## " + error);
         error("##");
 
@@ -50,9 +50,10 @@ public class Logging {
         error("## This is an internal error which you may be able to fix.");
         error("## How to fix: " + fix);
         error("## Unable to solve this problem using the fix? Visit the Discord or GitHub.");
+        error("## Be sure to send this entire error.");
         error("##");
         error("## Version information:");
-        error("##\tBuild Version: " + ViPlugin.getFyPlugin().getDescription().getVersion());
+        error("##\tBuild Version: " + ViPlugin.getViPlugin().getDescription().getVersion());
         error("##\tMinecraft: " + Version.getVersion().name().replaceAll("_", "."));
         error("##");
     }
