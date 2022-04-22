@@ -196,7 +196,7 @@ public class Menu implements EventWatcher {
             }
 
             if (itemsInRow.keySet().size() > 0) {
-                List<Integer> sortedSlots = ViList.sort(itemsInRow.keySet()); // sort all slots
+                List<Integer> sortedSlots = new ViList<>(itemsInRow.keySet()).sort().toList(); // sort all slots
                 List<Integer> slots = getEvenlyDistributedSlots(sortedSlots.size()); // evenly distribute items
                 List<Integer> olds = new ArrayList<>();
                 List<Integer> news = new ArrayList<>();

@@ -1,6 +1,7 @@
 package dev.efnilite.vilib.inventory;
 
 import dev.efnilite.vilib.inventory.item.MenuItem;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 /**
@@ -30,6 +31,10 @@ public class MenuClickEvent {
 
     public MenuItem getItem() {
         return item;
+    }
+
+    public Player getPlayer() {
+        return (Player) event.getWhoClicked();
     }
 
     public InventoryClickEvent getEvent() {

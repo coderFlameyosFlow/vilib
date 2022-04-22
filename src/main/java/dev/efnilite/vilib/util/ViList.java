@@ -1,21 +1,38 @@
 package dev.efnilite.vilib.util;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-public class ViList<V> extends ArrayList<V> {
+public class ViList<T> extends ArrayList<T> {
 
-    public static <V> List<V> sort(List<V> list) {
-        return list.stream()
-                .sorted()
-                .collect(Collectors.toList());
+    private List<T> list;
+
+    public ViList(@NotNull Collection<? extends T> collection) {
+        super(collection);
+
+        this.list = new ArrayList<>(collection);
     }
 
-    public static <V> List<V> sort(Set<V> set) {
-        return set.stream()
+    public ViList<T> sort() {
+        list = list.stream()
                 .sorted()
                 .collect(Collectors.toList());
+        return this;
+    }
+
+    public T first() {
+        return list.get(0);
+    }
+
+    public T last() {
+        return list.get(list.size() - 1);
+    }
+
+    public List<T> toList() {
+        return list;
     }
 }

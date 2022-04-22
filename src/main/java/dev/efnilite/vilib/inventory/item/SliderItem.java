@@ -7,7 +7,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * Class for an item which uses the difference between left/right click to assign values
@@ -21,7 +21,7 @@ public class SliderItem extends MenuItem {
      */
     private int current;
     private final ViMap<Integer, Item> items = new ViMap<>();
-    private final ViMap<Integer, Function<MenuClickEvent, Boolean>> switchFunctions = new ViMap<>();
+    private final ViMap<Integer, Predicate<MenuClickEvent>> switchFunctions = new ViMap<>();
 
     /**
      * Sets the initial viewing index.
@@ -53,7 +53,7 @@ public class SliderItem extends MenuItem {
      *
      * @return the instance of this class
      */
-    public SliderItem add(int value, Item item, Function<MenuClickEvent, Boolean> onSwitchTo) {
+    public SliderItem add(int value, Item item, Predicate<MenuClickEvent> onSwitchTo) {
         items.put(value, item);
         switchFunctions.put(value, onSwitchTo);
         return this;
@@ -85,11 +85,11 @@ public class SliderItem extends MenuItem {
                 return;
         }
 
-        Function<MenuClickEvent, Boolean> function = switchFunctions.get(currentTo);
+        Predicate<MenuClickEvent> function = switchFunctions.get(currentTo);
         if (function == null) {
             return;
         }
-        boolean update = function.apply(new MenuClickEvent(event.getSlot(), menu, this, event));
+        boolean update = function.test(new MenuClickEvent(event.getSlot(), menu, this, event));
 
         if (update) {
             event.getInventory().setItem(event.getSlot(), items.get(currentTo).build());
