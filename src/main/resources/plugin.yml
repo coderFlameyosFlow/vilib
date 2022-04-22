@@ -1,0 +1,5 @@
+name: 'vilib'
+description: 'Dependency library for several plugins by Efnilite'
+author: 'Efnilite'
+version: '1.0.0'
+main: dev.efnilite.vilib.ViMain
