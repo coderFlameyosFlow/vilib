@@ -70,7 +70,7 @@ public final class SnakeSingleAnimation extends MenuAnimation {
             currentSlot = next;
             return currentSlot;
         } else {
-            heading.rotate(90); // if not, rotate vector and try again
+            heading.rotate(-90); // if not, rotate vector and try again
             return getNextSlot();
         }
     }
