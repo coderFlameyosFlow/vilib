@@ -109,23 +109,22 @@ public class AutoSliderItem extends MenuItem {
             init = items.get(items.randomKey());
         }
 
-        BukkitRunnable runnable = new BukkitRunnable() {
-            @Override
-            public void run() {
-                InventoryView view = menu.getPlayer().getOpenInventory();
-                if (view.getTitle().equals(menu.getTitle())) {
-                    view.getTopInventory().setItem(slot, getNextItem().build());
-                } else {
-                    cancel(); // prevent going on forever
+        if (items.size() > 1) { // loop through if there are more than 1 players
+            BukkitRunnable runnable = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    InventoryView view = menu.getPlayer().getOpenInventory();
+                    if (view.getTitle().equals(menu.getTitle())) {
+                        view.getTopInventory().setItem(slot, getNextItem().build());
+                    } else {
+                        cancel(); // prevent going on forever
+                    }
                 }
-            }
-        };
+            };
 
-        Task task = new Task()
-                .delay(cooldown)
-                .repeat(cooldown)
-                .execute(runnable);
-        task.run();
+            Task task = new Task().delay(cooldown).repeat(cooldown).execute(runnable);
+            task.run();
+        }
 
         return init.build();
     }
@@ -137,6 +136,9 @@ public class AutoSliderItem extends MenuItem {
      */
     public Item getNextItem() {
         current++;
+        if (current >= items.size() - 1) {
+            current = 0;
+        }
 
         return items.get(current);
     }
