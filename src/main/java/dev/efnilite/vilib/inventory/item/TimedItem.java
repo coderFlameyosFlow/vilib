@@ -9,6 +9,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * A MenuItem which only stays for a certain amount of ticks. This item is meant as a confirm option or to display items for a small amount of time.
@@ -16,38 +17,57 @@ import org.bukkit.inventory.ItemStack;
  */
 public class TimedItem extends MenuItem {
 
+    private int timeStay;
     private Task task;
     private MenuItem revertTo;
-    private final int timeStay;
-    private final int slot;
     private final Player player;
-    private final Menu menu;
     private final MenuItem item;
+    private final MenuClickEvent event;
 
-    public TimedItem(MenuItem item, MenuClickEvent event, int timeStay) {
+    public TimedItem(MenuItem item, MenuClickEvent event) {
         this.item = item;
-        this.timeStay = timeStay;
-        this.slot = event.getSlot();
-        this.revertTo = event.getMenu().getItem(slot);
+        this.revertTo = event.getMenu().getItem(event.getSlot());
         if (revertTo == null) {
             revertTo = new Item(Material.AIR, "&c");
         }
-        this.player = (Player) event.getEvent().getWhoClicked();
-        this.menu = event.getMenu();
+        this.player = event.getPlayer();
+        this.event = event;
+    }
+
+    /**
+     * Sets the amount of ticks this item will stay in view for.
+     *
+     * @param   ticks
+     *          The amount of ticks
+     *
+     * @return the instance of the class
+     */
+    public TimedItem stay(int ticks) {
+        this.timeStay = ticks;
+        return this;
     }
 
     @Override
     public ItemStack build() {
+        BukkitRunnable runnable = new BukkitRunnable() {
+            @Override
+            public void run() {
+                Menu menu = event.getMenu();
+                InventoryView view = player.getOpenInventory();
+                if (view.getTitle().equals(menu.getTitle())) {
+                    menu.item(event.getSlot(), revertTo);
+                    menu.updateItem(event.getSlot());
+                } else {
+                    cancel(); // prevent going on forever
+                }
+            }
+        };
+
         task = new Task()
                 .delay(timeStay)
-                .execute(() -> {
-                    InventoryView view = player.getOpenInventory();
-                    if (view.getTitle().equals(menu.getTitle())) {
-                        menu.item(slot, revertTo);
-                        menu.updateItem(slot);
-                    }
-                });
+                .execute(runnable);
         task.run();
+
         return item.build();
     }
 

@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.function.Predicate;
 
 /**
- * Class for an item which uses the difference between left/right click to assign values
+ * Class for an item which uses the difference between left/right click to assign values.
  *
  * @author Efnilite
  */

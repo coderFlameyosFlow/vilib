@@ -3,12 +3,16 @@ package dev.efnilite.vilib.util.elevator;
 import dev.efnilite.vilib.ViPlugin;
 import dev.efnilite.vilib.util.Logging;
 import dev.efnilite.vilib.util.Task;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Collectors;
@@ -83,9 +87,18 @@ public class Elevator {
                 .async()
                 .execute(() -> {
                     try {
-                        InputStream stream = new URL(downloadUrl).openStream();
-                        Files.copy(stream, Paths.get(plugin.getDataFolder().getParent()), StandardCopyOption.REPLACE_EXISTING);
                         // todo
+                        InputStream stream = new URL(downloadUrl).openStream();
+
+                        File folder = plugin.getDataFolder();
+                        File jar = getJar();
+                        if (jar == null) {
+                            return;
+                        }
+
+                        Path full = Paths.get(folder.toString(), jar.toString());
+
+                        Files.copy(stream, full, StandardCopyOption.REPLACE_EXISTING); // replace current jar
 
                         stream.close();
 
@@ -96,6 +109,17 @@ public class Elevator {
                     }
                 })
                 .run();
+    }
+
+    private File getJar() {
+        try {
+            Method method = JavaPlugin.class.getDeclaredMethod("getFile");
+            method.setAccessible(true);
+            return (File) method.invoke(this.plugin);
+        } catch (ReflectiveOperationException ex) {
+            Logging.stack("Failed to get plugin jar name", "Please report this error to the developer!", ex);
+            return null;
+        }
     }
 
     public boolean isOutdated() {
