@@ -1,4 +1,4 @@
-package dev.efnilite.vilib.util;
+package dev.efnilite.vilib.util.collections;
 
 import org.jetbrains.annotations.NotNull;
 

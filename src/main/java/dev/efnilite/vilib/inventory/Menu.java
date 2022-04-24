@@ -7,7 +7,7 @@ import dev.efnilite.vilib.inventory.item.Item;
 import dev.efnilite.vilib.inventory.item.MenuItem;
 import dev.efnilite.vilib.util.Numbers;
 import dev.efnilite.vilib.util.Task;
-import dev.efnilite.vilib.util.ViList;
+import dev.efnilite.vilib.util.collections.ViList;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

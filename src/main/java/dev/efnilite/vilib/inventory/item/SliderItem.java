@@ -2,7 +2,7 @@ package dev.efnilite.vilib.inventory.item;
 
 import dev.efnilite.vilib.inventory.Menu;
 import dev.efnilite.vilib.inventory.MenuClickEvent;
-import dev.efnilite.vilib.util.ViMap;
+import dev.efnilite.vilib.util.collections.ViMap;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
