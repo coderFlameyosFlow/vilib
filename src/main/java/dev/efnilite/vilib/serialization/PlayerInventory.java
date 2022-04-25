@@ -1,8 +1,8 @@
 package dev.efnilite.vilib.serialization;
 
 import com.google.gson.annotations.Expose;
+import dev.efnilite.vilib.ViMain;
 import dev.efnilite.vilib.ViPlugin;
-import dev.efnilite.vilib.util.Logging;
 import dev.efnilite.vilib.util.Task;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -77,7 +77,7 @@ public class PlayerInventory {
      *          What to do on complete. Can be null.
      */
     public static void save(File file, PlayerInventory inventory, @Nullable Runnable onComplete) {
-        new Task()
+        Task.create(ViMain.getPlugin())
                 .async()
                 .execute(() -> {
                     try {
@@ -98,8 +98,7 @@ public class PlayerInventory {
                         writer.flush();
                         writer.close();
                     } catch (IOException ex) {
-                        ViPlugin.logging().stack("Error while saving inventory",
-                                "Please report this error and the above stack trace to the developer!", ex);
+                        ViMain.logging().stack("Error while saving inventory", ex);
                     }
                 })
                 .run();
@@ -115,7 +114,7 @@ public class PlayerInventory {
      *          Consumer containing the gathered PlayerInventory. Can be null.
      */
     public static void read(File file, @Nullable Consumer<@Nullable PlayerInventory> onRead) {
-        new Task()
+        Task.create(ViMain.getPlugin())
                 .async()
                 .execute(() -> {
                     try {
@@ -134,8 +133,7 @@ public class PlayerInventory {
 
                         reader.close();
                     } catch (IOException ex) {
-                        ViPlugin.logging().stack("Error while reading inventory",
-                                "Please report this error and the above stack trace to the developer!", ex);
+                        ViMain.logging().stack("Error while reading inventory", ex);
                         if (onRead != null) {
                             onRead.accept(null);
                         }

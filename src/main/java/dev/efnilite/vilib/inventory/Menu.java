@@ -1,5 +1,6 @@
 package dev.efnilite.vilib.inventory;
 
+import dev.efnilite.vilib.ViMain;
 import dev.efnilite.vilib.chat.Message;
 import dev.efnilite.vilib.event.EventWatcher;
 import dev.efnilite.vilib.inventory.animation.MenuAnimation;
@@ -41,7 +42,7 @@ public class Menu implements EventWatcher {
     private final static List<Menu> disabledMenus = new ArrayList<>();
 
     static { // Prevent big boy memory usage by unregistering unused menus
-        new Task()
+        Task.create(ViMain.getPlugin())
                 .repeat(5 * 20)
                 .execute(() -> {
                     if (openMenus.keySet().size() == 0) {

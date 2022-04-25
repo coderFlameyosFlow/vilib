@@ -1,5 +1,6 @@
 package dev.efnilite.vilib.inventory.item;
 
+import dev.efnilite.vilib.ViMain;
 import dev.efnilite.vilib.inventory.Menu;
 import dev.efnilite.vilib.inventory.MenuClickEvent;
 import dev.efnilite.vilib.util.Task;
@@ -122,7 +123,10 @@ public class AutoSliderItem extends MenuItem {
                 }
             };
 
-            Task task = new Task().delay(cooldown).repeat(cooldown).execute(runnable);
+            Task task = Task.create(ViMain.getPlugin())
+                    .delay(cooldown)
+                    .repeat(cooldown)
+                    .execute(runnable);
             task.run();
         }
 

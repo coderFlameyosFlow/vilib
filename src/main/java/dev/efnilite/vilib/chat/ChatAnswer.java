@@ -1,5 +1,6 @@
 package dev.efnilite.vilib.chat;
 
+import dev.efnilite.vilib.ViMain;
 import dev.efnilite.vilib.event.EventWatcher;
 import dev.efnilite.vilib.util.Strings;
 import dev.efnilite.vilib.util.Task;
@@ -126,7 +127,7 @@ public class ChatAnswer implements EventWatcher {
                 AsyncPlayerChatEvent.getHandlerList().unregister(this);
                 return;
             }
-            new Task() // move from async to sync
+            Task.create(ViMain.getPlugin()) // move from async to sync
                     .execute(() -> postMessage.accept(player, message))
                     .run();
         } else {
@@ -135,7 +136,7 @@ public class ChatAnswer implements EventWatcher {
                 return;
             }
 
-            new Task() // move from async to sync
+            Task.create(ViMain.getPlugin()) // move from async to sync
                     .execute(() -> cancelMessage.accept(player))
                     .run();
         }
@@ -152,11 +153,11 @@ public class ChatAnswer implements EventWatcher {
         String message = event.getMessage();
         event.setCancelled(true);
         if (Strings.getLevenshteinDistance(cancelText, message) > matchDistance) {
-            new Task() // move from async to sync
+            Task.create(ViMain.getPlugin()) // move from async to sync
                     .execute(() -> postMessage.accept(player, message))
                     .run();
         } else {
-            new Task() // move from async to sync
+            Task.create(ViMain.getPlugin()) // move from async to sync
                     .execute(() -> cancelMessage.accept(player))
                     .run();
         }

@@ -1,7 +1,7 @@
 package dev.efnilite.vilib.util.elevator;
 
+import dev.efnilite.vilib.ViMain;
 import dev.efnilite.vilib.ViPlugin;
-import dev.efnilite.vilib.util.Logging;
 import dev.efnilite.vilib.util.Task;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -56,7 +56,7 @@ public class Elevator {
      * Checks if this plugin version is outdated. Automatically called on instantiation.
      */
     public void check() {
-        new Task()
+        Task.create(ViMain.getPlugin())
                 .async()
                 .execute(() -> {
                     try {
@@ -76,14 +76,14 @@ public class Elevator {
                         stream.close();
                         reader.close();
                     } catch (Throwable throwable) {
-                        ViPlugin.logging().error("There was an error while checking the latest version");
+                        ViMain.logging().error("There was an error while checking the latest version");
                     }
                 })
                 .run();
     }
 
     public void elevate() {
-        new Task()
+        Task.create(ViMain.getPlugin())
                 .async()
                 .execute(() -> {
                     try {
@@ -102,10 +102,10 @@ public class Elevator {
 
                         stream.close();
 
-                        ViPlugin.logging().info("A new version of " + plugin.getDescription().getName() + " has been downloaded.");
-                        ViPlugin.logging().info("A server restart is required for this download to take effect.");
+                        ViMain.logging().info("A new version of " + plugin.getDescription().getName() + " has been downloaded.");
+                        ViMain.logging().info("A server restart is required for this download to take effect.");
                     } catch (Throwable throwable) {
-                        ViPlugin.logging().error("There was an error while updating to the latest version");
+                        ViMain.logging().error("There was an error while updating to the latest version");
                     }
                 })
                 .run();
@@ -117,7 +117,7 @@ public class Elevator {
             method.setAccessible(true);
             return (File) method.invoke(this.plugin);
         } catch (ReflectiveOperationException ex) {
-            ViPlugin.logging().stack("Failed to get plugin jar name", "Please report this error to the developer!", ex);
+            ViMain.logging().stack("Failed to get plugin jar name", ex);
             return null;
         }
     }

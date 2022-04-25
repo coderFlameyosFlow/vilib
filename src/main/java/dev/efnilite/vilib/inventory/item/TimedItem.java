@@ -1,5 +1,6 @@
 package dev.efnilite.vilib.inventory.item;
 
+import dev.efnilite.vilib.ViMain;
 import dev.efnilite.vilib.inventory.Menu;
 import dev.efnilite.vilib.inventory.MenuClickEvent;
 import dev.efnilite.vilib.util.Task;
@@ -63,7 +64,7 @@ public class TimedItem extends MenuItem {
             }
         };
 
-        task = new Task()
+        task = Task.create(ViMain.getPlugin())
                 .delay(timeStay)
                 .execute(runnable);
         task.run();

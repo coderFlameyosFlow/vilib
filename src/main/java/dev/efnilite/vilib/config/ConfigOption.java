@@ -1,7 +1,6 @@
 package dev.efnilite.vilib.config;
 
-import dev.efnilite.vilib.ViPlugin;
-import dev.efnilite.vilib.util.Logging;
+import dev.efnilite.vilib.ViMain;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.regex.Matcher;
@@ -23,19 +22,19 @@ public class ConfigOption<Type> {
         try {
             value = (Type) config.get(path);
         } catch (ClassCastException ex) {
-            ViPlugin.logging().stack("Incompatible types in config option '" + path + "': " + ex.getMessage(),
-                    "Please check if you have entered the correct type of data for path '" + path + "'", ex);
+            ViMain.logging().stack("Incompatible types in config option '" + path + "': " + ex.getMessage(),
+                    "check if you have entered the correct type of data for path "+ path, ex);
             return;
         }
 
         if (value == null) {
-            ViPlugin.logging().stack("No value found for option '" + path + "'",
-                    "Please check if you have entered anything for path '" + path + "'");
+            ViMain.logging().stack("No value found for option " + path,
+                    "check if you have entered anything for path " + path);
         } else if (regex != null) {
             this.regex = Pattern.compile(regex);
             Matcher matcher = this.regex.matcher(String.valueOf(value));
             if (!matcher.find()) {
-                ViPlugin.logging().stack("Invalid type regex found for option '" + path + "'", "Please check if you have entered the correct syntax!");
+                ViMain.logging().stack("Invalid type regex found for option " + path, "check if you have entered the correct syntax");
             }
         }
     }
@@ -48,8 +47,8 @@ public class ConfigOption<Type> {
         this.value = value;
 
         if (value == null) {
-            ViPlugin.logging().stack("No value found for unknown option",
-                    "Please check if you have entered everything correctly.");
+            ViMain.logging().stack("No value found for unknown option",
+                    "check if you have entered everything correctly");
         }
     }
 

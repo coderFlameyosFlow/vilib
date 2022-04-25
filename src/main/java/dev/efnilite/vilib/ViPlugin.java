@@ -12,8 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Main class which plugins may inherit to reduce the amount of setup required.
- * Instance-based logging and verbosing is possible due to the class being abstract.
- * If this was not the case, there would only be one {@link Logging} instance for all running vilib plugins.
+ * Classes inheriting this may want to create static methods to inherit the logging and viPlugin vars.
  *
  * Made by Efnilite (c) 2021-2022
  *
@@ -21,11 +20,12 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public abstract class ViPlugin extends JavaPlugin {
 
-    protected static boolean verbosing = false;
+    protected boolean verbosing = false;
+    protected Logging logging;
+    protected ViPlugin viPlugin;
+
     protected static Gson gson;
     protected static Version version;
-    protected static Logging logging;
-    protected static ViPlugin viPlugin;
 
     @Override
     public void onEnable() {
@@ -85,38 +85,11 @@ public abstract class ViPlugin extends JavaPlugin {
     }
 
     /**
-     * Returns whether verbosing is enabled or not.
-     *
-     * @return true if enabled, false if not.
-     */
-    public static boolean verbosing() {
-        return verbosing;
-    }
-
-    /**
-     * Returns this plugin's {@link Logging} instance
-     *
-     * @return the {@link Logging} class that belongs to this plugin
-     */
-    public static Logging logging() {
-        return logging;
-    }
-
-    /**
      * Gets a default Gson instance.
      *
      * @return a Gson instance which has already been set up.
      */
     public static Gson getGson() {
         return gson;
-    }
-
-    /**
-     * Returns the instance of this class as a {@link ViPlugin} instance.
-     *
-     * @return the instance of this class
-     */
-    public static ViPlugin getPlugin() {
-        return viPlugin;
     }
 }

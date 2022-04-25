@@ -1,7 +1,6 @@
 package dev.efnilite.vilib.util;
 
 import dev.efnilite.vilib.ViPlugin;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.logging.Logger;
@@ -11,10 +10,12 @@ import java.util.logging.Logger;
  */
 public class Logging {
 
-    private static Logger logger;
+    private final Logger logger;
+    private final ViPlugin plugin;
 
-    public Logging(Plugin plugin) {
-        logger = plugin.getLogger();
+    public Logging(ViPlugin plugin) {
+        this.plugin = plugin;
+        this.logger = plugin.getLogger();
     }
 
     public void info(String info) {
@@ -39,7 +40,7 @@ public class Logging {
 
     public void stack(String error, @Nullable String fix, @Nullable Throwable throwable) {
         error("##");
-        error("## " + ViPlugin.getPlugin().getName() + " has encountered a critical error!");
+        error("## " + plugin.getName() + " has encountered a critical error!");
         error("## " + error);
         error("##");
 
@@ -67,14 +68,8 @@ public class Logging {
         }
         error("##");
         error("## Version information:");
-        error("##\tBuild Version: " + ViPlugin.getPlugin().getDescription().getVersion());
+        error("##\tBuild Version: " + plugin.getDescription().getVersion());
         error("##\tMinecraft: " + Version.getVersion().name().replaceAll("_", "."));
         error("##");
-    }
-
-    public static void verbose(String message) {
-        if (ViPlugin.verbosing()) {
-            logger.info("(Verbose) " + message);
-        }
     }
 }

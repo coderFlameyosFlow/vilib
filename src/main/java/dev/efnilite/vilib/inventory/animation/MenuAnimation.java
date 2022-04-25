@@ -1,5 +1,6 @@
 package dev.efnilite.vilib.inventory.animation;
 
+import dev.efnilite.vilib.ViMain;
 import dev.efnilite.vilib.inventory.Menu;
 import dev.efnilite.vilib.inventory.item.MenuItem;
 import dev.efnilite.vilib.util.Task;
@@ -90,7 +91,7 @@ public abstract class MenuAnimation {
     public void run(Menu menu) {
         Map<Integer, MenuItem> items = menu.getItems();
         Inventory top = menu.getPlayer().getOpenInventory().getTopInventory();
-        task = new Task()
+        task = Task.create(ViMain.getPlugin())
                 .execute(() -> {
                     List<Integer> slots = steps.get(currentStep);
                     if (slots == null || slots.isEmpty()) {

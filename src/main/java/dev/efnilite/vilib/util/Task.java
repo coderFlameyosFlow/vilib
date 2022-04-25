@@ -1,6 +1,5 @@
 package dev.efnilite.vilib.util;
 
-import dev.efnilite.vilib.ViPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -22,11 +21,23 @@ public class Task {
     private BukkitTask task;
     private BukkitRunnable bukkitRunnable;
 
-    public Task() {
-        this.plugin = ViPlugin.getPlugin();
+    public Task(Plugin plugin) {
+        this.plugin = plugin;
         this.delay = 0;
         this.repeat = 0;
         this.async = false;
+    }
+
+    /**
+     * Returns a new Task instance
+     *
+     * @param   plugin
+     *          The plugin which to register this Task with
+     *
+     * @return the created Task instance
+     */
+    public static Task create(Plugin plugin) {
+        return new Task(plugin);
     }
 
     /**
