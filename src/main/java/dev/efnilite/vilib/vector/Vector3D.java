@@ -5,10 +5,12 @@ import org.bukkit.World;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
+
 /**
  * 3D vector.
  */
-public class Vector3D {
+public class Vector3D implements Serializable {
 
     public int x;
     public int y;

@@ -2,10 +2,12 @@ package dev.efnilite.vilib.vector;
 
 import org.bukkit.util.Vector;
 
+import java.io.Serializable;
+
 /**
  * A 2D vector.
  */
-public class Vector2D {
+public class Vector2D implements Serializable {
 
     public int x;
     public int y;
