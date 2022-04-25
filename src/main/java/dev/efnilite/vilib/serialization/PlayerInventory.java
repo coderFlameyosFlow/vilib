@@ -98,7 +98,7 @@ public class PlayerInventory {
                         writer.flush();
                         writer.close();
                     } catch (IOException ex) {
-                        Logging.stack("Error while saving inventory",
+                        ViPlugin.logging().stack("Error while saving inventory",
                                 "Please report this error and the above stack trace to the developer!", ex);
                     }
                 })
@@ -134,7 +134,7 @@ public class PlayerInventory {
 
                         reader.close();
                     } catch (IOException ex) {
-                        Logging.stack("Error while reading inventory",
+                        ViPlugin.logging().stack("Error while reading inventory",
                                 "Please report this error and the above stack trace to the developer!", ex);
                         if (onRead != null) {
                             onRead.accept(null);

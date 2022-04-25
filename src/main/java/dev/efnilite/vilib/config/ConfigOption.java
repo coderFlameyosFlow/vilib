@@ -1,5 +1,6 @@
 package dev.efnilite.vilib.config;
 
+import dev.efnilite.vilib.ViPlugin;
 import dev.efnilite.vilib.util.Logging;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -22,19 +23,19 @@ public class ConfigOption<Type> {
         try {
             value = (Type) config.get(path);
         } catch (ClassCastException ex) {
-            Logging.stack("Incompatible types in config option '" + path + "': " + ex.getMessage(),
+            ViPlugin.logging().stack("Incompatible types in config option '" + path + "': " + ex.getMessage(),
                     "Please check if you have entered the correct type of data for path '" + path + "'", ex);
             return;
         }
 
         if (value == null) {
-            Logging.stack("No value found for option '" + path + "'",
+            ViPlugin.logging().stack("No value found for option '" + path + "'",
                     "Please check if you have entered anything for path '" + path + "'");
         } else if (regex != null) {
             this.regex = Pattern.compile(regex);
             Matcher matcher = this.regex.matcher(String.valueOf(value));
             if (!matcher.find()) {
-                Logging.stack("Invalid type regex found for option '" + path + "'", "Please check if you have entered the correct syntax!");
+                ViPlugin.logging().stack("Invalid type regex found for option '" + path + "'", "Please check if you have entered the correct syntax!");
             }
         }
     }
@@ -47,7 +48,7 @@ public class ConfigOption<Type> {
         this.value = value;
 
         if (value == null) {
-            Logging.stack("No value found for unknown option",
+            ViPlugin.logging().stack("No value found for unknown option",
                     "Please check if you have entered everything correctly.");
         }
     }

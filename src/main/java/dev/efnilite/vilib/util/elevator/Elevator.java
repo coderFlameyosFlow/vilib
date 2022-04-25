@@ -76,7 +76,7 @@ public class Elevator {
                         stream.close();
                         reader.close();
                     } catch (Throwable throwable) {
-                        Logging.error("There was an error while checking the latest version");
+                        ViPlugin.logging().error("There was an error while checking the latest version");
                     }
                 })
                 .run();
@@ -102,10 +102,10 @@ public class Elevator {
 
                         stream.close();
 
-                        Logging.info("A new version of " + plugin.getDescription().getName() + " has been downloaded.");
-                        Logging.info("A server restart is required for this download to take effect.");
+                        ViPlugin.logging().info("A new version of " + plugin.getDescription().getName() + " has been downloaded.");
+                        ViPlugin.logging().info("A server restart is required for this download to take effect.");
                     } catch (Throwable throwable) {
-                        Logging.error("There was an error while updating to the latest version");
+                        ViPlugin.logging().error("There was an error while updating to the latest version");
                     }
                 })
                 .run();
@@ -117,7 +117,7 @@ public class Elevator {
             method.setAccessible(true);
             return (File) method.invoke(this.plugin);
         } catch (ReflectiveOperationException ex) {
-            Logging.stack("Failed to get plugin jar name", "Please report this error to the developer!", ex);
+            ViPlugin.logging().stack("Failed to get plugin jar name", "Please report this error to the developer!", ex);
             return null;
         }
     }

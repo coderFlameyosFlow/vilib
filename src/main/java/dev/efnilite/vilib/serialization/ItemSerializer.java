@@ -1,5 +1,6 @@
 package dev.efnilite.vilib.serialization;
 
+import dev.efnilite.vilib.ViPlugin;
 import dev.efnilite.vilib.util.Logging;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
@@ -27,7 +28,7 @@ public class ItemSerializer {
             output.close();
             return Base64Coder.encodeLines(outputStream.toByteArray());
         } catch (Throwable throwable) {
-            Logging.stack("There was an error while trying to convert an item to base 64!",
+            ViPlugin.logging().stack("There was an error while trying to convert an item to base 64!",
                     "Please retry. If this error still persists, contact the developer!", throwable);
             return "";
         }
@@ -41,7 +42,7 @@ public class ItemSerializer {
             input.close();
             return (ItemStack) input.readObject();
         } catch (Throwable throwable) {
-            Logging.stack("There was an error while trying to convert an item from base 64!",
+            ViPlugin.logging().stack("There was an error while trying to convert an item from base 64!",
                     "You are probably using an outdated inventory saving format.", throwable);
             return null;
         }
@@ -102,7 +103,7 @@ public class ItemSerializer {
 //
 //        Material material = Material.matchMaterial(String.valueOf(map.get("material"))); // saved as String
 //        if (material == null) {
-//            Logging.error("Inventory recovery material not found: " + map.get("material"));
+//            ViPlugin.logging().error("Inventory recovery material not found: " + map.get("material"));
 //            material = Material.STONE;
 //        }
 //

@@ -1,5 +1,6 @@
 package dev.efnilite.vilib.sql;
 
+import dev.efnilite.vilib.ViPlugin;
 import dev.efnilite.vilib.util.Logging;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,7 +18,7 @@ public abstract class Database {
         this.database = database;
 
         try {
-            Logging.info("Connecting to SQL...");
+            ViPlugin.logging().info("Connecting to SQL...");
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver"); // For newer versions
             } catch (ClassNotFoundException ignored) {
@@ -28,10 +29,10 @@ public abstract class Database {
                     + "&autoReconnect=true", username, password);
 
             initTables();
-            Logging.info("Connected to SQL!");
+            ViPlugin.logging().info("Connected to SQL!");
         } catch (SQLException | ClassNotFoundException ex) {
             ex.printStackTrace();
-            Logging.error("Error while trying to connect to SQL!");
+            ViPlugin.logging().error("Error while trying to connect to SQL!");
         }
     }
 
@@ -42,8 +43,8 @@ public abstract class Database {
             statement.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
-            Logging.error("Error while trying to update MySQL database!");
-            Logging.error("Query: " + query);
+            ViPlugin.logging().error("Error while trying to update MySQL database!");
+            ViPlugin.logging().error("Query: " + query);
         }
     }
 
@@ -58,8 +59,8 @@ public abstract class Database {
             return connection.prepareStatement(query);
         } catch (SQLException ex) {
             ex.printStackTrace();
-            Logging.error("Error while trying to fetch from MySQL database!");
-            Logging.error("Query: " + query);
+            ViPlugin.logging().error("Error while trying to fetch from MySQL database!");
+            ViPlugin.logging().error("Query: " + query);
             return null;
         }
     }
@@ -67,10 +68,10 @@ public abstract class Database {
     public void close() {
         try {
             connection.close();
-            Logging.info("Closed connection to MySQL");
+            ViPlugin.logging().info("Closed connection to MySQL");
         } catch (SQLException ex) {
             ex.printStackTrace();
-            Logging.error("Error while trying to close connection to MySQL database!");
+            ViPlugin.logging().error("Error while trying to close connection to MySQL database!");
         }
     }
 

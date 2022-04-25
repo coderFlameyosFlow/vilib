@@ -1,5 +1,6 @@
 package dev.efnilite.vilib.sql;
 
+import dev.efnilite.vilib.ViPlugin;
 import dev.efnilite.vilib.util.Logging;
 
 import java.sql.SQLException;
@@ -59,7 +60,7 @@ public class UpdertStatement extends Statement {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            Logging.error("Error while trying to update/insert values");
+            ViPlugin.logging().error("Error while trying to update/insert values");
         }
     }
 }
