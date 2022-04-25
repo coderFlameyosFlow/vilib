@@ -20,7 +20,6 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public abstract class ViPlugin extends JavaPlugin {
 
-    protected boolean verbosing = false;
     protected Logging logging;
     protected ViPlugin viPlugin;
 

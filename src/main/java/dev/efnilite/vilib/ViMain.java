@@ -18,10 +18,20 @@ public class ViMain extends ViPlugin {
 
     }
 
+    /**
+     * Returns the {@link Logging} belonging to this plugin.
+     *
+     * @return this plugin's {@link Logging} instance.
+     */
     public static Logging logging() {
         return getPlugin().logging;
     }
 
+    /**
+     * Returns this plugin instance.
+     *
+     * @return the plugin instance.
+     */
     public static ViMain getPlugin() {
         return instance;
     }
