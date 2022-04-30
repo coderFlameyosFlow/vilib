@@ -1,32 +1,33 @@
 package dev.efnilite.vilib.util.elevator;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import dev.efnilite.vilib.ViMain;
 import dev.efnilite.vilib.ViPlugin;
 import dev.efnilite.vilib.util.Task;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.lang.reflect.Method;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 
 /**
  * Elevator class to automatically check for and update plugins.
+ * Used for open-source plugins, specifically hosted on GitHub.
  * Lowers the barrier of downloading a new version, which is useful for improving "updatedness" retention.
  */
-public class Elevator {
+public class GitElevator {
 
     private boolean outdated;
     private String newerVersion;
-    private String versionUrl;
     private String downloadUrl;
-    private final ViPlugin plugin;
     private VersionComparator comparator;
-    private VersionRetriever retriever;
-    private boolean downloadIfOutdated;
+    private final String repo;
+    private final ViPlugin plugin;
+    private final boolean downloadIfOutdated;
 
     /**
      * Constructor of this Elevator. Automatically checks for updates on creation.
@@ -34,17 +35,15 @@ public class Elevator {
      * @param   plugin
      *          The plugin. Used to get the current version.
      *
-     * @param   versionUrl
-     *          The url of the plugin.yml (or other files) to check versions with.
-     *          File must contain the following syntax: 'version: '
+     * @param   repo
+     *          The repo name including the author, e.g. Efnilite/vilib
      *
-     * @param   downloadUrl
-     *          The url where to download the latest file from.
+     * @param   downloadIfOutdated
+     *          Whether the Elevator should download a new version if the current is outdated.
      */
-    public Elevator(ViPlugin plugin, String versionUrl, String downloadUrl, boolean downloadIfOutdated) {
+    public GitElevator(ViPlugin plugin, String repo, boolean downloadIfOutdated) {
         this.plugin = plugin;
-        this.versionUrl = versionUrl;
-        this.downloadUrl = downloadUrl;
+        this.repo = repo;
         this.downloadIfOutdated = downloadIfOutdated;
     }
 
@@ -56,25 +55,10 @@ public class Elevator {
      *
      * @return the instance of this class
      */
-    public Elevator comparator(VersionComparator comparator) {
+    public GitElevator comparator(VersionComparator comparator) {
         this.comparator = comparator;
         return this;
     }
-
-    /**
-     * Sets the retriever type of this Elevator.
-     *
-     * @param   retriever
-     *          The retriever type.
-     *
-     * @return the instance of this class
-     */
-    public Elevator retriever(VersionRetriever retriever) {
-        this.retriever = retriever;
-        return this;
-    }
-
-    // todo get latest version via github rest and then the tag name -v
 
     /**
      * Checks if this plugin version is outdated. Automatically called on instantiation.
@@ -84,11 +68,23 @@ public class Elevator {
                 .async()
                 .execute(() -> {
                     try {
-                        newerVersion = retriever.getLatestVersion(versionUrl);
+                        String url = "https://api.github.com/repos/" + repo + "/releases/latest";
+
+                        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+                        connection.setRequestProperty("accept", "application/json");
+
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+                        JsonObject object = JsonParser.parseReader(reader).getAsJsonObject();
+                        newerVersion = object.get("tag_name").getAsString();
+                        downloadUrl = object.get("browser_download_url").getAsString();
+
+                        reader.close();
+
                         outdated = !comparator.isLatest(plugin.getDescription().getVersion(), newerVersion);
 
                         if (outdated) {
-                            ViMain.logging().info("A new version of " + plugin.getName() + " has been found.");
+                            ViMain.logging().info("A new version of " + plugin.getName() + " is available!");
                             if (downloadIfOutdated) {
                                 ViMain.logging().info(plugin.getName() + " will now be updated...");
                                 elevate();
@@ -128,7 +124,7 @@ public class Elevator {
                         stream.close();
 
                         ViMain.logging().info("A new version of " + plugin.getName() + " has been downloaded.");
-                        ViMain.logging().info("A server restart is required for this download to take effect.");
+                        ViMain.logging().info("A server restart is required for this download to work!");
                     } catch (Throwable throwable) {
                         throwable.printStackTrace();
                         ViMain.logging().error("There was an error while updating to the latest version");

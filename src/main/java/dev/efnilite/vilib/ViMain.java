@@ -1,26 +1,20 @@
 package dev.efnilite.vilib;
 
 import dev.efnilite.vilib.util.Logging;
-import dev.efnilite.vilib.util.elevator.Elevator;
+import dev.efnilite.vilib.util.elevator.GitElevator;
 import dev.efnilite.vilib.util.elevator.VersionComparator;
-import dev.efnilite.vilib.util.elevator.VersionRetriever;
 
 public class ViMain extends ViPlugin {
 
     private static ViMain instance;
-    private static Elevator elevator;
+    private static GitElevator elevator;
 
     @Override
     public void enable() {
         instance = this;
 
-        elevator = new Elevator(this,
-                "https://raw.githubusercontent.com/ViStudios/vilib/master/src/main/resources/plugin.yml",
-                "https://github.com/ViStudios/vilib/releases/download/v1.0.0-test/vilib-1.0.0.jar", true)
-                .comparator(VersionComparator.FROM_SEMANTIC)
-                .retriever(VersionRetriever.GITHUB);
-
-        // todo update checker
+        elevator = new GitElevator(this, "ViStudios/vilib", true)
+                .comparator(VersionComparator.FROM_SEMANTIC);
     }
 
     @Override
