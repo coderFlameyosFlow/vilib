@@ -5,17 +5,13 @@ import dev.efnilite.vilib.ViPlugin;
 import dev.efnilite.vilib.util.Task;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.stream.Collectors;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 
 /**
  * Elevator class to automatically check for and update plugins.
@@ -24,11 +20,13 @@ import java.util.stream.Collectors;
 public class Elevator {
 
     private boolean outdated;
-
-    private final String versionUrl;
-    private final String downloadUrl;
+    private String newerVersion;
+    private String versionUrl;
+    private String downloadUrl;
     private final ViPlugin plugin;
-    private final VersionComparator comparator;
+    private VersionComparator comparator;
+    private VersionRetriever retriever;
+    private boolean downloadIfOutdated;
 
     /**
      * Constructor of this Elevator. Automatically checks for updates on creation.
@@ -43,14 +41,40 @@ public class Elevator {
      * @param   downloadUrl
      *          The url where to download the latest file from.
      */
-    public Elevator(ViPlugin plugin, String versionUrl, String downloadUrl, VersionComparator comparator) {
+    public Elevator(ViPlugin plugin, String versionUrl, String downloadUrl, boolean downloadIfOutdated) {
         this.plugin = plugin;
         this.versionUrl = versionUrl;
         this.downloadUrl = downloadUrl;
-        this.comparator = comparator;
-
-        check();
+        this.downloadIfOutdated = downloadIfOutdated;
     }
+
+    /**
+     * Sets the comparator of this Elevator.
+     *
+     * @param   comparator
+     *          The comparator type to be used.
+     *
+     * @return the instance of this class
+     */
+    public Elevator comparator(VersionComparator comparator) {
+        this.comparator = comparator;
+        return this;
+    }
+
+    /**
+     * Sets the retriever type of this Elevator.
+     *
+     * @param   retriever
+     *          The retriever type.
+     *
+     * @return the instance of this class
+     */
+    public Elevator retriever(VersionRetriever retriever) {
+        this.retriever = retriever;
+        return this;
+    }
+
+    // todo get latest version via github rest and then the tag name -v
 
     /**
      * Checks if this plugin version is outdated. Automatically called on instantiation.
@@ -60,21 +84,18 @@ public class Elevator {
                 .async()
                 .execute(() -> {
                     try {
-                        InputStream stream = new URL(versionUrl).openStream();
+                        newerVersion = retriever.getLatestVersion(versionUrl);
+                        outdated = !comparator.isLatest(plugin.getDescription().getVersion(), newerVersion);
 
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(stream)); // buffered to improve performance
-                        String version = reader.lines()
-                                .filter(s -> s.startsWith("version:")) // only get the version
-                                .collect(Collectors.toList())
-                                .get(0)
-                                .replace("version:", "")
-                                .replaceAll("['\"]", "")
-                                .trim(); // remove trailing spaces
-
-                        outdated = !comparator.isLatest(plugin.getDescription().getVersion(), version);
-
-                        stream.close();
-                        reader.close();
+                        if (outdated) {
+                            ViMain.logging().info("A new version of " + plugin.getName() + " has been found.");
+                            if (downloadIfOutdated) {
+                                ViMain.logging().info(plugin.getName() + " will now be updated...");
+                                elevate();
+                            } else {
+                                ViMain.logging().info("Please update!");
+                            }
+                        }
                     } catch (Throwable throwable) {
                         ViMain.logging().error("There was an error while checking the latest version");
                     }
@@ -87,24 +108,29 @@ public class Elevator {
                 .async()
                 .execute(() -> {
                     try {
-                        // todo
-                        InputStream stream = new URL(downloadUrl).openStream();
-
-                        File folder = plugin.getDataFolder();
+                        if (!outdated) {
+                            return;
+                        }
                         File jar = getJar();
                         if (jar == null) {
                             return;
                         }
 
-                        Path full = Paths.get(folder.toString(), jar.toString());
+                        InputStream stream = new URL(downloadUrl).openStream();
+                        ReadableByteChannel channel = Channels.newChannel(stream);
+                        FileOutputStream output = new FileOutputStream(jar);
 
-                        Files.copy(stream, full, StandardCopyOption.REPLACE_EXISTING); // replace current jar
+                        output.getChannel().transferFrom(channel, 0, Long.MAX_VALUE);
 
+                        channel.close();
+                        output.flush();
+                        output.close();
                         stream.close();
 
-                        ViMain.logging().info("A new version of " + plugin.getDescription().getName() + " has been downloaded.");
+                        ViMain.logging().info("A new version of " + plugin.getName() + " has been downloaded.");
                         ViMain.logging().info("A server restart is required for this download to take effect.");
                     } catch (Throwable throwable) {
+                        throwable.printStackTrace();
                         ViMain.logging().error("There was an error while updating to the latest version");
                     }
                 })
