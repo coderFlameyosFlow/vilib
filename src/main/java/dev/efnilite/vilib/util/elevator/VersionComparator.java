@@ -23,19 +23,10 @@ public enum VersionComparator {
 
         @Override
         boolean isLatest(String latest, String current) {
-            String[] latestVs = strip(latest).split("\\.");
-            String[] currentVs = strip(current).split("\\.");
+            int latestVs = Integer.parseInt(strip(latest));
+            int currentVs = Integer.parseInt(strip(current));
 
-            for (int i = 0; i < latestVs.length; i++) {
-                int l = Integer.parseInt(latestVs[i]);
-                int c = Integer.parseInt(currentVs[i]);
-
-                if (l != c) {
-                    return false;
-                }
-            }
-
-            return true;
+            return latestVs <= currentVs;
         }
     };
 
@@ -43,6 +34,6 @@ public enum VersionComparator {
 
     // strips a string
     protected String strip(String string) {
-        return string.toLowerCase().replace("v", "");
+        return string.toLowerCase().replace("v", "").replace(".", "");
     }
 }
