@@ -56,8 +56,8 @@ public class Menu implements EventWatcher {
     }
 
     public Menu(int rows, String name) {
-        if (rows < 0 || rows > 6) {
-            throw new IllegalArgumentException("Rows is below 0 or above 6");
+        if (rows < 1 || rows > 6) {
+            throw new IllegalArgumentException("Rows is below 1 or above 6");
         }
         this.rows = rows;
         this.title = Message.parseFormatting(name);

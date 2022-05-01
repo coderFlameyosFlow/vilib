@@ -7,10 +7,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// todo finish
 public class ViList<T> extends ArrayList<T> {
-
     private List<T> list;
-
     public ViList(@NotNull Collection<? extends T> collection) {
         super(collection);
 

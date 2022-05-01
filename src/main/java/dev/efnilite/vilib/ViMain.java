@@ -1,20 +1,27 @@
 package dev.efnilite.vilib;
 
 import dev.efnilite.vilib.util.Logging;
+import dev.efnilite.vilib.util.Version;
 import dev.efnilite.vilib.util.elevator.GitElevator;
 import dev.efnilite.vilib.util.elevator.VersionComparator;
+import org.bstats.bukkit.Metrics;
 
 public class ViMain extends ViPlugin {
 
     private static ViMain instance;
-    private static GitElevator elevator;
 
     @Override
     public void enable() {
         instance = this;
 
-        elevator = new GitElevator(this, "ViStudios/vilib", true)
-                .comparator(VersionComparator.FROM_SEMANTIC);
+        Configuration configuration = new Configuration(this);
+
+        if (Version.isHigherOrEqual(Version.V1_13)) { // no gson under 1.13
+            new GitElevator("ViStudios/vilib", this, VersionComparator.FROM_SEMANTIC,
+                    configuration.getFile("config").getBoolean("auto-updater"));
+        }
+
+        new Metrics(this, 15090);
     }
 
     @Override

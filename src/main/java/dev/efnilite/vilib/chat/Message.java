@@ -3,6 +3,7 @@ package dev.efnilite.vilib.chat;
 import dev.efnilite.vilib.chat.tag.TextTag;
 import org.bukkit.command.CommandSender;
 
+// todo realize this is pointless
 public class Message {
 
     private final String text;

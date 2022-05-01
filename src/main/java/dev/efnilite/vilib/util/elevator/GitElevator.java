@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import dev.efnilite.vilib.ViMain;
 import dev.efnilite.vilib.ViPlugin;
 import dev.efnilite.vilib.util.Task;
+import dev.efnilite.vilib.util.Time;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
@@ -24,10 +25,15 @@ public class GitElevator {
     private boolean outdated;
     private String newerVersion;
     private String downloadUrl;
-    private VersionComparator comparator;
+    private final VersionComparator comparator;
     private final String repo;
     private final ViPlugin plugin;
     private final boolean downloadIfOutdated;
+
+    /**
+     * The interval between update checks. By default 8 hours.
+     */
+    private static final int CHECK_INTERVAL = Time.SECONDS_PER_HOUR * 8 * 20;
 
     /**
      * Constructor of this Elevator. Automatically checks for updates on creation.
@@ -35,68 +41,61 @@ public class GitElevator {
      * @param   plugin
      *          The plugin. Used to get the current version.
      *
+     * @param   comparator
+     *          The comparator type used for version checking.
+     *
      * @param   repo
      *          The repo name including the author, e.g. Efnilite/vilib
      *
      * @param   downloadIfOutdated
      *          Whether the Elevator should download a new version if the current is outdated.
      */
-    public GitElevator(ViPlugin plugin, String repo, boolean downloadIfOutdated) {
+    public GitElevator(String repo, ViPlugin plugin, VersionComparator comparator, boolean downloadIfOutdated) {
         this.plugin = plugin;
         this.repo = repo;
-        this.downloadIfOutdated = downloadIfOutdated;
-    }
-
-    /**
-     * Sets the comparator of this Elevator.
-     *
-     * @param   comparator
-     *          The comparator type to be used.
-     *
-     * @return the instance of this class
-     */
-    public GitElevator comparator(VersionComparator comparator) {
         this.comparator = comparator;
-        return this;
+        this.downloadIfOutdated = downloadIfOutdated;
+
+        Task.create(plugin)
+                .async()
+                .repeat(CHECK_INTERVAL)
+                .execute(this::check)
+                .run();
     }
 
     /**
-     * Checks if this plugin version is outdated. Automatically called on instantiation.
+     * Checks if this plugin version is outdated.
      */
     public void check() {
-        Task.create(ViMain.getPlugin())
-                .async()
-                .execute(() -> {
-                    try {
-                        String url = "https://api.github.com/repos/" + repo + "/releases/latest";
+        try {
+            String url = "https://api.github.com/repos/" + repo + "/releases/latest";
 
-                        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-                        connection.setRequestProperty("accept", "application/json");
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setRequestProperty("accept", "application/json");
 
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
-                        JsonObject object = JsonParser.parseReader(reader).getAsJsonObject();
-                        newerVersion = object.get("tag_name").getAsString();
-                        downloadUrl = object.get("browser_download_url").getAsString();
+            JsonObject object = JsonParser.parseReader(reader).getAsJsonObject();
+            newerVersion = object.get("tag_name").getAsString();
+            downloadUrl = object.getAsJsonArray("assets").get(0) // for some reason assets is an array with one element
+                    .getAsJsonObject().get("browser_download_url").getAsString(); // get browser_download_url
 
-                        reader.close();
+            reader.close();
 
-                        outdated = !comparator.isLatest(plugin.getDescription().getVersion(), newerVersion);
+            outdated = !comparator.isLatest(plugin.getDescription().getVersion(), newerVersion);
 
-                        if (outdated) {
-                            ViMain.logging().info("A new version of " + plugin.getName() + " is available!");
-                            if (downloadIfOutdated) {
-                                ViMain.logging().info(plugin.getName() + " will now be updated...");
-                                elevate();
-                            } else {
-                                ViMain.logging().info("Please update!");
-                            }
-                        }
-                    } catch (Throwable throwable) {
-                        ViMain.logging().error("There was an error while checking the latest version");
-                    }
-                })
-                .run();
+            if (outdated) {
+                ViMain.logging().info("A new version of " + plugin.getName() + " is available!");
+                if (downloadIfOutdated) {
+                    ViMain.logging().info(plugin.getName() + " will now be updated...");
+                    elevate();
+                } else {
+                    ViMain.logging().info("Please update!");
+                }
+            }
+        } catch (Throwable throwable) {
+            ViMain.logging().error("There was an error while checking the latest version");
+        }
     }
 
     public void elevate() {
