@@ -13,16 +13,14 @@ public class ViMain extends ViPlugin {
     @Override
     public void enable() {
         instance = this;
-        logging = new Logging(this);
 
         Configuration configuration = new Configuration(this);
 
-        if (Version.isHigherOrEqual(Version.V1_13)) { // no gson under 1.13
-            new GitElevator("ViStudios/vilib", this, VersionComparator.FROM_SEMANTIC,
-                    configuration.getFile("config").getBoolean("auto-updater"));
-        }
+        new GitElevator("ViStudios/vilib", this, VersionComparator.FROM_SEMANTIC,
+                configuration.getFile("config").getBoolean("auto-updater"));
 
         new Metrics(this, 15090);
+        logging.info("Enabled vilib " + getDescription().getVersion());
     }
 
     @Override

@@ -22,7 +22,6 @@ public abstract class ViPlugin extends JavaPlugin {
 
     protected Logging logging;
     protected ViPlugin viPlugin;
-
     protected static Gson gson;
     protected static Version version;
 

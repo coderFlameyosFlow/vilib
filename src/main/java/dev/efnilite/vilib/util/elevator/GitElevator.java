@@ -6,6 +6,7 @@ import dev.efnilite.vilib.ViMain;
 import dev.efnilite.vilib.ViPlugin;
 import dev.efnilite.vilib.util.Task;
 import dev.efnilite.vilib.util.Time;
+import dev.efnilite.vilib.util.Version;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
@@ -56,6 +57,9 @@ public class GitElevator {
         this.comparator = comparator;
         this.downloadIfOutdated = downloadIfOutdated;
 
+        if (!Version.isHigherOrEqual(Version.V1_13)) { // no gson under 1.13
+            return;
+        }
         Task.create(plugin)
                 .async()
                 .repeat(CHECK_INTERVAL)
