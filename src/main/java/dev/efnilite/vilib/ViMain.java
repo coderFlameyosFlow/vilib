@@ -13,6 +13,7 @@ public class ViMain extends ViPlugin {
     @Override
     public void enable() {
         instance = this;
+        logging = new Logging(this);
 
         Configuration configuration = new Configuration(this);
 
