@@ -2,7 +2,6 @@ package dev.efnilite.vilib.util.elevator;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import dev.efnilite.vilib.ViMain;
 import dev.efnilite.vilib.ViPlugin;
 import dev.efnilite.vilib.util.Task;
 import dev.efnilite.vilib.util.Time;
@@ -89,21 +88,21 @@ public class GitElevator {
             outdated = !comparator.isLatest(plugin.getDescription().getVersion(), newerVersion);
 
             if (outdated) {
-                ViMain.logging().info("A new version of " + plugin.getName() + " is available!");
+                plugin.getLogger().info("A new version of is available!");
                 if (downloadIfOutdated) {
-                    ViMain.logging().info(plugin.getName() + " will now be updated...");
+                    plugin.getLogger().info("This plugin will now be updated...");
                     elevate();
                 } else {
-                    ViMain.logging().info("Please update!");
+                    plugin.getLogger().info("Please update!");
                 }
             }
         } catch (Throwable throwable) {
-            ViMain.logging().error("There was an error while checking the latest version");
+            plugin.getLogger().severe("There was an error while checking the latest version");
         }
     }
 
     public void elevate() {
-        Task.create(ViMain.getPlugin())
+        Task.create(plugin)
                 .async()
                 .execute(() -> {
                     try {
@@ -126,11 +125,11 @@ public class GitElevator {
                         output.close();
                         stream.close();
 
-                        ViMain.logging().info("A new version of " + plugin.getName() + " has been downloaded.");
-                        ViMain.logging().info("A server restart is required for this download to work!");
+                        plugin.getLogger().info("A new version of " + plugin.getName() + " has been downloaded.");
+                        plugin.getLogger().info("A server restart is required for this download to work!");
                     } catch (Throwable throwable) {
                         throwable.printStackTrace();
-                        ViMain.logging().error("There was an error while updating to the latest version");
+                        plugin.getLogger().severe("There was an error while updating to the latest version");
                     }
                 })
                 .run();
@@ -142,7 +141,7 @@ public class GitElevator {
             method.setAccessible(true);
             return (File) method.invoke(this.plugin);
         } catch (ReflectiveOperationException ex) {
-            ViMain.logging().stack("Failed to get plugin jar name", ex);
+            plugin.getLogger().severe("Failed to get plugin jar name: " + ex.getMessage());
             return null;
         }
     }
