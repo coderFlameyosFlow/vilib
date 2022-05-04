@@ -114,16 +114,16 @@ public class Task {
 
     /**
      * Cancels the active/waiting task and runs the task immediately
-     *
-     * @return the instance of this class
      */
-    public BukkitTask cancelAndRunImmediately() {
+    public void cancelAndRunImmediately() {
         task.cancel();
 
-        delay = 0; // reset to run immediately
-        repeat = 0;
-
-        return run();
+        if (bukkitRunnable != null) {
+            bukkitRunnable.run();
+        }
+        if (defaultRunnable != null) {
+            defaultRunnable.run();
+        }
     }
 
     /**
