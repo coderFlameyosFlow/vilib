@@ -125,6 +125,8 @@ public class GitElevator {
                         output.close();
                         stream.close();
 
+                        outdated = false;
+
                         plugin.getLogger().info("A new version of " + plugin.getName() + " has been downloaded.");
                         plugin.getLogger().info("A server restart is required for this download to work!");
                     } catch (Throwable throwable) {
