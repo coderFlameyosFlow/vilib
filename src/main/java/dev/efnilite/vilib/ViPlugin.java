@@ -32,6 +32,8 @@ public abstract class ViPlugin extends JavaPlugin {
         version = Version.getVersion();
 
         if (Version.isHigherOrEqual(Version.V1_13)) { // <1.13 makes me sad
+            gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().disableHtmlEscaping().setLenient().create();
+        } else {
             gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().disableHtmlEscaping().create();
         }
 
