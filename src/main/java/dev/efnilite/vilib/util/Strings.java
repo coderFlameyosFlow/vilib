@@ -30,7 +30,7 @@ public class Strings {
 
     /**
      * Gets the levenshtein distance between two strings
-     * Source: https://www.stephenenright.com/java-levenshtein-distance
+     * Source: <a href="https://www.stephenenright.com/java-levenshtein-distance">https://www.stephenenright.com/java-levenshtein-distance</a>
      *
      * @param   source
      *          The source string

@@ -34,8 +34,8 @@ public class FormatTag extends TextTag {
             }
 
             result = result.replace(full,
-                    ChatColor.of(startFormat.getName()) +
-                    betweenText + ChatColor.of(closeFormat.getName()));
+                    of(startFormat) +
+                    betweenText + of(closeFormat));
         }
 
         matcher = pattern.matcher(result);
@@ -50,7 +50,7 @@ public class FormatTag extends TextTag {
                 continue;
             }
 
-            result = result.replace(full, ChatColor.of(defFormat.getName()).toString());
+            result = result.replace(full, of(defFormat));
         }
 
         return result;

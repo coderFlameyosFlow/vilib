@@ -69,6 +69,7 @@ public class GitElevator {
     /**
      * Checks if this plugin version is outdated.
      */
+    @SuppressWarnings("deprecation") // <1.13
     public void check() {
         try {
             String url = "https://api.github.com/repos/" + repo + "/releases/latest";
@@ -78,7 +79,7 @@ public class GitElevator {
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
-            JsonObject object = JsonParser.parseReader(reader).getAsJsonObject();
+            JsonObject object = new JsonParser().parse(reader).getAsJsonObject();
             newerVersion = object.get("tag_name").getAsString();
             downloadUrl = object.getAsJsonArray("assets").get(0) // for some reason assets is an array with one element
                     .getAsJsonObject().get("browser_download_url").getAsString(); // get browser_download_url

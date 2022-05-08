@@ -1,7 +1,6 @@
 package dev.efnilite.vilib.chat.tag;
 
 import dev.efnilite.vilib.chat.ChatColour;
-import net.md_5.bungee.api.ChatColor;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,7 +23,7 @@ public class ColourTag extends TextTag {
             String full = matcher.group();
             String hex = matcher.group(1);
 
-            result = result.replace(full, ChatColor.of("#" + hex).toString());
+            result = result.replace(full, of(hex));
         }
 
         matcher = pattern.matcher(result);
@@ -39,7 +38,7 @@ public class ColourTag extends TextTag {
                 continue;
             }
 
-            result = result.replace(full, ChatColor.of("#" + defColour.getHex()).toString());
+            result = result.replace(full, of(defColour.getHex()));
         }
 
         return result;

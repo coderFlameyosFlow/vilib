@@ -18,6 +18,19 @@ public class ViMap<K, V> extends HashMap<K, V> {
                 ));
     }
 
+    public Map<K, V> sortValues() {
+        return entrySet()
+                .stream()
+                .sorted()
+                .collect(Collectors.toMap(
+                        Entry::getKey,
+                        Entry::getValue,
+                        (a, b) -> a,
+                        LinkedHashMap::new
+                ));
+    }
+
+
     public K randomKey() {
         List<K> keys = new ArrayList<>(keySet());
         return keys.get(ThreadLocalRandom.current().nextInt(keys.size() - 1));

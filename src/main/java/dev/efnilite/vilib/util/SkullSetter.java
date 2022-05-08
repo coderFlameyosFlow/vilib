@@ -6,6 +6,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.lang.reflect.Method;
 
+@SuppressWarnings("deprecation")
 public class SkullSetter {
 
     private static boolean isPaper;
@@ -26,7 +27,11 @@ public class SkullSetter {
     }
 
     public static void setPlayerHead(OfflinePlayer player, SkullMeta meta) {
-        meta.setOwningPlayer(player);
+        if (Version.isHigherOrEqual(Version.V1_13)) {
+            meta.setOwningPlayer(player);
+        } else {
+            meta.setOwner(player.getName()); // <1.13
+        }
     }
 
     public static void setPlayerHead(Player player, SkullMeta meta) {
@@ -37,11 +42,11 @@ public class SkullSetter {
                 if (hasTexture) {
                     setPlayerProfileMethod.invoke(meta, playerProfile);
                 }
-            } catch (Throwable e) {
-                meta.setOwningPlayer(player); // if the paper version doesn't work, try the default one
+            } catch (Throwable throwable) {
+                setPlayerHead((OfflinePlayer) player, meta);
             }
         } else {
-            meta.setOwningPlayer(player);
+            setPlayerHead((OfflinePlayer) player, meta);
         }
     }
 }

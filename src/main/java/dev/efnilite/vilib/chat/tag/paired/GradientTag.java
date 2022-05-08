@@ -2,7 +2,6 @@ package dev.efnilite.vilib.chat.tag.paired;
 
 import dev.efnilite.vilib.chat.ChatFormat;
 import dev.efnilite.vilib.chat.tag.TextTag;
-import net.md_5.bungee.api.ChatColor;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -77,7 +76,7 @@ public class GradientTag extends TextTag {
             String code = toHex(r) + toHex(g) + toHex(b);
 
             result
-                    .append(ChatColor.of("#" + code))
+                    .append(of(code))
                     .append(last)
                     .append(character);
         }
