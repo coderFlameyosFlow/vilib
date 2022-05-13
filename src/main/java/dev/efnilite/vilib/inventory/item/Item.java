@@ -77,7 +77,7 @@ public class Item extends MenuItem {
             meta = Bukkit.getItemFactory().getItemMeta(item.getType());
         }
         if (meta == null) {
-            throw new IllegalStateException("Meta is null");
+            return item;
         }
 
         if (glowing) {
