@@ -1,6 +1,8 @@
 package dev.efnilite.vilib.vector;
 
+import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
@@ -9,10 +11,10 @@ import java.io.Serializable;
  */
 public class Vector2D implements Serializable {
 
-    public int x;
-    public int y;
+    public double x;
+    public double y;
 
-    public Vector2D(int x, int y) {
+    public Vector2D(double x, double y) {
         this.x = x;
         this.y = y;
     }
@@ -22,6 +24,7 @@ public class Vector2D implements Serializable {
      *
      * @return this vector but usable in Bukkit applications
      */
+    @NotNull
     public Vector toBukkitVector() {
         return new Vector(x, y, 0);
     }
@@ -35,12 +38,7 @@ public class Vector2D implements Serializable {
      * @return a new Vector2D
      */
     public static Vector2D fromBukkit(Vector vector) {
-        return new Vector2D(vector.getBlockX(), vector.getBlockY());
-    }
-
-    @Override
-    public Vector2D clone() {
-        return new Vector2D(x, y);
+        return new Vector2D(vector.getX(), vector.getY());
     }
 
     /**
@@ -51,7 +49,8 @@ public class Vector2D implements Serializable {
      *
      * @return the instance of this class with updated coordinates
      */
-    public Vector2D add(Vector2D other) {
+    @NotNull
+    public Vector2D add(@NotNull Vector2D other) {
         this.x += other.x;
         this.y += other.y;
         return this;
@@ -65,6 +64,7 @@ public class Vector2D implements Serializable {
      *
      * @return the instance of this class with updated coordinates
      */
+    @NotNull
     public Vector2D multiply(double modifier) {
         this.x *= modifier;
         this.y *= modifier;
@@ -79,6 +79,7 @@ public class Vector2D implements Serializable {
      *
      * @return the instance of this class with updated coordinates
      */
+    @NotNull
     public Vector2D subtract(Vector2D other) {
         this.x -= other.x;
         this.y -= other.y;
@@ -93,20 +94,10 @@ public class Vector2D implements Serializable {
      *
      * @return the distance between the two vectors. Always positive.
      */
-    public double distanceTo(Vector2D other) {
+    public double distanceTo(@NotNull Vector2D other) {
         double x2 = Math.pow(other.x - x, 2);
         double y2 = Math.pow(other.y - y, 2);
         return Math.sqrt(Math.abs(x2 + y2));
-    }
-
-    public Vector2D setX(int x) {
-        this.x = x;
-        return this;
-    }
-
-    public Vector2D setY(int y) {
-        this.y = y;
-        return this;
     }
 
     /**
@@ -123,6 +114,45 @@ public class Vector2D implements Serializable {
 
         this.x = (int) Math.round(rotatedX);
         this.y = (int) Math.round(rotatedY);
+    }
+
+    /**
+     * Gets the length of this vector
+     *
+     * @return the length of this vector
+     */
+    public double length() {
+        return Math.sqrt(x * x + y * y);
+    }
+
+    /**
+     * Normalizes this vector instance.
+     * All values will be divided by the length.
+     *
+     * @return the instance of this vector, but normalized
+     */
+    public Vector2D normalize() {
+        double length = length();
+        this.x /= length;
+        this.y /= length;
+        return this;
+    }
+
+    @NotNull
+    public Vector2D setX(int x) {
+        this.x = x;
+        return this;
+    }
+
+    @NotNull
+    public Vector2D setY(int y) {
+        this.y = y;
+        return this;
+    }
+
+    @Override
+    public Vector2D clone() {
+        return new Vector2D(x, y);
     }
 
     @Override

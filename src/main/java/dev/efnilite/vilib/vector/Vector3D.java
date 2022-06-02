@@ -12,11 +12,11 @@ import java.io.Serializable;
  */
 public class Vector3D implements Serializable {
 
-    public int x;
-    public int y;
-    public int z;
+    public double x;
+    public double y;
+    public double z;
 
-    public Vector3D(int x, int y, int z) {
+    public Vector3D(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -27,6 +27,7 @@ public class Vector3D implements Serializable {
      *
      * @return this vector but usable in Bukkit applications
      */
+    @NotNull
     public Vector toBukkitVector() {
         return new Vector(x, y, z);
     }
@@ -39,13 +40,9 @@ public class Vector3D implements Serializable {
      *
      * @return a new Vector3D
      */
-    public static Vector3D fromBukkit(Vector vector) {
+    @NotNull
+    public static Vector3D fromBukkit(@NotNull Vector vector) {
         return new Vector3D(vector.getBlockX(), vector.getBlockY(), vector.getBlockZ());
-    }
-
-    @Override
-    public Vector3D clone() {
-        return new Vector3D(x, y, z);
     }
 
     /**
@@ -56,6 +53,7 @@ public class Vector3D implements Serializable {
      *
      * @return the instance of this class with updated coordinates
      */
+    @NotNull
     public Vector3D add(Vector3D other) {
         this.x += other.x;
         this.y += other.y;
@@ -71,6 +69,7 @@ public class Vector3D implements Serializable {
      *
      * @return the instance of this class with updated coordinates
      */
+    @NotNull
     public Vector3D multiply(double modifier) {
         this.x *= modifier;
         this.y *= modifier;
@@ -92,6 +91,7 @@ public class Vector3D implements Serializable {
      *
      * @return the instance of this class with updated coordinates
      */
+    @NotNull
     public Vector3D multiply(double xMod, double yMod, double zMod) {
         this.x *= xMod;
         this.y *= yMod;
@@ -107,6 +107,7 @@ public class Vector3D implements Serializable {
      *
      * @return the instance of this class with updated coordinates
      */
+    @NotNull
     public Vector3D subtract(Vector3D other) {
         this.x -= other.x;
         this.y -= other.y;
@@ -136,6 +137,7 @@ public class Vector3D implements Serializable {
      * @param   deg
      *          The angle in degrees.
      */
+    @NotNull
     public Vector3D rotateXZ(int deg) {
         double rad =  Math.toRadians(deg * -1); // * -1 is required to follow clockwise rotation = negative and other way around, not sure why
         double rotatedX = (Math.cos(rad) * x) - (Math.sin(rad) * z);
@@ -147,6 +149,29 @@ public class Vector3D implements Serializable {
     }
 
     /**
+     * Gets the length of this vector
+     *
+     * @return the length of this vector
+     */
+    public double length() {
+        return Math.sqrt(x * x + y * y + z * z);
+    }
+
+    /**
+     * Normalizes this vector instance.
+     * All values will be divided by the length.
+     *
+     * @return the instance of this vector, but normalized
+     */
+    public Vector3D normalize() {
+        double length = length();
+        this.x /= length;
+        this.y /= length;
+        this.z /= length;
+        return this;
+    }
+
+    /**
      * Turns this Vector3D instance into a Bukkit Location.
      *
      * @param   world
@@ -154,23 +179,32 @@ public class Vector3D implements Serializable {
      *
      * @return the Location instance with the same coordinates
      */
+    @NotNull
     public Location toLocation(@NotNull World world) {
         return new Location(world, x, y, z);
     }
 
+    @NotNull
     public Vector3D setX(int x) {
         this.x = x;
         return this;
     }
 
+    @NotNull
     public Vector3D setY(int y) {
         this.y = y;
         return this;
     }
 
+    @NotNull
     public Vector3D setZ(int z) {
         this.z = z;
         return this;
+    }
+
+    @Override
+    public Vector3D clone() {
+        return new Vector3D(x, y, z);
     }
 
     @Override

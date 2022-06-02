@@ -56,8 +56,8 @@ public final class SnakeSingleAnimation extends MenuAnimation {
     }
 
     private int getNextSlot() {
-        int horizontal = heading.x;
-        int vertical = heading.y;
+        int horizontal = (int) heading.x;
+        int vertical = (int) heading.y;
 
         int next;
         if (horizontal != 0) { // get next horizontal
