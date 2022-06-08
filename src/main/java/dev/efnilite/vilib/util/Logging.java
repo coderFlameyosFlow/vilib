@@ -1,5 +1,6 @@
 package dev.efnilite.vilib.util;
 
+import dev.efnilite.vilib.ViMain;
 import dev.efnilite.vilib.ViPlugin;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,7 +52,7 @@ public class Logging {
             error("## " + throwable);
             StackTraceElement[] stack = throwable.getStackTrace();
             for (StackTraceElement stackTraceElement : stack) {
-                error("## \t" + stackTraceElement.toString());
+                error("##\t" + stackTraceElement.toString());
             }
         }
 
@@ -68,7 +69,8 @@ public class Logging {
         }
         error("##");
         error("## Version information:");
-        error("##\tBuild Version: " + plugin.getDescription().getVersion());
+        error("##\tPlugin Version: " + plugin.getDescription().getVersion());
+        error("##\tvilib Version: " + ViMain.getPlugin().getDescription().getVersion());
         error("##\tMinecraft: " + Version.getVersion().name().replaceAll("_", "."));
         error("##");
     }
