@@ -23,9 +23,7 @@ public class ViMain extends ViPlugin {
     }
 
     @Override
-    public void disable() {
-
-    }
+    public void disable() { }
 
     /**
      * Returns the {@link Logging} belonging to this plugin.
