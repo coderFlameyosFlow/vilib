@@ -22,7 +22,7 @@ public enum VersionComparator {
     FROM_SEMANTIC {
 
         @Override
-        boolean isLatest(String latest, String current) {
+        public boolean isLatest(String latest, String current) {
             int latestVs = Integer.parseInt(strip(latest));
             int currentVs = Integer.parseInt(strip(current));
 
@@ -30,7 +30,7 @@ public enum VersionComparator {
         }
     };
 
-    abstract boolean isLatest(String latest, String current);
+    public abstract boolean isLatest(String latest, String current);
 
     // strips a string
     protected String strip(String string) {
