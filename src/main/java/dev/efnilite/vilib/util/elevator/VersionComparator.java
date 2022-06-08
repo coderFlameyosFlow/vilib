@@ -23,10 +23,14 @@ public enum VersionComparator {
 
         @Override
         public boolean isLatest(String latest, String current) {
-            int latestVs = Integer.parseInt(strip(latest));
-            int currentVs = Integer.parseInt(strip(current));
+            try {
+                int latestVs = Integer.parseInt(strip(latest));
+                int currentVs = Integer.parseInt(strip(current));
 
-            return latestVs <= currentVs;
+                return latestVs <= currentVs;
+            } catch (NumberFormatException ex) {
+                return false; // if numbers contain letters, assume the worst by not being updated
+            }
         }
     };
 
