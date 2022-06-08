@@ -1,7 +1,6 @@
 package dev.efnilite.vilib;
 
 import dev.efnilite.vilib.util.Logging;
-import dev.efnilite.vilib.util.Version;
 import dev.efnilite.vilib.util.elevator.GitElevator;
 import dev.efnilite.vilib.util.elevator.VersionComparator;
 import org.bstats.bukkit.Metrics;

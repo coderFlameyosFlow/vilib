@@ -62,6 +62,28 @@ public class Vector3D implements Serializable {
     }
 
     /**
+     * Adds values to the current coordinates.
+     *
+     * @param   x
+     *          The x value.
+     *
+     * @param   y
+     *          The y value.
+     *
+     * @param   z
+     *          The z value.
+     *
+     * @return the instance of this class with updated coordinates
+     */
+    @NotNull
+    public Vector3D add(double x, double y, double z) {
+        this.x += x;
+        this.y += y;
+        this.z += z;
+        return this;
+    }
+
+    /**
      * Multiplies all coordinates by the same modifier.
      *
      * @param   modifier
@@ -131,20 +153,62 @@ public class Vector3D implements Serializable {
     }
 
     /**
-     * Rotates this vector a specific amount of degrees around the Oxz-axis.
+     * Rotates this vector a specific amount of degrees around the x-axis.
      * Clockwise is negative and counterclockwise is positive.
      *
      * @param   deg
      *          The angle in degrees.
+     *
+     * @return the rotated vector
      */
     @NotNull
-    public Vector3D rotateXZ(int deg) {
+    public Vector3D rotateX(int deg) {
+        double rad =  Math.toRadians(deg * -1); // * -1 is required to follow clockwise rotation = negative and other way around, not sure why
+        double rotatedY = (Math.cos(rad) * y) - (Math.sin(rad) * z);
+        double rotatedZ = (Math.sin(rad) * y) + (Math.cos(rad) * z);
+
+        this.y = rotatedY;
+        this.z = rotatedZ;
+        return this;
+    }
+
+    /**
+     * Rotates this vector a specific amount of degrees around the y-axis.
+     * Clockwise is negative and counterclockwise is positive.
+     *
+     * @param   deg
+     *          The angle in degrees.
+     *
+     * @return the rotated vector
+     */
+    @NotNull
+    public Vector3D rotateY(int deg) {
         double rad =  Math.toRadians(deg * -1); // * -1 is required to follow clockwise rotation = negative and other way around, not sure why
         double rotatedX = (Math.cos(rad) * x) - (Math.sin(rad) * z);
         double rotatedZ = (Math.sin(rad) * x) + (Math.cos(rad) * z);
 
-        this.x = (int) Math.round(rotatedX);
-        this.z = (int) Math.round(rotatedZ);
+        this.x = rotatedX;
+        this.z = rotatedZ;
+        return this;
+    }
+
+    /**
+     * Rotates this vector a specific amount of degrees around the z-axis.
+     * Clockwise is negative and counterclockwise is positive.
+     *
+     * @param   deg
+     *          The angle in degrees.
+     *
+     * @return the rotated vector
+     */
+    @NotNull
+    public Vector3D rotateZ(int deg) {
+        double rad =  Math.toRadians(deg * -1); // * -1 is required to follow clockwise rotation = negative and other way around, not sure why
+        double rotatedX = (Math.cos(rad) * x) - (Math.sin(rad) * y);
+        double rotatedY = (Math.sin(rad) * x) + (Math.cos(rad) * y);
+
+        this.x = rotatedX;
+        this.y = rotatedY;
         return this;
     }
 
