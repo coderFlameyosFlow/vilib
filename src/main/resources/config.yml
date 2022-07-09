@@ -15,6 +15,6 @@
 #===========================================================#
 
 # -= Auto updater =-
-# When enabled, vilib automatically downloads a new update whenever one is found.
+# When enabled, vilib automatically downloads a new update, whenever one is found.
 # It's highly recommended to keep this enabled!
 auto-updater: true
