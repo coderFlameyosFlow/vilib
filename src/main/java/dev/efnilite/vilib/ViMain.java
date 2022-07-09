@@ -15,7 +15,7 @@ public class ViMain extends ViPlugin {
 
         Configuration configuration = new Configuration(this);
 
-        new GitElevator("ViStudios/vilib", this, VersionComparator.FROM_SEMANTIC,
+        new GitElevator("Efnilite/vilib", this, VersionComparator.FROM_SEMANTIC,
                 configuration.getFile("config").getBoolean("auto-updater"));
 
         new Metrics(this, 15090);
