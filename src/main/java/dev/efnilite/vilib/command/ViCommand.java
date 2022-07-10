@@ -1,5 +1,6 @@
 package dev.efnilite.vilib.command;
 
+import dev.efnilite.vilib.util.Commands;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
@@ -138,6 +139,9 @@ public abstract class ViCommand implements CommandExecutor, TabCompleter {
 
         command.setExecutor(wrapper);
         command.setTabCompleter(wrapper);
+
+        // add command to internal register
+        Commands.add(name, command);
     }
 
     @Override

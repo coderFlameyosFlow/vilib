@@ -5,7 +5,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.SimpleCommandMap;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,7 +16,6 @@ import java.util.Map;
 /**
  * Reflections required to update the internal CommandMap
  */
-@ApiStatus.Internal
 public class Commands {
 
     private final static Method syncCommands;
