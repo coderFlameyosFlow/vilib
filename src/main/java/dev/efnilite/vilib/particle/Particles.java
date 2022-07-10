@@ -154,9 +154,8 @@ public class Particles {
 
     /**
      * Creates a box of particles
-     * <p>
      * Calculates the min point and then adds all the dimensions to each other point to get the locations of all the points
-     * </p>
+     *
      * @param   box
      *          The box which the particles will go around
      *
@@ -204,6 +203,58 @@ public class Particles {
         line(point2, point6, data, player, distanceBetween);
         line(point3, point7, data, player, distanceBetween);
         line(point4, point8, data, player, distanceBetween);
+    }
+
+    /**
+     * Creates a box of particles.
+     * Calculates the min point and then adds all the dimensions to each other point to get the locations of all the points
+     *
+     * @param   box
+     *          The box which the particles will go around
+     *
+     * @param   world
+     *          The world
+     *
+     * @param   data
+     *          The particle data
+     *
+     * @param   distanceBetween
+     *          The distance between particles
+     */
+    public static <T> void box(BoundingBox box, @NotNull World world, ParticleData<T> data, double distanceBetween) {
+        Location point1 = box.getMin().toLocation(world);
+        Location point2, point3, point4, point5, point6, point7, point8;
+
+        if (box.getWidthX() == 1.0 && box.getWidthZ() == 1.0) {
+            point2 = point1.clone().add(box.getWidthX(), 0.0, 0.0);
+            point3 = point2.clone().add(0.0, 0.0, box.getWidthZ());
+            point4 = point1.clone().add(0.0, 0.0, box.getWidthZ());
+            point5 = point1.clone().add(0.0, box.getHeight(), 0.0);
+            point6 = point2.clone().add(0.0, box.getHeight(), 0.0);
+            point7 = point3.clone().add(0.0, box.getHeight(), 0.0);
+            point8 = point4.clone().add(0.0, box.getHeight(), 0.0);
+        } else {
+            point2 = point1.clone().add(box.getWidthX() + 1.0, 0.0, 0.0);
+            point3 = point2.clone().add(0.0, 0.0, box.getWidthZ() + 1.0);
+            point4 = point1.clone().add(0.0, 0.0, box.getWidthZ() + 1.0);
+            point5 = point1.clone().add(0.0, box.getHeight() + 1.0, 0.0);
+            point6 = point2.clone().add(0.0, box.getHeight() + 1.0, 0.0);
+            point7 = point3.clone().add(0.0, box.getHeight() + 1.0, 0.0);
+            point8 = point4.clone().add(0.0, box.getHeight() + 1.0, 0.0);
+        }
+
+        line(point1, point2, data, distanceBetween);
+        line(point2, point3, data, distanceBetween);
+        line(point3, point4, data, distanceBetween);
+        line(point4, point1, data, distanceBetween);
+        line(point5, point6, data, distanceBetween);
+        line(point6, point7, data, distanceBetween);
+        line(point7, point8, data, distanceBetween);
+        line(point5, point8, data, distanceBetween);
+        line(point1, point5, data, distanceBetween);
+        line(point2, point6, data, distanceBetween);
+        line(point3, point7, data, distanceBetween);
+        line(point4, point8, data, distanceBetween);
     }
 
     /**

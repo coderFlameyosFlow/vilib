@@ -42,20 +42,36 @@ public enum Version {
         return VERSION.major >= compareTo.major; // 17 >= 16 -> true
     }
 
+    /**
+     * Get the current version as a String which can be displayed to users.
+     *
+     * @return the pretty version as a String
+     */
     public static String getPrettyVersion() {
-        String string = getFullVersion().replace("_", ".");
+        String string = getInternalVersion().substring(0, 5).replace("_", ".");
         string = string.endsWith(".") ? string.substring(0, string.length() - 1) : string;
         return string;
     }
 
+    /**
+     * Returns the current version as an instance of this enum.
+     *
+     * @return the version.
+     */
     public static Version getVersion() {
-        String string = getFullVersion().toUpperCase();
+        String string = getInternalVersion().substring(0, 5).toUpperCase();
         string = string.endsWith("_") ? string.substring(0, string.length() - 1) : string;
         VERSION = valueOf(string);
         return VERSION;
     }
 
-    private static String getFullVersion() {
-        return Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3].substring(0, 5);
+    /**
+     * Gets the internal version from the Bukkit package.
+     * Format: "v1_20_R1"
+     *
+     * @return the internal version with format "v1_20_R1"
+     */
+    public static String getInternalVersion() {
+        return Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
     }
 }
