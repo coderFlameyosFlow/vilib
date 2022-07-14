@@ -16,7 +16,7 @@ public final class SplitMiddleOutAnimation extends MenuAnimation {
 
     @Override
     public void init(int rows) {
-        ticksPerStep(3);
+        ticksPerStep(2);
         // middle row first since uneven
         add(0, getVertical(4, rows));
 

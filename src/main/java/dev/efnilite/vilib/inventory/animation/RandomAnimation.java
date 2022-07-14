@@ -31,7 +31,7 @@ public final class RandomAnimation extends MenuAnimation {
         random = ThreadLocalRandom.current();
         available = Numbers.getFromZero(rows * 9 - 1);
 
-        ticksPerStep(2);
+        ticksPerStep(1);
         amountPerTick = rows;
         // (9 * 2) / 1 = 18 ticks, and thus for
         // (9n * 2) / n = 18

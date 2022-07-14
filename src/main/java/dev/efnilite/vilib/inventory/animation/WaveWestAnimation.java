@@ -16,7 +16,7 @@ public final class WaveWestAnimation extends MenuAnimation {
 
     @Override
     public void init(int rows) {
-        ticksPerStep(2);
+        ticksPerStep(1);
         add(0, getVertical(8, rows));
         add(1, getVertical(7, rows));
         add(2, getVertical(6, rows));

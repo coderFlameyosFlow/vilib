@@ -16,7 +16,7 @@ public final class SplitMiddleInAnimation extends MenuAnimation {
 
     @Override
     public void init(int rows) {
-        ticksPerStep(3);
+        ticksPerStep(2);
 
         add(0, getVertical(8, rows));
         add(0, getVertical(0, rows));
