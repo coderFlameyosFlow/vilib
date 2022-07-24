@@ -1,6 +1,5 @@
 package dev.efnilite.vilib.vector;
 
-import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 

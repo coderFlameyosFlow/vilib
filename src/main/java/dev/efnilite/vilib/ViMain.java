@@ -1,6 +1,9 @@
 package dev.efnilite.vilib;
 
+import dev.efnilite.vilib.inventory.Menu;
+import dev.efnilite.vilib.util.Commands;
 import dev.efnilite.vilib.util.Logging;
+import dev.efnilite.vilib.util.SkullSetter;
 import dev.efnilite.vilib.util.elevator.GitElevator;
 import dev.efnilite.vilib.util.elevator.VersionComparator;
 import org.bstats.bukkit.Metrics;
@@ -11,6 +14,10 @@ public class ViMain extends ViPlugin {
 
     @Override
     public void enable() {
+        Menu.init();
+        Commands.init();
+        SkullSetter.init();
+
         instance = this;
 
         Configuration configuration = new Configuration(this);
@@ -19,6 +26,7 @@ public class ViMain extends ViPlugin {
                 configuration.getFile("config").getBoolean("auto-updater"));
 
         new Metrics(this, 15090);
+
         logging.info("Enabled vilib " + getDescription().getVersion());
     }
 

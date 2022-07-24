@@ -18,9 +18,9 @@ import java.util.Map;
  */
 public class Commands {
 
-    private final static Method syncCommands;
+    private static Method syncCommands;
 
-    static {
+    public static void init() {
         try {
             syncCommands = getCBClass().getMethod("syncCommands");
         } catch (NoSuchMethodException ex) {

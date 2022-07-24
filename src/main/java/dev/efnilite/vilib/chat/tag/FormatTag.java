@@ -1,7 +1,6 @@
 package dev.efnilite.vilib.chat.tag;
 
 import dev.efnilite.vilib.chat.ChatFormat;
-import net.md_5.bungee.api.ChatColor;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
