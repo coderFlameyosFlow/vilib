@@ -77,7 +77,6 @@ public class GitElevator {
             reader.close();
 
             outdated = !comparator.isLatest(newerVersion, plugin.getDescription().getVersion());
-            outdated = true;
 
             if (outdated) {
                 plugin.getLogger().info("A new version of is available!");
