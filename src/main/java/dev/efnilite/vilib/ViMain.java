@@ -7,9 +7,11 @@ import dev.efnilite.vilib.util.SkullSetter;
 import dev.efnilite.vilib.util.elevator.GitElevator;
 import dev.efnilite.vilib.util.elevator.VersionComparator;
 import org.bstats.bukkit.Metrics;
+import org.jetbrains.annotations.Nullable;
 
 public class ViMain extends ViPlugin {
 
+    private Configuration configuration;
     private static ViMain instance;
 
     @Override
@@ -20,10 +22,7 @@ public class ViMain extends ViPlugin {
 
         instance = this;
 
-        Configuration configuration = new Configuration(this);
-
-        new GitElevator("Efnilite/vilib", this, VersionComparator.FROM_SEMANTIC,
-                configuration.getFile("config").getBoolean("auto-updater"));
+        configuration = new Configuration(this);
 
         new Metrics(this, 15090);
 
@@ -32,6 +31,12 @@ public class ViMain extends ViPlugin {
 
     @Override
     public void disable() { }
+
+    @Override
+    public @Nullable GitElevator getElevator() {
+        return new GitElevator("Efnilite/vilib", this, VersionComparator.FROM_SEMANTIC,
+                configuration.getFile("config").getBoolean("auto-updater"));
+    }
 
     /**
      * Returns the {@link Logging} belonging to this plugin.

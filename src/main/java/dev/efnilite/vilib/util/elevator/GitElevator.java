@@ -33,7 +33,7 @@ public class GitElevator {
     /**
      * The interval between update checks. By default 8 hours.
      */
-    private static final int CHECK_INTERVAL = Time.SECONDS_PER_HOUR * 8 * 20;
+    public static final int CHECK_INTERVAL = Time.SECONDS_PER_HOUR * 8 * 20;
 
     /**
      * Constructor of this Elevator. Automatically checks for updates on creation.
@@ -55,15 +55,6 @@ public class GitElevator {
         this.repo = repo;
         this.comparator = comparator;
         this.downloadIfOutdated = downloadIfOutdated;
-
-        if (!Version.isHigherOrEqual(Version.V1_13)) { // no gson under 1.13
-            return;
-        }
-        Task.create(plugin)
-                .async()
-                .repeat(CHECK_INTERVAL)
-                .execute(this::check)
-                .run();
     }
 
     /**
@@ -90,52 +81,61 @@ public class GitElevator {
 
             if (outdated) {
                 plugin.getLogger().info("A new version of is available!");
-                if (downloadIfOutdated) {
-                    plugin.getLogger().info("This plugin will now be updated...");
-                    elevate();
-                } else {
-                    plugin.getLogger().info("Please update!");
-                }
+                plugin.getLogger().info("Please update!");
             }
         } catch (Throwable throwable) {
             plugin.getLogger().severe("There was an error while checking the latest version");
         }
     }
 
-    public void elevate() {
-        Task.create(plugin)
-                .async()
-                .execute(() -> {
-                    try {
-                        if (!outdated) {
-                            return;
-                        }
-                        File jar = getJar();
-                        if (jar == null) {
-                            return;
-                        }
+    /**
+     * Elevates the current plugin build.
+     *
+     * Warning: using this on start-up will result in many errors in class-loading semantics, etc.
+     * Advised to be used on disable.
+     *
+     * @param   async
+     *          Whether this task should be run async. Warning: when this is used on disable, async tasks can't be registered. Use true in this case.
+     */
+    public void elevate(boolean async) {
+        if (async) {
+            Task.create(plugin)
+                    .async()
+                    .execute(this::_update)
+                    .run();
+        } else {
+            _update();
+        }
+    }
 
-                        InputStream stream = new URL(downloadUrl).openStream();
-                        ReadableByteChannel channel = Channels.newChannel(stream);
-                        FileOutputStream output = new FileOutputStream(jar);
+    private void _update() {
+        try {
+            if (!outdated) {
+                return;
+            }
+            File jar = getJar();
+            if (jar == null) {
+                return;
+            }
 
-                        output.getChannel().transferFrom(channel, 0, Long.MAX_VALUE);
+            InputStream stream = new URL(downloadUrl).openStream();
+            ReadableByteChannel channel = Channels.newChannel(stream);
+            FileOutputStream output = new FileOutputStream(jar);
 
-                        channel.close();
-                        output.flush();
-                        output.close();
-                        stream.close();
+            output.getChannel().transferFrom(channel, 0, Long.MAX_VALUE);
 
-                        outdated = false;
+            channel.close();
+            output.flush();
+            output.close();
+            stream.close();
 
-                        plugin.getLogger().info("A new version of " + plugin.getName() + " has been downloaded.");
-                        plugin.getLogger().info("A server restart is required for this download to work!");
-                    } catch (Throwable throwable) {
-                        throwable.printStackTrace();
-                        plugin.getLogger().severe("There was an error while updating to the latest version");
-                    }
-                })
-                .run();
+            outdated = false;
+
+            plugin.getLogger().info("A new version of " + plugin.getName() + " has been downloaded.");
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+            plugin.getLogger().severe("There was an error while updating to the latest version");
+        }
     }
 
     private File getJar() {
@@ -151,5 +151,9 @@ public class GitElevator {
 
     public boolean isOutdated() {
         return outdated;
+    }
+
+    public boolean shouldDownloadIfOutdated() {
+        return downloadIfOutdated;
     }
 }
