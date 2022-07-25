@@ -68,7 +68,7 @@ public abstract class ViPlugin extends JavaPlugin {
             elevator = getElevator();
         }
 
-        if (elevator != null && elevator.shouldDownloadIfOutdated()) {
+        if (elevator != null && elevator.isOutdated() && elevator.shouldDownloadIfOutdated()) {
             elevator.elevate(false); // no tasks can be registered while disabling
         }
 
