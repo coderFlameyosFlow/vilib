@@ -109,14 +109,12 @@ public class GitElevator {
     }
 
     private void _update() {
-        System.out.println("update call");
         try {
             if (!outdated) {
                 return;
             }
             File jar = getJar();
             if (jar == null) {
-                System.out.println("jar null");
                 return;
             }
 
