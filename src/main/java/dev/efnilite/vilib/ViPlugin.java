@@ -13,8 +13,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
 
-import static dev.efnilite.vilib.util.elevator.GitElevator.CHECK_INTERVAL;
-
 /**
  * Main class which plugins may inherit to reduce the amount of setup required.
  * Classes inheriting this may want to create static methods to inherit the logging and viPlugin vars.
@@ -27,6 +25,7 @@ public abstract class ViPlugin extends JavaPlugin {
 
     protected Logging logging;
     protected ViPlugin viPlugin;
+    protected GitElevator elevator;
     protected static Gson gson;
     protected static Version version;
 
@@ -42,12 +41,15 @@ public abstract class ViPlugin extends JavaPlugin {
             gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().disableHtmlEscaping().create();
         }
 
-        if (!Version.isHigherOrEqual(Version.V1_13)) { // no gson under 1.13
+        if (Version.isHigherOrEqual(Version.V1_13)) { // no gson under 1.13
             Task.create(this)
                     .async()
                     .repeat(GitElevator.CHECK_INTERVAL)
                     .execute(() -> {
-                        GitElevator elevator = getElevator();
+                        if (elevator == null) {
+                            elevator = getElevator();
+                        }
+
                         if (elevator != null) {
                             elevator.check();
                         }
@@ -62,8 +64,11 @@ public abstract class ViPlugin extends JavaPlugin {
     public void onDisable() {
         disable();
 
-        GitElevator elevator = getElevator();
-        if (elevator != null && elevator.isOutdated() && elevator.shouldDownloadIfOutdated()) {
+        if (elevator == null) {
+            elevator = getElevator();
+        }
+
+        if (elevator != null && elevator.shouldDownloadIfOutdated()) {
             elevator.elevate(false); // no tasks can be registered while disabling
         }
 

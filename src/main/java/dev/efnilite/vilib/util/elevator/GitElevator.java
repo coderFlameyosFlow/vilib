@@ -23,7 +23,6 @@ import java.nio.channels.ReadableByteChannel;
 public class GitElevator {
 
     private boolean outdated;
-    private String newerVersion;
     private String downloadUrl;
     private final VersionComparator comparator;
     private final String repo;
@@ -71,17 +70,18 @@ public class GitElevator {
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
             JsonObject object = new JsonParser().parse(reader).getAsJsonObject();
-            newerVersion = object.get("tag_name").getAsString();
+            String newerVersion = object.get("tag_name").getAsString();
             downloadUrl = object.getAsJsonArray("assets").get(0) // for some reason assets is an array with one element
                     .getAsJsonObject().get("browser_download_url").getAsString(); // get browser_download_url
 
             reader.close();
 
             outdated = !comparator.isLatest(newerVersion, plugin.getDescription().getVersion());
+            outdated = true;
 
             if (outdated) {
                 plugin.getLogger().info("A new version of is available!");
-                plugin.getLogger().info("Please update!");
+                plugin.getLogger().info("Restarting the server will apply the changes.");
             }
         } catch (Throwable throwable) {
             plugin.getLogger().severe("There was an error while checking the latest version");
@@ -109,12 +109,14 @@ public class GitElevator {
     }
 
     private void _update() {
+        System.out.println("update call");
         try {
             if (!outdated) {
                 return;
             }
             File jar = getJar();
             if (jar == null) {
+                System.out.println("jar null");
                 return;
             }
 

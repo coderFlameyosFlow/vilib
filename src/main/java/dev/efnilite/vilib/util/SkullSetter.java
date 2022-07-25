@@ -14,7 +14,7 @@ public class SkullSetter {
     private static Method hasTexturesMethod;
     private static Method setPlayerProfileMethod;
 
-    public static void init() {
+    static {
         try {
             Class<?> playerProfileClass = Class.forName("com.destroystokyo.paper.profile.PlayerProfile");
             getPlayerProfileMethod = Player.class.getDeclaredMethod("getPlayerProfile");

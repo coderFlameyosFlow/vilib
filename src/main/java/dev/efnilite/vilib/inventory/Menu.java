@@ -41,6 +41,23 @@ public class Menu implements EventWatcher {
     private final static Map<UUID, UUID> openMenus = new HashMap<>();
     private final static List<Menu> disabledMenus = new ArrayList<>();
 
+    /*
+     * Prevents big boy memory usage by unregistering unused menus
+     */
+    static {
+        Task.create(ViMain.getPlugin())
+                .repeat(5 * 20)
+                .execute(() -> {
+                    if (openMenus.keySet().size() == 0) {
+                        for (Menu menu : disabledMenus) {
+                            menu.unregisterAll();
+                        }
+                        disabledMenus.clear();
+                    }
+                })
+                .run();
+    }
+
     public Menu(int rows, String name) {
         if (rows < 1 || rows > 6) {
             throw new IllegalArgumentException("Rows is below 1 or above 6");
@@ -333,22 +350,4 @@ public class Menu implements EventWatcher {
                 return Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8);
         }
     }
-
-    /**
-     * Prevents big boy memory usage by unregistering unused menus
-     */
-    public static void init() {
-        Task.create(ViMain.getPlugin())
-                .repeat(5 * 20)
-                .execute(() -> {
-                    if (openMenus.keySet().size() == 0) {
-                        for (Menu menu : disabledMenus) {
-                            menu.unregisterAll();
-                        }
-                        disabledMenus.clear();
-                    }
-                })
-                .run();
-    }
-
 }

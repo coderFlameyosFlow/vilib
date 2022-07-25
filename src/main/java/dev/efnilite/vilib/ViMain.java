@@ -16,10 +16,6 @@ public class ViMain extends ViPlugin {
 
     @Override
     public void enable() {
-        Menu.init();
-        Commands.init();
-        SkullSetter.init();
-
         instance = this;
 
         configuration = new Configuration(this);
