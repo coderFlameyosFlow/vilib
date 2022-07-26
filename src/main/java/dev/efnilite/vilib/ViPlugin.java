@@ -39,9 +39,7 @@ public abstract class ViPlugin extends JavaPlugin {
             gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().disableHtmlEscaping().setLenient().create();
         } else {
             gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().disableHtmlEscaping().create();
-        }
 
-        if (Version.isHigherOrEqual(Version.V1_13)) { // no gson under 1.13
             Task.create(this)
                     .async()
                     .repeat(GitElevator.CHECK_INTERVAL)

@@ -80,7 +80,11 @@ public class GitElevator {
 
             if (outdated) {
                 plugin.getLogger().info("A new version of is available!");
-                plugin.getLogger().info("Restarting the server will apply the changes.");
+                if (downloadIfOutdated) {
+                    plugin.getLogger().info("Restarting the server will apply the changes.");
+                } else {
+                    plugin.getLogger().info("Please update!");
+                }
             }
         } catch (Throwable throwable) {
             plugin.getLogger().severe("There was an error while checking the latest version");
