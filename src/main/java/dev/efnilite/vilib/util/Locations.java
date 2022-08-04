@@ -1,5 +1,6 @@
 package dev.efnilite.vilib.util;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -54,6 +55,30 @@ public class Locations {
         } else {
             return "(" + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ() + ")";
         }
+    }
+
+    /**
+     * Get a location from a string
+     *
+     * @param   string
+     *          The string
+     *
+     * @return the location from the string
+     */
+    public static Location parseLocation(String string) {
+        String[] values = string.replaceAll("[()]", "")
+                .replace(", ", " ")
+                .replace(",", " ")
+                .split(" ");
+
+        World world = Bukkit.getWorld(values[3]);
+
+        // if world is null, get first world
+        if (world == null) {
+            world = Bukkit.getWorlds().get(0);
+        }
+
+        return new Location(world, Double.parseDouble(values[0]), Double.parseDouble(values[1]), Double.parseDouble(values[2]));
     }
 
 }

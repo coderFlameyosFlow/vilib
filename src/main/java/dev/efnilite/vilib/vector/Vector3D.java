@@ -236,6 +236,25 @@ public class Vector3D implements Serializable {
     }
 
     /**
+     * Gets the current angle in degrees between this vector and the provided vector instance.
+     *
+     * @param   other
+     *          The other vector
+     *
+     * @return the angle in degrees to the other vector
+     */
+    public double angle(Vector3D other) {
+        if (this == other) {
+            return 0;
+        }
+
+        double dotProduct = x * other.x + y * other.y + z * other.z;
+        double divideBy = length() * other.length();
+
+        return Math.toDegrees(Math.acos(dotProduct / divideBy));
+    }
+
+    /**
      * Turns this Vector3D instance into a Bukkit Location.
      *
      * @param   world

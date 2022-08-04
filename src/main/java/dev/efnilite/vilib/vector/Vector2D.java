@@ -137,6 +137,25 @@ public class Vector2D implements Serializable {
         return this;
     }
 
+    /**
+     * Gets the current angle in degrees between this vector and the provided vector instance.
+     *
+     * @param   other
+     *          The other vector
+     *
+     * @return the angle in degrees to the other vector
+     */
+    public double angle(Vector2D other) {
+        if (this == other) {
+            return 0;
+        }
+
+        double dotProduct = x * other.x + y * other.y;
+        double divideBy = length() * other.length();
+
+        return Math.toDegrees(Math.acos(dotProduct / divideBy));
+    }
+
     @NotNull
     public Vector2D setX(int x) {
         this.x = x;
