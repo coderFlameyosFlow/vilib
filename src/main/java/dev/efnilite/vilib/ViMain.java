@@ -1,11 +1,9 @@
 package dev.efnilite.vilib;
 
-import dev.efnilite.vilib.inventory.Menu;
-import dev.efnilite.vilib.util.Commands;
 import dev.efnilite.vilib.util.Logging;
-import dev.efnilite.vilib.util.SkullSetter;
 import dev.efnilite.vilib.util.elevator.GitElevator;
 import dev.efnilite.vilib.util.elevator.VersionComparator;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bstats.bukkit.Metrics;
 import org.jetbrains.annotations.Nullable;
 

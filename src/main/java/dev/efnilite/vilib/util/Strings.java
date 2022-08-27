@@ -1,8 +1,63 @@
 package dev.efnilite.vilib.util;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Strings {
+
+    private static final MiniMessage miniMessage = MiniMessage.miniMessage();
+
+    /**
+     * Colours a list of strings using {@link MiniMessage}
+     *
+     * @param   strings
+     *          The list of strings
+     *
+     * @return the coloured list of strings
+     */
+    public static List<String> colour(@NotNull List<String> strings) {
+        return strings.stream().map(Strings::colour).collect(Collectors.toList());
+    }
+
+    /**
+     * Colours an array of strings using {@link MiniMessage}
+     *
+     * @param   strings
+     *          The array of strings
+     *
+     * @return the array of strings, but coloured
+     */
+    @NotNull
+    public static String[] colour(@NotNull String... strings) {
+        String[] coloured = new String[strings.length];
+
+        int index = 0;
+        for (String string : strings) {
+            coloured[index] = colour(string);
+            index++;
+        }
+
+        return coloured;
+    }
+
+    /**
+     * Colours a string using {@link MiniMessage}
+     *
+     * @param   string
+     *          The string
+     *
+     * @return the coloured string
+     */
+    @NotNull
+    public static String colour(@NotNull String string) {
+        Component component = miniMessage.deserialize(string);
+
+        return miniMessage.serialize(component);
+    }
 
     /**
      * Gets the closest matching string
