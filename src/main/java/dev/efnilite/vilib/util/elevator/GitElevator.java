@@ -5,7 +5,6 @@ import com.google.gson.JsonParser;
 import dev.efnilite.vilib.ViPlugin;
 import dev.efnilite.vilib.util.Task;
 import dev.efnilite.vilib.util.Time;
-import dev.efnilite.vilib.util.Version;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
@@ -93,7 +92,6 @@ public class GitElevator {
 
     /**
      * Elevates the current plugin build.
-     *
      * Warning: using this on start-up will result in many errors in class-loading semantics, etc.
      * Advised to be used on disable.
      *

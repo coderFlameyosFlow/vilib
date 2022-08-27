@@ -1,6 +1,6 @@
 package dev.efnilite.vilib.inventory.item;
 
-import dev.efnilite.vilib.chat.Message;
+import dev.efnilite.vilib.util.Strings;
 import dev.efnilite.vilib.util.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -21,6 +21,7 @@ import java.util.function.Function;
  *
  * @author Efnilite
  */
+@SuppressWarnings("unused")
 public class Item extends MenuItem {
 
     private int amount;
@@ -85,7 +86,7 @@ public class Item extends MenuItem {
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
 
-        meta.setDisplayName(Message.parseFormatting(name));
+        meta.setDisplayName(Strings.colour(name));
         meta.setLore(lore);
 
         if (Version.isHigherOrEqual(Version.V1_13)) {
@@ -97,6 +98,7 @@ public class Item extends MenuItem {
         return item;
     }
 
+    @SuppressWarnings("all")
     @Override
     public Item clone() {
         Item item = new Item(material, amount, name);
@@ -224,7 +226,7 @@ public class Item extends MenuItem {
         }
         this.lore.clear();
         for (String l : lore) {
-            this.lore.add(Message.parseFormatting(l));
+            this.lore.add(Strings.colour(l));
         }
         return this;
     }
@@ -253,7 +255,7 @@ public class Item extends MenuItem {
     public Item modifyLore(Function<String, String> function) {
         List<String> newLore = new ArrayList<>();
         for (String l : lore) {
-            newLore.add(Message.parseFormatting(function.apply(l)));
+            newLore.add(Strings.colour(function.apply(l)));
         }
         lore.clear();
         lore.addAll(newLore);

@@ -1,12 +1,12 @@
 package dev.efnilite.vilib.inventory;
 
 import dev.efnilite.vilib.ViMain;
-import dev.efnilite.vilib.chat.Message;
 import dev.efnilite.vilib.event.EventWatcher;
 import dev.efnilite.vilib.inventory.animation.MenuAnimation;
 import dev.efnilite.vilib.inventory.item.Item;
 import dev.efnilite.vilib.inventory.item.MenuItem;
 import dev.efnilite.vilib.util.Numbers;
+import dev.efnilite.vilib.util.Strings;
 import dev.efnilite.vilib.util.Task;
 import dev.efnilite.vilib.util.collections.ViList;
 import org.bukkit.Bukkit;
@@ -26,6 +26,7 @@ import java.util.*;
  *
  * @author Efnilite
  */
+@SuppressWarnings("unused")
 public class Menu implements EventWatcher {
 
     protected boolean deactivated = false;
@@ -63,7 +64,7 @@ public class Menu implements EventWatcher {
             throw new IllegalArgumentException("Rows is below 1 or above 6");
         }
         this.rows = rows;
-        this.title = Message.parseFormatting(name);
+        this.title = Strings.colour(name);
         this.inventoryId = UUID.randomUUID();
     }
 
