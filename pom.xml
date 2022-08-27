@@ -44,6 +44,11 @@
                                 </relocation>
                                 <relocation>
                                     <pattern>com.tchristofferson</pattern>
+                                    <shadedPattern>dev.efnilite.vilib.lib.configupdater</shadedPattern>
+                                </relocation>
+
+                                <relocation>
+                                    <pattern>fr.mrmicky</pattern>
                                     <shadedPattern>dev.efnilite.vilib.lib.fastboard</shadedPattern>
                                 </relocation>
 
@@ -95,6 +100,13 @@
             <artifactId>annotations</artifactId>
             <version>23.0.0</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.mrmicky</groupId>
+            <artifactId>fastboard</artifactId>
+            <version>1.2.1</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
