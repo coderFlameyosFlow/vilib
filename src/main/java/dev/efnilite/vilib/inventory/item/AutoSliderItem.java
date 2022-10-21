@@ -1,5 +1,6 @@
 package dev.efnilite.vilib.inventory.item;
 
+import com.google.common.annotations.Beta;
 import dev.efnilite.vilib.ViMain;
 import dev.efnilite.vilib.inventory.Menu;
 import dev.efnilite.vilib.inventory.MenuClickEvent;
@@ -18,6 +19,7 @@ import java.util.function.Consumer;
  *
  * @author Efnilite
  */
+@Beta
 public class AutoSliderItem extends MenuItem {
 
     /**

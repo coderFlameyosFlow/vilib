@@ -4,17 +4,19 @@ import dev.efnilite.vilib.util.Strings;
 import dev.efnilite.vilib.util.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * A class for creating items.
@@ -31,7 +33,9 @@ public class Item extends MenuItem {
     private String name;
     private ItemMeta meta;
     private Material material;
-    private final List<String> lore;
+    private List<String> lore;
+    private Map<Attribute, AttributeModifier> attributes;
+    private Map<Enchantment, Integer> enchantments;
 
     /**
      * Creates a new instance
@@ -60,12 +64,16 @@ public class Item extends MenuItem {
      */
     public Item(Material material, int amount, String name) {
         this.amount = amount;
+
         if (material != null) {
             this.durability = material.getMaxDurability();
         } else {
             material = Material.GRASS_BLOCK;
         }
+
         this.name = name;
+        this.attributes = new HashMap<>();
+        this.enchantments = new HashMap<>();
         this.lore = new ArrayList<>();
         this.material = material;
         this.unbreakable = false;
@@ -74,9 +82,12 @@ public class Item extends MenuItem {
     @Override
     public ItemStack build() {
         ItemStack item = new ItemStack(material, amount);
+
         if (meta == null) {
             meta = Bukkit.getItemFactory().getItemMeta(item.getType());
         }
+
+        // if this item's meta cant be modified, return itemstack instance
         if (meta == null) {
             return item;
         }
@@ -84,12 +95,20 @@ public class Item extends MenuItem {
         if (glowing) {
             meta.addEnchant(Enchantment.DURABILITY, 1, false);
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        } else {
+            for (Enchantment enchantment : enchantments.keySet()) {
+                meta.addEnchant(enchantment, enchantments.get(enchantment), true);
+            }
         }
 
         meta.setDisplayName(Strings.colour(name));
-        meta.setLore(lore);
+        meta.setLore(Strings.colour(lore));
 
         if (Version.isHigherOrEqual(Version.V1_13)) {
+            for (Attribute attribute : attributes.keySet()) {
+                meta.addAttributeModifier(attribute, attributes.get(attribute));
+            }
+
             ((Damageable) meta).setDamage(Math.abs(durability - material.getMaxDurability()));
             meta.setUnbreakable(unbreakable);
         }
@@ -107,7 +126,9 @@ public class Item extends MenuItem {
         item.durability = durability;
         item.unbreakable = unbreakable;
         item.meta = meta;
-        item.lore.addAll(lore);
+        item.lore = lore;
+        item.attributes = attributes;
+        item.enchantments = enchantments;
 
         return item;
     }
@@ -120,7 +141,7 @@ public class Item extends MenuItem {
     /**
      * Set unbreakable
      *
-     * @return the instance this class
+     * @return the instance of this class
      */
     public Item unbreakable() {
         this.unbreakable = true;
@@ -130,7 +151,7 @@ public class Item extends MenuItem {
     /**
      * Set glowing
      *
-     * @return the instance this class
+     * @return the instance of this class
      */
     public Item glowing() {
         this.glowing = true;
@@ -155,7 +176,7 @@ public class Item extends MenuItem {
      * @param   name
      *          The name
      *
-     * @return  the instance this class
+     * @return  the instance of this class
      */
     public Item name(String name) {
         this.name = name;
@@ -168,7 +189,7 @@ public class Item extends MenuItem {
      * @param   meta
      *          The meta
      *
-     * @return  the instance this class
+     * @return  the instance of this class
      */
     public Item meta(ItemMeta meta) {
         this.meta = meta;
@@ -205,7 +226,7 @@ public class Item extends MenuItem {
      * @param   material
      *          The type
      *
-     * @return  the instance this class
+     * @return  the instance of this class
      */
     public Item material(Material material) {
         this.material = material;
@@ -218,16 +239,15 @@ public class Item extends MenuItem {
      * @param   lore
      *          The lore
      *
-     * @return  the instance this class
+     * @return  the instance of this class
      */
     public Item lore(@Nullable List<String> lore) {
         if (lore == null || lore.isEmpty()) {
             return this;
         }
+
         this.lore.clear();
-        for (String l : lore) {
-            this.lore.add(Strings.colour(l));
-        }
+        this.lore.addAll(lore);
         return this;
     }
 
@@ -237,10 +257,54 @@ public class Item extends MenuItem {
      * @param   lore
      *          The lore
      *
-     * @return the instance this class
+     * @return the instance of this class
      */
     public Item lore(String... lore) {
         return lore(Arrays.asList(lore));
+    }
+
+    /**
+     * Enchants this item with a specific enchantment and a provided level.
+     * This ignores enchantment limit restrictions.
+     * 
+     * @param   enchantment
+     *          The enchantment instance.
+     * 
+     * @param   level
+     *          The level.
+     * 
+     * @return the instance of this class
+     */
+    public Item enchant(@NotNull Enchantment enchantment, int level) {
+        enchantments.put(enchantment, level);
+
+        return this;
+    }
+
+    /**
+     * Adds the provided attribute to this item, with the specified value and the operation.
+     * Example:
+     * <br>
+     * <code>
+     *  item.attribute(Attribute.GENERIC_ATTACK_SPEED, -10, AttributeModifier.Operation.ADD_NUMBER)
+     * </code>
+     * @see AttributeModifier.Operation
+     *
+     * @param   attribute
+     *          The attribute
+     *
+     * @param   value
+     *          The value
+     *
+     * @param   operation
+     *          The operation
+     *
+     * @return the instance of this class
+     */
+    public Item attribute(@NotNull Attribute attribute, double value, AttributeModifier.Operation operation) {
+        attributes.put(attribute, new AttributeModifier("", value, operation));
+
+        return this;
     }
 
     /**
@@ -253,12 +317,7 @@ public class Item extends MenuItem {
      * @return the instance of this class
      */
     public Item modifyLore(Function<String, String> function) {
-        List<String> newLore = new ArrayList<>();
-        for (String l : lore) {
-            newLore.add(Strings.colour(function.apply(l)));
-        }
-        lore.clear();
-        lore.addAll(newLore);
+        this.lore = lore.stream().map(function).collect(Collectors.toList());
         return this;
     }
 

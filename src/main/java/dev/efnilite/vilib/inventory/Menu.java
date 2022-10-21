@@ -227,7 +227,7 @@ public class Menu implements EventWatcher {
 
         // Filler
         if (filler != null) { // fill the background with the same material
-            Item fillerItem = new Item(filler, "&c");
+            Item fillerItem = new Item(filler, "<red> ");
             for (int slot = 0; slot < rows * 9; slot++) {
                 if (items.get(slot) != null) { // ignore already-set items
                     continue;

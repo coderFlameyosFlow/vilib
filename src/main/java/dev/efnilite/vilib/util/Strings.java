@@ -2,6 +2,8 @@ package dev.efnilite.vilib.util;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -10,9 +12,15 @@ import java.util.stream.Collectors;
 public class Strings {
 
     private static final MiniMessage miniMessage = MiniMessage.miniMessage();
+    private static final LegacyComponentSerializer legacyComponentSerializer = LegacyComponentSerializer.builder()
+            .extractUrls()
+            .hexColors()
+            .character(LegacyComponentSerializer.SECTION_CHAR)
+            .useUnusualXRepeatedCharacterHexFormat() // spigot makes me sad :(
+            .build();
 
     /**
-     * Colours a list of strings using {@link MiniMessage}
+     * Colours a list of strings using {@link MiniMessage} and {@link LegacyComponentSerializer}
      *
      * @param   strings
      *          The list of strings
@@ -24,7 +32,7 @@ public class Strings {
     }
 
     /**
-     * Colours an array of strings using {@link MiniMessage}
+     * Colours an array of strings using {@link MiniMessage} and {@link LegacyComponentSerializer}
      *
      * @param   strings
      *          The array of strings
@@ -45,7 +53,7 @@ public class Strings {
     }
 
     /**
-     * Colours a string using {@link MiniMessage}
+     * Colours a string using {@link MiniMessage} and {@link LegacyComponentSerializer}
      *
      * @param   string
      *          The string
@@ -54,9 +62,9 @@ public class Strings {
      */
     @NotNull
     public static String colour(@NotNull String string) {
-        Component component = miniMessage.deserialize(string);
+        Component component = miniMessage.deserialize(string); // sanitize input
 
-        return miniMessage.serialize(component);
+        return ChatColor.translateAlternateColorCodes(LegacyComponentSerializer.SECTION_CHAR, legacyComponentSerializer.serialize(component));
     }
 
     /**

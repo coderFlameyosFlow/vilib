@@ -29,7 +29,7 @@ public class TimedItem extends MenuItem {
         this.item = item;
         this.revertTo = event.getMenu().getItem(event.getSlot());
         if (revertTo == null) {
-            revertTo = new Item(Material.AIR, "&c");
+            revertTo = new Item(Material.AIR, "<red> ");
         }
         this.player = event.getPlayer();
         this.event = event;

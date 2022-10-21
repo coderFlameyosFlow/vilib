@@ -33,6 +33,10 @@
                 </relocation>
                 <relocation>
                   <pattern>com.tchristofferson</pattern>
+                  <shadedPattern>dev.efnilite.vilib.lib.configupdater</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>fr.mrmicky</pattern>
                   <shadedPattern>dev.efnilite.vilib.lib.fastboard</shadedPattern>
                 </relocation>
                 <relocation>

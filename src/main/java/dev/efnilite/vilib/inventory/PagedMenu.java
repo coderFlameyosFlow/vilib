@@ -76,7 +76,7 @@ public class PagedMenu extends Menu {
         }
 
         List<MenuItem> values = new ArrayList<>(assigned.get(newPage));
-        Item missingFiller = new Item(filler, "&c");
+        Item missingFiller = new Item(filler, "<red> ");
 
         items.remove(prevPageSlot);
         items.remove(nextPageSlot);
