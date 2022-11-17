@@ -265,7 +265,7 @@ public class Item extends MenuItem {
 
     /**
      * Enchants this item with a specific enchantment and a provided level.
-     * This ignores enchantment limit restrictions.
+     * This ignores enchantment level limit restrictions.
      * 
      * @param   enchantment
      *          The enchantment instance.
