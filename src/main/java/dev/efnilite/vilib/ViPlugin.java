@@ -16,7 +16,6 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Main class which plugins may inherit to reduce the amount of setup required.
  * Classes inheriting this may want to create static methods to inherit the logging and viPlugin vars.
- *
  * Made by Efnilite (c) 2021-2022
  *
  * @since 1.0.0

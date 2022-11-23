@@ -3,6 +3,7 @@ package dev.efnilite.vilib.inventory.item;
 import dev.efnilite.vilib.util.Strings;
 import dev.efnilite.vilib.util.Version;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -11,6 +12,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,7 +70,12 @@ public class Item extends MenuItem {
         if (material != null) {
             this.durability = material.getMaxDurability();
         } else {
-            material = Material.GRASS_BLOCK;
+
+            if (Version.isHigherOrEqual(Version.V1_13)) {
+                material = Material.GRASS_BLOCK;
+            } else {
+                material = Material.GRASS;
+            }
         }
 
         this.name = name;
@@ -303,6 +310,23 @@ public class Item extends MenuItem {
      */
     public Item attribute(@NotNull Attribute attribute, double value, AttributeModifier.Operation operation) {
         attributes.put(attribute, new AttributeModifier("", value, operation));
+
+        return this;
+    }
+
+    /**
+     * Adds the provided {@link AttributeModifier} to the item with {@link Attribute} used as identification.
+     *
+     * @param   attribute
+     *          The attribute.
+     *
+     * @param   modifier
+     *          The modifier.
+     *
+     * @return the instance of this class
+     */
+    public Item attribute(@NotNull Attribute attribute, @NotNull AttributeModifier modifier) {
+        attributes.put(attribute, modifier);
 
         return this;
     }

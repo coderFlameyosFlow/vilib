@@ -18,13 +18,13 @@ import java.util.Map;
  */
 public class Commands {
 
-    private static final Method syncCommands;
+    private static Method syncCommands;
 
     static {
         try {
             syncCommands = getCBClass().getMethod("syncCommands");
-        } catch (NoSuchMethodException ex) {
-            throw new RuntimeException(ex);
+        } catch (NoSuchMethodException ignored) {
+
         }
     }
 
