@@ -3,7 +3,6 @@ package dev.efnilite.vilib.inventory.item;
 import dev.efnilite.vilib.util.Strings;
 import dev.efnilite.vilib.util.Version;
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -12,7 +11,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,15 +27,16 @@ import java.util.stream.Collectors;
 public class Item extends MenuItem {
 
     private int amount;
+    private int modelId = -1;
     private int durability;
-    private boolean glowing;
-    private boolean unbreakable;
+    private boolean glowing = false;
+    private boolean unbreakable = false;
     private String name;
     private ItemMeta meta;
     private Material material;
-    private List<String> lore;
-    private Map<Attribute, AttributeModifier> attributes;
-    private Map<Enchantment, Integer> enchantments;
+    private List<String> lore = new ArrayList<>();
+    private Map<Attribute, AttributeModifier> attributes = new HashMap<>();
+    private Map<Enchantment, Integer> enchantments = new HashMap<>();
 
     /**
      * Creates a new instance
@@ -79,11 +78,7 @@ public class Item extends MenuItem {
         }
 
         this.name = name;
-        this.attributes = new HashMap<>();
-        this.enchantments = new HashMap<>();
-        this.lore = new ArrayList<>();
         this.material = material;
-        this.unbreakable = false;
     }
 
     @Override
@@ -110,6 +105,7 @@ public class Item extends MenuItem {
 
         meta.setDisplayName(Strings.colour(name));
         meta.setLore(Strings.colour(lore));
+        meta.setCustomModelData(modelId);
 
         if (Version.isHigherOrEqual(Version.V1_13)) {
             for (Attribute attribute : attributes.keySet()) {
@@ -327,6 +323,20 @@ public class Item extends MenuItem {
      */
     public Item attribute(@NotNull Attribute attribute, @NotNull AttributeModifier modifier) {
         attributes.put(attribute, modifier);
+
+        return this;
+    }
+
+    /**
+     * Sets this item's model id
+     *
+     * @param   modelId
+     *          The model id
+     *
+     * @return the instance of this class
+     */
+    public Item modelId(int modelId) {
+        this.modelId = modelId;
 
         return this;
     }
