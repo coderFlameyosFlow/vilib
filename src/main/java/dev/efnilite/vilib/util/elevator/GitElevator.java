@@ -82,7 +82,7 @@ public class GitElevator {
                 if (downloadIfOutdated) {
                     plugin.getLogger().info("Restarting the server will apply the changes.");
                 } else {
-                    plugin.getLogger().info("Please update!");
+                    plugin.getLogger().info("Please update to the latest version of vilib!");
                 }
             }
         } catch (Throwable throwable) {
