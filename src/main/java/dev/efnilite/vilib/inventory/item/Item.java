@@ -68,13 +68,11 @@ public class Item extends MenuItem {
 
         if (material != null) {
             this.durability = material.getMaxDurability();
-        } else {
 
-            if (Version.isHigherOrEqual(Version.V1_13)) {
-                material = Material.GRASS_BLOCK;
-            } else {
-                material = Material.GRASS;
-            }
+        if (Version.isHigherOrEqual(Version.V1_13)) {
+            material = Material.GRASS_BLOCK;
+        } else {
+            material = Material.GRASS;
         }
 
         this.name = name;
@@ -90,9 +88,7 @@ public class Item extends MenuItem {
         }
 
         // if this item's meta cant be modified, return itemstack instance
-        if (meta == null) {
-            return item;
-        }
+        if (meta == null) return item;
 
         if (glowing) {
             meta.addEnchant(Enchantment.DURABILITY, 1, false);
