@@ -21,10 +21,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 /**
  * Class for Menu handling
@@ -54,16 +50,15 @@ public class Menu implements EventWatcher {
      */
     static {
         Task.create(ViMain.getPlugin())
-                .repeat(5 * 20)
-                .execute(() -> {
-                    if (openMenus.keySet().size() == 0) {
-                        for (Menu menu : disabledMenus) {
-                            menu.unregisterAll();
-                        }
-                        disabledMenus.clear();
+            .repeat(5 * 20)
+            .execute(() -> {
+                if (openMenus.keySet().size() == 0) {
+                    for (Menu menu : disabledMenus) {
+                        menu.unregisterAll();
                     }
-                })
-                .run();
+                    disabledMenus.clear();
+                }
+            }).run();
     }
 
     public Menu(int rows, String name) {
@@ -187,7 +182,7 @@ public class Menu implements EventWatcher {
      * @param   player
      *          The player to open it to
      */
-    public void open(Player player) throws InterruptedException, ExecutionException {
+    public void open(Player player) {
         this.player = player;
         Inventory inventory = Bukkit.createInventory(null, rows * 9, title);
         
@@ -267,7 +262,7 @@ public class Menu implements EventWatcher {
         if (clickedItem == null) return;
         
         event.setCancelled(
-            !(clickedItem.isMovable())
+            !clickedItem.isMovable()
         );
 
         clickedItem.handleClick(this, event, event.getClick());
