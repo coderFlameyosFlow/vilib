@@ -40,18 +40,15 @@ public abstract class ViPlugin extends JavaPlugin {
             gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().disableHtmlEscaping().create();
 
             Task.create(this)
-                    .async()
-                    .repeat(GitElevator.CHECK_INTERVAL)
-                    .execute(() -> {
-                        if (elevator == null) {
-                            elevator = getElevator();
-                        }
+                .async()
+                .repeat(GitElevator.CHECK_INTERVAL)
+                .execute(() -> {
+                    if (elevator == null) {
+                        elevator = getElevator();
+                    }
 
-                        if (elevator != null) {
-                            elevator.check();
-                        }
-                    })
-                    .run();
+                    if (elevator != null) elevator.check();
+                }).run();
         }
 
         enable();
