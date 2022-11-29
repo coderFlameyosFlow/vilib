@@ -261,9 +261,7 @@ public class Menu implements EventWatcher {
         MenuItem clickedItem = items.get(event.getSlot());
         if (clickedItem == null) return;
         
-        event.setCancelled(
-            !clickedItem.isMovable()
-        );
+        event.setCancelled(!clickedItem.isMovable());
 
         clickedItem.handleClick(this, event, event.getClick());
     }
