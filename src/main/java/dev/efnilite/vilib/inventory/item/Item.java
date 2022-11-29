@@ -69,7 +69,6 @@ public class Item extends MenuItem {
         if (material != null) {
             this.durability = material.getMaxDurability();
         } else {
-
             if (Version.isHigherOrEqual(Version.V1_13)) {
                 material = Material.GRASS_BLOCK;
             } else {
@@ -90,9 +89,7 @@ public class Item extends MenuItem {
         }
 
         // if this item's meta cant be modified, return itemstack instance
-        if (meta == null) {
-            return item;
-        }
+        if (meta == null) return item;
 
         if (glowing) {
             meta.addEnchant(Enchantment.DURABILITY, 1, false);
@@ -112,7 +109,8 @@ public class Item extends MenuItem {
                 meta.addAttributeModifier(attribute, attributes.get(attribute));
             }
 
-            ((Damageable) meta).setDamage(Math.abs(durability - material.getMaxDurability()));
+            ((Damageable) meta).setDamage(
+                Math.abs(durability - material.getMaxDurability()));
             meta.setUnbreakable(unbreakable);
         }
 

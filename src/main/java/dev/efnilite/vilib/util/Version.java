@@ -50,7 +50,7 @@ public enum Version {
     public static String getPrettyVersion() {
         String string = getInternalVersion().substring(0, 5).replace("_", ".");
         string = string.endsWith(".") ? string.substring(0, string.length() - 1) : string;
-        return string;
+        return string; // returns a pretty looking version, ex: 1.12 instead of 1_12
     }
 
     /**

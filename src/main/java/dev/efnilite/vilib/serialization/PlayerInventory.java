@@ -45,9 +45,7 @@ public class PlayerInventory {
 
         int slot = 0;
         for (ItemStack item : inventory.getContents()) {
-            if (item != null) {
-                items.put(slot, item);
-            }
+            if (item != null) items.put(slot, item);
             slot++;
         }
     }
@@ -78,30 +76,27 @@ public class PlayerInventory {
      */
     public static void save(File file, PlayerInventory inventory, @Nullable Runnable onComplete) {
         Task.create(ViMain.getPlugin())
-                .async()
-                .execute(() -> {
-                    try {
-                        if (!file.exists()) {
-                            file.createNewFile();
-                        }
-
-                        inventory.serialized.clear();
-                        inventory.serialized.putAll(InventorySerializer.serialize64(inventory));
-
-                        FileWriter writer = new FileWriter(file);
-                        ViPlugin.getGson().toJson(inventory, writer);
-
-                        if (onComplete != null) {
-                            onComplete.run();
-                        }
-
-                        writer.flush();
-                        writer.close();
-                    } catch (IOException ex) {
-                        ViMain.logging().stack("Error while saving inventory", ex);
+            .async()
+            .execute(() -> {
+                try {
+                    if (!file.exists()) {
+                        file.createNewFile();
                     }
-                })
-                .run();
+
+                    inventory.serialized.clear();
+                    inventory.serialized.putAll(InventorySerializer.serialize64(inventory));
+
+                    FileWriter writer = new FileWriter(file);
+                    ViPlugin.getGson().toJson(inventory, writer);
+
+                    if (onComplete != null) onComplete.run();
+
+                    writer.flush();
+                    writer.close();
+                } catch (IOException ex) {
+                    ViMain.logging().stack("Error while saving inventory", ex);
+                }
+            }).run();
     }
 
     /**
@@ -115,31 +110,26 @@ public class PlayerInventory {
      */
     public static void read(File file, @Nullable Consumer<@Nullable PlayerInventory> onRead) {
         Task.create(ViMain.getPlugin())
-                .async()
-                .execute(() -> {
-                    try {
-                        if (!file.exists()) {
-                            if (onRead != null) {
-                                onRead.accept(null);
-                            }
-                            return;
-                        }
-                        FileReader reader = new FileReader(file);
-                        PlayerInventory inventory = ViPlugin.getGson().fromJson(reader, PlayerInventory.class);
-
-                        if (onRead != null) {
-                            onRead.accept(InventorySerializer.deserialize64(inventory.serialized));
-                        }
-
-                        reader.close();
-                    } catch (IOException ex) {
-                        ViMain.logging().stack("Error while reading inventory", ex);
-                        if (onRead != null) {
-                            onRead.accept(null);
-                        }
+            .async()
+            .execute(() -> {
+                try {
+                    if (!file.exists()) {
+                        if (onRead != null) onRead.accept(null);
+                        return;
                     }
-                })
-                .run();
+                    FileReader reader = new FileReader(file);
+                    PlayerInventory inventory = ViPlugin.getGson().fromJson(reader, PlayerInventory.class);
+
+                    if (onRead != null) {
+                        onRead.accept(InventorySerializer.deserialize64(inventory.serialized)); 
+                    }
+
+                    reader.close();
+                } catch (IOException ex) {
+                    ViMain.logging().stack("Error while reading inventory", ex);
+                    if (onRead != null) onRead.accept(null);
+                }
+            }).run();
     }
 
     /**
@@ -152,8 +142,8 @@ public class PlayerInventory {
         Inventory inventory = player.getInventory();
         inventory.clear();
 
-        for (int slot : items.keySet()) {
-            inventory.setItem(slot, items.get(slot));
+        for (int slot : items.keySet()) { 
+            inventory.setItem(slot, items.get(slot)); 
         }
     }
 

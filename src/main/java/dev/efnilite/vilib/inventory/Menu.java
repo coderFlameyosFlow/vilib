@@ -9,6 +9,7 @@ import dev.efnilite.vilib.util.Numbers;
 import dev.efnilite.vilib.util.Strings;
 import dev.efnilite.vilib.util.Task;
 import dev.efnilite.vilib.util.collections.ViList;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -30,10 +31,12 @@ import java.util.*;
 public class Menu implements EventWatcher {
 
     protected boolean deactivated = false;
+    
     protected UUID inventoryId;
     protected Player player;
     protected Material filler = null;
     protected MenuAnimation animation = null;
+    
     protected final int rows;
     protected final String title;
     protected final Map<Integer, MenuItem> items = new HashMap<>();
@@ -47,16 +50,15 @@ public class Menu implements EventWatcher {
      */
     static {
         Task.create(ViMain.getPlugin())
-                .repeat(5 * 20)
-                .execute(() -> {
-                    if (openMenus.keySet().size() == 0) {
-                        for (Menu menu : disabledMenus) {
-                            menu.unregisterAll();
-                        }
-                        disabledMenus.clear();
+            .repeat(5 * 20)
+            .execute(() -> {
+                if (openMenus.keySet().size() == 0) {
+                    for (Menu menu : disabledMenus) {
+                        menu.unregisterAll();
                     }
-                })
-                .run();
+                    disabledMenus.clear();
+                }
+            }).run();
     }
 
     public Menu(int rows, String name) {
@@ -154,9 +156,7 @@ public class Menu implements EventWatcher {
     public void updateItem(int... slots) {
         Inventory inventory = player.getOpenInventory().getTopInventory();
 
-        if (inventory.getSize() % 9 != 0) {
-            return;
-        }
+        if (inventory.getSize() % 9 != 0) return;
 
         for (int slot : slots) {
             inventory.setItem(slot, items.get(slot).build());
@@ -169,9 +169,7 @@ public class Menu implements EventWatcher {
     public void update() {
         Inventory inventory = player.getOpenInventory().getTopInventory();
 
-        if (inventory.getSize() % 9 != 0) {
-            return;
-        }
+        if (inventory.getSize() % 9 != 0) return;
 
         for (int slot : items.keySet()) {
             inventory.setItem(slot, items.get(slot).build());
@@ -187,7 +185,8 @@ public class Menu implements EventWatcher {
     public void open(Player player) {
         this.player = player;
         Inventory inventory = Bukkit.createInventory(null, rows * 9, title);
-
+        
+        
         // Evenly distributed rows
         for (int row : evenlyDistributedRows) {
             int min = row * 9; // 0 * 9 = 0
@@ -200,41 +199,41 @@ public class Menu implements EventWatcher {
                 }
             }
 
-            if (itemsInRow.keySet().size() > 0) {
-                List<Integer> sortedSlots = new ViList<>(itemsInRow.keySet()).sort().toList(); // sort all slots
-                List<Integer> slots = getEvenlyDistributedSlots(sortedSlots.size()); // evenly distribute items
-                List<Integer> olds = new ArrayList<>();
-                List<Integer> news = new ArrayList<>();
+            
+            
+            if (itemsInRow.keySet().isEmpty()) return;
+            
+            List<Integer> sortedSlots = new ViList<>(itemsInRow.keySet()).sort().toList(); // sort all slots
+            List<Integer> slots = getEvenlyDistributedSlots(sortedSlots.size()); // evenly distribute items
+            List<Integer> olds = new ArrayList<>();
+            List<Integer> news = new ArrayList<>();
 
-                for (int i = 0; i < slots.size(); i++) {
-                    int newSlot = slots.get(i) + (9 * row); // gets the new slot
-                    int oldSlot = sortedSlots.get(i); // the previous slot
-                    MenuItem item = itemsInRow.get(oldSlot); // the item in the previous slot
+            for (int i = 0; i < slots.size(); i++) {
+                int newSlot = slots.get(i) + (9 * row); // gets the new slot
+                int oldSlot = sortedSlots.get(i); // the previous slot
+                MenuItem item = itemsInRow.get(oldSlot); // the item in the previous slot
 
-                    news.add(newSlot);
-                    olds.add(oldSlot);
-                    items.put(newSlot, item); // put item in new slot
-                }
+                news.add(newSlot);
+                olds.add(oldSlot);
+                items.put(newSlot, item); // put item in new slot
+            }
 
-                for (int oldSlot : olds) {
-                    if (news.contains(oldSlot)) {
-                        continue;
-                    }
-                    items.remove(oldSlot); // remove items from previous slot without deleting ones that are to-be moved
-                }
+            for (int oldSlot : olds) {
+                if (news.contains(oldSlot)) continue; 
+                items.remove(oldSlot); // remove items from previous slot without deleting ones that are to-be moved
             }
         }
 
         // Filler
-        if (filler != null) { // fill the background with the same material
-            Item fillerItem = new Item(filler, "<red> ");
-            for (int slot = 0; slot < rows * 9; slot++) {
-                if (items.get(slot) != null) { // ignore already-set items
-                    continue;
-                }
-
-                items.put(slot, fillerItem);
+        if (filler == null) return;
+        
+        Item fillerItem = new Item(filler, "<red> "); // fill the background with the same material
+        for (int slot = 0; slot < rows * 9; slot++) {
+            if (items.get(slot) != null) { // ignore already-set items
+                continue;
             }
+
+            items.put(slot, fillerItem);
         }
 
         player.openInventory(inventory);
@@ -254,19 +253,14 @@ public class Menu implements EventWatcher {
 
     @EventHandler
     public void click(@NotNull InventoryClickEvent event) {
-        if (deactivated || event.getClickedInventory() != event.getView().getTopInventory()) {
-            return;
-        }
+        if (deactivated || event.getClickedInventory() != event.getView().getTopInventory()) return;
 
         UUID id = openMenus.get(event.getWhoClicked().getUniqueId());
-        if (id != inventoryId) {
-            return;
-        }
+        if (id != inventoryId) return;
 
         MenuItem clickedItem = items.get(event.getSlot());
-        if (clickedItem == null) {
-            return;
-        }
+        if (clickedItem == null) return;
+        
         event.setCancelled(!clickedItem.isMovable());
 
         clickedItem.handleClick(this, event, event.getClick());
@@ -274,15 +268,11 @@ public class Menu implements EventWatcher {
 
     @EventHandler
     public void close(InventoryCloseEvent event) {
-        if (deactivated) {
-            return;
-        }
+        if (deactivated) return;
 
         UUID viewerId = event.getPlayer().getUniqueId();
         UUID id = openMenus.get(viewerId);
-        if (id != inventoryId) {
-            return;
-        }
+        if (id != inventoryId) return;
 
         if (animation != null) {
             animation.stop();
