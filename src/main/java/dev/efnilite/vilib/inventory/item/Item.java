@@ -68,11 +68,12 @@ public class Item extends MenuItem {
 
         if (material != null) {
             this.durability = material.getMaxDurability();
-
-        if (Version.isHigherOrEqual(Version.V1_13)) {
-            material = Material.GRASS_BLOCK;
         } else {
-            material = Material.GRASS;
+            if (Version.isHigherOrEqual(Version.V1_13)) {
+                material = Material.GRASS_BLOCK;
+            } else {
+                material = Material.GRASS;
+            }
         }
 
         this.name = name;
@@ -108,7 +109,8 @@ public class Item extends MenuItem {
                 meta.addAttributeModifier(attribute, attributes.get(attribute));
             }
 
-            ((Damageable) meta).setDamage(Math.abs(durability - material.getMaxDurability()));
+            ((Damageable) meta).setDamage(
+                Math.abs(durability - material.getMaxDurability()));
             meta.setUnbreakable(unbreakable);
         }
 
