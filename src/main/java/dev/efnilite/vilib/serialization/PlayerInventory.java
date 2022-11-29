@@ -142,7 +142,9 @@ public class PlayerInventory {
         Inventory inventory = player.getInventory();
         inventory.clear();
 
-        for (int slot : items.keySet()) inventory.setItem(slot, items.get(slot));
+        for (int slot : items.keySet()) { 
+            inventory.setItem(slot, items.get(slot)); 
+        }
     }
 
     /**
