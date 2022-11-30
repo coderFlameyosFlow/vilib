@@ -4,10 +4,13 @@ import dev.efnilite.vilib.util.Commands;
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
+
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.Arrays;
 
 /**
  * Class to wrap commands, which makes it a lot easier to produce them.
@@ -130,7 +133,7 @@ public abstract class ViCommand implements CommandExecutor, TabCompleter {
      * @param   wrapper
      *          The command that's going to be registered
      */
-    public static void register(String name, ViCommand wrapper) {
+    public static void register(String name, ViCommand wrapper, @Nullable String permission, @Nullable final String... aliases) {
         PluginCommand command = Bukkit.getPluginCommand(name);
 
         if (command == null) {
@@ -139,6 +142,12 @@ public abstract class ViCommand implements CommandExecutor, TabCompleter {
 
         command.setExecutor(wrapper);
         command.setTabCompleter(wrapper);
+        
+        // Set permission, if null is returned then there's no permission.
+        command.setPermission(permission);
+        
+        // Set any additional aliases
+        command.setAliases(Arrays.asList(aliases));
 
         // add command to internal register
         Commands.add(name, command);
